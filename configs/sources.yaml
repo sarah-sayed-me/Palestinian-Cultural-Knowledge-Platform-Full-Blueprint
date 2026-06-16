@@ -1,0 +1,117 @@
+# configs/sources.yaml
+# All data source configurations in one place.
+# Each collector reads its own section.
+
+wikipedia:
+  enabled: true
+  languages:
+    - code: "ar"
+      name: "Arabic Wikipedia"
+      source_id: "wikipedia-ar"
+      credibility_tier: "tier_1"
+      credibility_score: 0.90
+    - code: "en"
+      name: "English Wikipedia"
+      source_id: "wikipedia-en"
+      credibility_tier: "tier_1"
+      credibility_score: 0.90
+  # Seed categories: collector expands via subcategory traversal.
+  seed_categories:
+    ar:
+      - "فلسطين"
+      - "التاريخ_الفلسطيني"
+      - "الثقافة_الفلسطينية"
+      - "الأدب_الفلسطيني"
+      - "الفن_الفلسطيني"
+      - "المطبخ_الفلسطيني"
+      - "التراث_الفلسطيني"
+      - "المدن_الفلسطينية"
+      - "قرى_فلسطين"
+      - "شخصيات_فلسطينية"
+      - "النكبة"
+      - "لاجئون_فلسطينيون"
+      - "الموسيقى_الفلسطينية"
+      - "التطريز_الفلسطيني"
+      - "الشعر_الفلسطيني"
+    en:
+      - "Palestinian_culture"
+      - "Palestinian_history"
+      - "Palestinian_literature"
+      - "Palestinian_cuisine"
+      - "Palestinian_art"
+      - "Palestinian_people"
+      - "Palestinian_music"
+      - "Palestinian_embroidery"
+      - "History_of_Palestine"
+      - "Cities_in_Palestine"
+      - "Villages_in_Mandatory_Palestine"
+      - "Nakba"
+      - "Palestinian_poetry"
+      - "Palestinian_architects"
+  category_depth: 2
+  max_articles_per_category: 500
+  max_articles_per_language: 8000
+  rate_limit_delay: 1.0
+  max_retries: 3
+  timeout: 30
+
+gdelt:
+  enabled: false
+  country_codes: ["PS"]
+  date_start: "2010-01-01"
+  date_end: null
+  source_id: "gdelt"
+  credibility_tier: "tier_1"
+  credibility_score: 0.88
+
+wafa:
+  enabled: false
+  base_url: "https://wafa.ps"
+  source_id: "wafa-news"
+  credibility_tier: "tier_2"
+  credibility_score: 0.75
+  rate_limit_delay: 2.0
+
+nakba_archive:
+  enabled: false
+  base_url: "https://nakba-archive.org"
+  source_id: "nakba-archive"
+  credibility_tier: "tier_2"
+  credibility_score: 0.78
+  rate_limit_delay: 3.0
+
+palestine_remembered:
+  enabled: false
+  base_url: "https://palestineremembered.com"
+  source_id: "palestine-remembered"
+  credibility_tier: "tier_2"
+  credibility_score: 0.72
+  rate_limit_delay: 3.0
+
+semantic_scholar:
+  enabled: false
+  source_id: "semantic-scholar"
+  credibility_tier: "tier_1"
+  credibility_score: 0.91
+  queries:
+    - "Palestinian culture"
+    - "Palestine NLP"
+    - "Arabic heritage"
+    - "Palestinian history"
+
+credibility_map:
+  "wikipedia.org":          {tier: "tier_1", score: 0.90}
+  "ar.wikipedia.org":       {tier: "tier_1", score: 0.90}
+  "en.wikipedia.org":       {tier: "tier_1", score: 0.90}
+  "gdeltproject.org":       {tier: "tier_1", score: 0.88}
+  "unrwa.org":              {tier: "tier_1", score: 0.92}
+  "un.org":                 {tier: "tier_1", score: 0.93}
+  "semanticscholar.org":    {tier: "tier_1", score: 0.91}
+  "hrw.org":                {tier: "tier_1", score: 0.88}
+  "amnesty.org":            {tier: "tier_1", score: 0.87}
+  "wafa.ps":                {tier: "tier_2", score: 0.75}
+  "btselem.org":            {tier: "tier_2", score: 0.80}
+  "palestine-studies.org":  {tier: "tier_2", score: 0.82}
+  "nakba-archive.org":      {tier: "tier_2", score: 0.78}
+  "palestineremembered.com": {tier: "tier_2", score: 0.72}
+  "default":                {tier: "tier_3", score: 0.45}

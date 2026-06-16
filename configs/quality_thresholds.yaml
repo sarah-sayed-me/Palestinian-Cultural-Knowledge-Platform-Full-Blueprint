@@ -1,0 +1,62 @@
+# configs/quality_thresholds.yaml
+# Tunable quality rules. Change thresholds here, not in code.
+
+content_length:
+  min_word_count: 50
+  min_char_count: 300
+  max_word_count: 100000      # Flag for review if longer (book chapters are OK)
+  warn_word_count: 50000      # Warn but accept
+
+language:
+  accepted_languages: ["ar", "en"]
+  # If declared language differs from detected: warn but don't reject
+  language_mismatch_action: "warn"   # "warn" | "reject"
+
+deduplication:
+  threshold: 0.80             # Jaccard similarity threshold for LSH
+  num_perm: 128               # MinHash permutations
+  shingle_size: 3             # n-gram size for shingling (3 works well for Arabic)
+
+quality_score:
+  # Thresholds for the composite 0.0–1.0 score
+  accept: 0.70                # Clean accept — add to main corpus
+  accept_with_warning: 0.45   # Accept + flag for review
+  reject: 0.20                # Move to bad_docs.parquet
+  hard_reject: 0.00           # Discard entirely, log error
+
+  # Component weights (must sum to 1.0)
+  weights:
+    richness: 0.30
+    credibility: 0.35
+    completeness: 0.20
+    language: 0.15
+
+  # Richness breakpoints
+  richness:
+    full: 200       # word_count >= this → score 1.0
+    medium: 100     # word_count >= this → score 0.7
+    minimal: 50     # word_count >= this → score 0.4
+
+  # Credibility tier scores
+  credibility_tier_scores:
+    tier_1: 1.00
+    tier_2: 0.75
+    tier_3: 0.45
+    tier_4: 0.15
+
+  # Completeness fields to check
+  completeness_fields: ["title", "date_published", "source_url", "language"]
+
+corpus_distribution:
+  # Target proportions — enforce during collection
+  news: 0.60
+  wikipedia: 0.25
+  cultural_heritage: 0.15
+  # Warn when any source exceeds its quota by this margin
+  tolerance: 0.05
+
+output:
+  # Minimum corpus size before HuggingFace export
+  min_docs_for_export: 100
+  # Number of sample documents to log during collection
+  sample_log_every: 100

@@ -1,13 +1,125 @@
-.venv/
+# ─── Python ───────────────────────────────────────────────────────────────────
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+pip-log.txt
+pip-delete-this-directory.txt
 
+# ─── Environment & secrets ────────────────────────────────────────────────────
 .env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
 
+# ─── IDE ──────────────────────────────────────────────────────────────────────
 .vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
 
+# ─── Data — NEVER committed (tracked by DVC) ──────────────────────────────────
 data/raw/*
-data/processed/*
-
 !data/raw/.gitkeep
+!data/raw/wikipedia/
+data/raw/wikipedia/*
+!data/raw/wikipedia/.gitkeep
+!data/raw/wikipedia/ar/
+data/raw/wikipedia/ar/*
+!data/raw/wikipedia/ar/.gitkeep
+!data/raw/wikipedia/en/
+data/raw/wikipedia/en/*
+!data/raw/wikipedia/en/.gitkeep
+
+data/processed/*
 !data/processed/.gitkeep
+
+data/metadata/*
+!data/metadata/.gitkeep
+
+data/entities/*
+!data/entities/.gitkeep
+
+data/graph/*
+!data/graph/.gitkeep
+
+# ─── Embeddings & Vector databases ────────────────────────────────────────────
+*.npy
+*.npz
+chroma/
+chromadb/
+faiss_index/
+*.faiss
+*.index
+embeddings/
+
+# ─── Trained models & checkpoints ─────────────────────────────────────────────
+models/
+checkpoints/
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.gguf
+*.ggml
+*.onnx
+saved_model/
+
+# ─── HuggingFace & transformers cache ─────────────────────────────────────────
+.cache/
+~/.cache/huggingface/
+hf_cache/
+hub/
+
+# ─── DVC ──────────────────────────────────────────────────────────────────────
+.dvc/cache/
+.dvc/tmp/
+*.dvc
+!dvc.yaml
+!dvc.lock
+
+# ─── Jupyter notebooks output ─────────────────────────────────────────────────
+.ipynb_checkpoints/
+# Keep notebooks but strip outputs via nbstripout (recommended)
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+logs/
+*.log
+*.log.*
+
+# ─── Database files ───────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+
+# ─── Parquet & large data files ───────────────────────────────────────────────
+*.parquet
+*.arrow
+*.feather
+*.jsonl
+*.tmp
+*.temp
+*.h5
+*.hdf5
+
+# ─── Scrapy ───────────────────────────────────────────────────────────────────
+.scrapy/
+
+# ─── Coverage & testing ───────────────────────────────────────────────────────
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
