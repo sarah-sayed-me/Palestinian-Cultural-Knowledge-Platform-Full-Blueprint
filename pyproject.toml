@@ -3,7 +3,7 @@ name = "palestinian-cultural-knowledge-platform-full-blueprint"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 dependencies = [
     "beautifulsoup4>=4.15.0",
     "chardet>=7.4.3",

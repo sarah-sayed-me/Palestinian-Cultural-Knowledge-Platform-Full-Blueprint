@@ -33,6 +33,15 @@ wikipedia:
       - "الموسيقى_الفلسطينية"
       - "التطريز_الفلسطيني"
       - "الشعر_الفلسطيني"
+      - "العمارة_الفلسطينية"
+      - "الآثار_في_فلسطين"
+      - "المواقع_الأثرية_في_فلسطين"
+      - "الحرف_التقليدية_الفلسطينية"
+      - "الأغاني_الشعبية_الفلسطينية"
+      - "الأمثال_الفلسطينية"
+      - "المهرجانات_الفلسطينية"
+      - "المساجد_في_فلسطين"
+      - "الكنائس_في_فلسطين"
     en:
       - "Palestinian_culture"
       - "Palestinian_history"
@@ -48,7 +57,13 @@ wikipedia:
       - "Nakba"
       - "Palestinian_poetry"
       - "Palestinian_architects"
-  category_depth: 2
+      - "Palestinian_architecture"
+      - "Archaeological_sites_in_Palestine"
+      - "Palestinian_folklore"
+      - "Palestinian_festivals"
+      - "Mosques_in_Palestine"
+      - "Churches_in_Palestine"
+  category_depth: 3
   max_articles_per_category: 500
   max_articles_per_language: 8000
   rate_limit_delay: 1.0
