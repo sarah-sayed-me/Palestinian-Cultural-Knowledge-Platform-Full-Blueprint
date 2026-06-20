@@ -33,6 +33,14 @@ _BOILERPLATE_PATTERNS = [
     re.compile(r"جميع الحقوق محفوظة.*"),
     re.compile(r"Cookie\s+Policy.*", re.IGNORECASE),
     re.compile(r"Privacy\s+Policy.*", re.IGNORECASE),
+    re.compile(r"تابعونا على.*"),
+    re.compile(r"Follow us on.*", re.IGNORECASE),
+    re.compile(r"شارك هذا الخبر.*"),
+    re.compile(r"Share this article.*", re.IGNORECASE),
+    re.compile(r"اقرأ أيضا.*", re.IGNORECASE),
+    re.compile(r"Read more.*", re.IGNORECASE),
+    re.compile(r"تم النشر في.*"),
+    re.compile(r"Published on.*", re.IGNORECASE)
 ]
 
 _WIKI_SECTION_RE = re.compile(

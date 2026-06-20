@@ -52,6 +52,10 @@ class SourceType(str, Enum):
     SOCIAL_MEDIA = "social_media"
     POETRY = "poetry"
     LEGAL_DOC = "legal_doc"
+    BOOK = "book"
+    ARCHIVE_DOCUMENT = "archive_document"
+    INTERVIEW = "interview"
+    IMAGE_METADATA = "image_metadata"
     OTHER = "other"
 
 
@@ -67,6 +71,11 @@ class ContentCategory(str, Enum):
     ARCHITECTURE = "architecture"
     EDUCATION = "education"
     ECONOMY = "economy"
+    MUSIC = "music"
+    FOLKLORE = "folklore"
+    HERITAGE = "heritage"
+    BIOGRAPHY = "biography"
+    GEOGRAPHY = "geography"
     UNCATEGORIZED = "uncategorized"
 
 

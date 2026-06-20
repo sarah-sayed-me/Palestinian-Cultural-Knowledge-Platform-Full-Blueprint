@@ -29,7 +29,7 @@ from src.preprocessing.arabic_normalizer import count_arabic_ratio
 MIN_WORD_COUNT = 50
 MIN_CHAR_COUNT = 300
 MAX_WORD_COUNT = 100_000
-MIN_ARABIC_RATIO = 0.20   # At least 20% Arabic chars for "ar" language docs
+MIN_ARABIC_RATIO = 0.40   # At least 40% Arabic chars for Arabic language docs
 ACCEPT_THRESHOLD = 0.70
 WARN_THRESHOLD = 0.45
 
@@ -85,7 +85,7 @@ def _rule_language(text: str, declared_language: str) -> tuple[bool, list[str]]:
 
 
 def _rule_required_fields(doc: DocumentMetadata) -> tuple[bool, list[str]]:
-    required = ["doc_id", "text", "source_id", "language", "date_collected"]
+    required = ["doc_id", "text", "source_id", "language", "date_collected", "source_name", "source_type"]
     missing = [f for f in required if not getattr(doc, f, None)]
     if missing:
         return False, [f"Missing required fields: {', '.join(missing)}"]
@@ -96,14 +96,17 @@ def _compute_quality_score(doc: DocumentMetadata) -> float:
     """Weighted composite quality score (0.0–1.0).
 
     Components:
-      Content richness  30%
-      Source credibility 35%
+      Content richness  40%
+      Source credibility 20%
       Metadata completeness 20%
-      Language validity  15%
+      Language validity  20%
     """
-    # 1. Content richness (30%)
+    # 1. Content richness (40%)
     if doc.word_count >= 200:
-        richness = 1.0
+        richness = min(
+            doc.word_count / 1000,
+            1.0
+        )
     elif doc.word_count >= 100:
         richness = 0.70
     elif doc.word_count >= MIN_WORD_COUNT:
@@ -111,7 +114,7 @@ def _compute_quality_score(doc: DocumentMetadata) -> float:
     else:
         richness = 0.0
 
-    # 2. Source credibility (35%)
+    # 2. Source credibility (20%)
     tier_scores = {
         CredibilityTier.TIER_1: 1.0,
         CredibilityTier.TIER_2: 0.75,
@@ -121,22 +124,31 @@ def _compute_quality_score(doc: DocumentMetadata) -> float:
     credibility = tier_scores.get(CredibilityTier(doc.credibility), 0.30)
 
     # 3. Metadata completeness (20%)
-    meta_fields = ["title", "date_published", "source_url", "language"]
+    meta_fields = [
+        "title",
+        "source_url",
+        "language",
+        "source_name",
+    ]    
     filled = sum(1 for f in meta_fields if getattr(doc, f, None) is not None)
     completeness = filled / len(meta_fields)
 
     # 4. Language validity (15%)
     lang_score = 0.0 if doc.language == Language.UNKNOWN else 1.0
     # Bonus for correctly detected Arabic
-    if str(doc.language).startswith("ar"):
+    if doc.language in {
+    Language.ARABIC_MSA,
+    Language.ARABIC_PAL,
+    Language.ARABIC_OTHER,
+    }:
         ratio = count_arabic_ratio(doc.text)
         lang_score = min(1.0, ratio / 0.5)  # Full score at 50%+ Arabic
 
     score = (
-        richness * 0.30
-        + credibility * 0.35
+        richness * 0.40
+        + credibility * 0.20
         + completeness * 0.20
-        + lang_score * 0.15
+        + lang_score * 0.20
     )
     return round(score, 4)
 

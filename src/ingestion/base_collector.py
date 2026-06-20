@@ -7,8 +7,12 @@ pipeline orchestrator can treat all collectors identically.
 
 Contract:
   - `collect()` is a generator that yields DocumentMetadata objects.
-  - Each yielded document has already been normalised and quality-checked
-    by the collector itself (using shared utilities from preprocessing/).
+  Collector is responsible for:
+    - Fetching
+    - Parsing
+    - Normalization
+
+    Quality validation is performed later in the pipeline.
   - Duplicates are detected externally by the pipeline using DuplicationIndex.
   - The base class provides shared helpers: logging, retry, progress bars.
 """

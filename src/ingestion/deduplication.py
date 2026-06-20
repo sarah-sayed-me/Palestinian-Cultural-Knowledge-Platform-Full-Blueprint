@@ -25,7 +25,7 @@ class DupResult:
 class DuplicationIndex:
     """Maintains an in-memory LSH index for one pipeline run."""
 
-    def __init__(self, threshold: float = 0.80, num_perm: int = NUM_PERM):
+    def __init__(self, threshold: float = 0.70, num_perm: int = NUM_PERM):
         self.threshold = threshold
         self.num_perm = num_perm
         self._lsh = MinHashLSH(threshold=threshold, num_perm=num_perm) if _HAS_DATASKETCH else None

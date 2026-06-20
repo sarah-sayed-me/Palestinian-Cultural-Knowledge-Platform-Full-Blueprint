@@ -26,10 +26,10 @@ quality_score:
 
   # Component weights (must sum to 1.0)
   weights:
-    richness: 0.30
-    credibility: 0.35
+    richness: 0.40
+    credibility: 0.20
     completeness: 0.20
-    language: 0.15
+    language: 0.20
 
   # Richness breakpoints
   richness:
@@ -45,15 +45,16 @@ quality_score:
     tier_4: 0.15
 
   # Completeness fields to check
-  completeness_fields: ["title", "date_published", "source_url", "language"]
+  completeness_fields: ["title", "source_url", "source_name", "language"]
 
 corpus_distribution:
   # Target proportions — enforce during collection
-  news: 0.60
+  cultural_heritage: 0.35
   wikipedia: 0.25
-  cultural_heritage: 0.15
+  books: 0.20
+  archives: 0.15
   # Warn when any source exceeds its quota by this margin
-  tolerance: 0.05
+  news: 0.05
 
 output:
   # Minimum corpus size before HuggingFace export
