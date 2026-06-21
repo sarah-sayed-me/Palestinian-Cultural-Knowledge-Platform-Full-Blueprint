@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+from email import generator
 import json
 from pathlib import Path
+from random import seed
 from typing import Generator, Iterable, Optional
 from urllib.parse import quote
 
@@ -25,10 +27,25 @@ MAINTENANCE_CATEGORY_PATTERNS = (
     "بوابة",
     "صيانة",
     "صفحات تستخدم",
+    "صفحات مع",
     "صفحات بها",
     "قالب",
     "جميع المقالات",
+    "جميع مقالات",
+    "مقالات يتيمة",
     "أخطاء الاستشهاد",
+    "الاستشهاد",
+    "ويكي بيانات",
+
+    # NEW
+    "وصلات خارجية مكسورة",
+    "بحاجة لمصادر",
+    "بأخطاء في المراجع",
+    "تحوي نصا",
+    "ISBN",
+    "بذرة",
+    "بحاجة لتعديل",
+    "قوالب خرائط",
 )
 
 
@@ -162,18 +179,34 @@ class WikipediaCollector(BaseCollector):
             )
 
     def _iter_candidate_pages(self) -> Iterable:
-        for seed in self.seed_categories:
-            category_page = self._get_page(self._category_title(seed))
-            if self._page_exists(category_page):
-                yield from self._walk_category(category_page, depth=0, seed=seed)
-                continue
+        """Round-robin across seed categories so no single large seed
+        (e.g. the broad top-level 'فلسطين' category) can exhaust max_docs
+        before other seeds (cuisine, poetry, music, etc.) get a turn.
+        """
+        seed_generators = [self._iter_seed_pages(seed) for seed in self.seed_categories]
+        active = list(seed_generators)
+        while active:
+            still_active = []
+            for generator in active:
+                try:
+                    yield next(generator)
+                    still_active.append(generator)
+                except StopIteration:
+                    continue
+            active = still_active
 
-            direct_page = self._get_page(seed)
-            if self._page_exists(direct_page) and self._is_article(direct_page):
-                key = self._page_key(direct_page)
-                if key not in self._seen_pages:
-                    self._seen_pages.add(key)
-                    yield seed, direct_page
+    def _iter_seed_pages(self, seed: str) -> Iterable:
+        category_page = self._get_page(self._category_title(seed))
+        if self._page_exists(category_page):
+            yield from self._walk_category(category_page, depth=0, seed=seed)
+            return
+
+        direct_page = self._get_page(seed)
+        if self._page_exists(direct_page) and self._is_article(direct_page):
+            key = self._page_key(direct_page)
+            if key not in self._seen_pages:
+                self._seen_pages.add(key)
+                yield seed, direct_page
 
     def _walk_category(self, category_page, *, depth: int, seed: str) -> Iterable:
         category_key = self._page_key(category_page)
