@@ -21,6 +21,38 @@ from src.ingestion.schemas import (
 from src.preprocessing.arabic_normalizer import full_clean
 from src.utils.collection_logger import CollectionLogger
 
+MAINTENANCE_CATEGORY_PATTERNS = (
+    "بوابة",
+    "صيانة",
+    "صفحات تستخدم",
+    "صفحات بها",
+    "قالب",
+    "جميع المقالات",
+    "أخطاء الاستشهاد",
+)
+
+
+def is_maintenance_category(category_name: str) -> bool:
+    """True if category_name is Wikipedia bookkeeping/admin noise, not topical content."""
+    return any(pattern in category_name for pattern in MAINTENANCE_CATEGORY_PATTERNS)
+
+DIASPORA_TERMINAL_PATTERNS = (
+    "من أصل فلسطيني",
+)
+
+
+def is_diaspora_terminal_category(category_name: str) -> bool:
+    """True if category_name marks a Palestinian-diaspora-origin category.
+
+    Categories like "Jordanians of Palestinian origin" contain genuinely
+    relevant articles, but their *subcategories* (ministers, parliament
+    members, born-in-city grids) typically belong to the host country's
+    category system, not Palestinian topics. We collect this category's
+    own articles but never recurse past it — this is a structural rule
+    about category *type*, not a nationality blocklist, so it doesn't
+    exclude any host-country term.
+    """
+    return any(pattern in category_name for pattern in DIASPORA_TERMINAL_PATTERNS)
 
 class WikipediaCollector(BaseCollector):
     """Collect Palestine-related articles from Wikipedia category seeds."""
@@ -50,6 +82,17 @@ class WikipediaCollector(BaseCollector):
         self.max_articles_per_category = int(
             self.source_config.get("max_articles_per_category", 100)
         )
+        self.max_articles_per_language = (
+            int(self.source_config["max_articles_per_language"])
+            if self.source_config.get("max_articles_per_language")
+            else None
+        )
+        if self.max_articles_per_language is not None:
+            self.max_docs = (
+                self.max_articles_per_language
+                if self.max_docs is None
+                else min(self.max_docs, self.max_articles_per_language)
+            )
         self.max_retries = int(self.source_config.get("max_retries", 3))
         self.timeout = int(self.source_config.get("timeout", 30))
         self.seed_categories = list(
@@ -75,11 +118,11 @@ class WikipediaCollector(BaseCollector):
         try:
             candidates = self._iter_candidate_pages()
             progress = tqdm(candidates, total=self.max_docs, desc=f"{self.SOURCE_NAME} articles")
-            for page in progress:
+            for seed, page in progress:
                 if self.max_docs is not None and emitted >= self.max_docs:
                     break
                 self.collection_logger.record_attempt()
-                document = self._page_to_document(page)
+                document = self._page_to_document(page, seed_category=seed)
                 if document is None:
                     continue
                 emitted += 1
@@ -122,7 +165,7 @@ class WikipediaCollector(BaseCollector):
         for seed in self.seed_categories:
             category_page = self._get_page(self._category_title(seed))
             if self._page_exists(category_page):
-                yield from self._walk_category(category_page, depth=0)
+                yield from self._walk_category(category_page, depth=0, seed=seed)
                 continue
 
             direct_page = self._get_page(seed)
@@ -130,9 +173,9 @@ class WikipediaCollector(BaseCollector):
                 key = self._page_key(direct_page)
                 if key not in self._seen_pages:
                     self._seen_pages.add(key)
-                    yield direct_page
+                    yield seed, direct_page
 
-    def _walk_category(self, category_page, *, depth: int) -> Iterable:
+    def _walk_category(self, category_page, *, depth: int, seed: str) -> Iterable:
         category_key = self._page_key(category_page)
         if category_key in self._seen_categories:
             return
@@ -145,8 +188,16 @@ class WikipediaCollector(BaseCollector):
                 return
 
             if self._is_category(member):
-                if depth < self.category_depth:
-                    yield from self._walk_category(member, depth=depth + 1)
+                member_title = str(getattr(member, "title", ""))
+                if is_maintenance_category(member_title):
+                    continue
+                if is_diaspora_terminal_category(member_title):
+                    # Harvest this category's own articles only; stop here.
+                    yield from self._walk_category(
+                        member, depth=self.category_depth, seed=seed
+                    )
+                elif depth < self.category_depth:
+                    yield from self._walk_category(member, depth=depth + 1, seed=seed)
                 continue
 
             if not self._is_article(member):
@@ -157,7 +208,7 @@ class WikipediaCollector(BaseCollector):
                 continue
             self._seen_pages.add(key)
             yielded_for_category += 1
-            yield member
+            yield seed, member
 
             if yielded_for_category >= self.max_articles_per_category:
                 return
@@ -177,7 +228,9 @@ class WikipediaCollector(BaseCollector):
     def _get_page(self, title: str):
         return self._retry(self._wiki.page, title, retries=self.max_retries)
 
-    def _page_to_document(self, page) -> Optional[DocumentMetadata]:
+    def _page_to_document(
+        self, page, *, seed_category: Optional[str] = None
+    ) -> Optional[DocumentMetadata]:
         try:
             raw_text = getattr(page, "text", "") or ""
             cleaned_text = full_clean(raw_text, is_wikipedia=True)
@@ -210,6 +263,7 @@ class WikipediaCollector(BaseCollector):
                 wikipedia_page_id=self._optional_int(page, "pageid"),
                 wikipedia_revid=self._optional_int(page, "revision_id", "revid", "lastrevid"),
                 wikipedia_categories=categories,
+                seed_category=seed_category,
                 raw_file_path=None,
             )
         except Exception as exc:
@@ -244,7 +298,11 @@ class WikipediaCollector(BaseCollector):
     def _page_categories(self, page) -> list[str]:
         categories = getattr(page, "categories", {}) or {}
         names = categories.keys() if isinstance(categories, dict) else categories
-        return sorted(str(name).replace("تصنيف:", "").replace("Category:", "") for name in names)
+        cleaned = (
+            str(name).replace("تصنيف:", "").replace("Category:", "")
+            for name in names
+        )
+        return sorted(name for name in cleaned if not is_maintenance_category(name))
 
     def _page_key(self, page) -> str:
         return str(getattr(page, "title", "") or getattr(page, "pageid", "unknown"))

@@ -81,6 +81,8 @@ def run_wikipedia_arabic_pipeline(
     }
     categories: Counter[str] = Counter()
     decisions: Counter[str] = Counter()
+    rejection_reasons: Counter[str] = Counter()
+    seed_categories_counter: Counter[str] = Counter()
 
     with accepted_path.open("w", encoding="utf-8") as accepted, rejected_path.open(
         "w", encoding="utf-8"
@@ -95,6 +97,7 @@ def run_wikipedia_arabic_pipeline(
 
             if quality.decision in {QualityDecision.REJECT, QualityDecision.HARD_REJECT}:
                 stats["rejected_documents"] += 1
+                rejection_reasons[quality.rejection_reason or "unknown"] += 1
                 _write_jsonl(rejected, document.model_dump(mode="json"))
                 continue
 
@@ -105,12 +108,14 @@ def run_wikipedia_arabic_pipeline(
                 document.rejection_reason = "duplicate"
                 stats["duplicate_documents"] += 1
                 stats["rejected_documents"] += 1
+                rejection_reasons["duplicate"] += 1
                 _write_jsonl(rejected, document.model_dump(mode="json"))
                 continue
 
             stats["accepted_documents"] += 1
             stats["total_words"] += document.word_count
             categories.update(document.wikipedia_categories)
+            seed_categories_counter.update([document.seed_category or "unknown"])
             _write_jsonl(accepted, document.model_dump(mode="json"))
 
     accepted_count = stats["accepted_documents"]
@@ -118,6 +123,8 @@ def run_wikipedia_arabic_pipeline(
         stats["average_document_length"] = round(stats["total_words"] / accepted_count, 2)
     stats["category_distribution"] = dict(categories.most_common(50))
     stats["quality_decision_distribution"] = dict(decisions)
+    stats["rejection_reason_distribution"] = dict(rejection_reasons.most_common(50))
+    stats["seed_category_distribution"] = dict(seed_categories_counter.most_common(50))
     stats["deduplication"] = dedup_index.stats()
     stats["duration_seconds"] = round(time.time() - started, 2)
 

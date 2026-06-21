@@ -63,7 +63,7 @@ wikipedia:
       - "Palestinian_festivals"
       - "Mosques_in_Palestine"
       - "Churches_in_Palestine"
-  category_depth: 3
+  category_depth: 2
   max_articles_per_category: 500
   max_articles_per_language: 8000
   rate_limit_delay: 1.0

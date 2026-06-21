@@ -153,6 +153,11 @@ class DocumentMetadata(BaseModel):
         default_factory=list,
         description="Raw category strings from Wikipedia, e.g. ['فلسطين', 'تاريخ فلسطين']"
     )
+    seed_category: Optional[str] = Field(
+        default=None,
+        description="The seed category (from configs/sources.yaml) that led to this "
+                    "document's discovery, for traversal auditing."
+    )
 
     # --- Temporal ---
     date_published: Optional[datetime] = None
