@@ -46,6 +46,15 @@ MAINTENANCE_CATEGORY_PATTERNS = (
     "بذرة",
     "بحاجة لتعديل",
     "قوالب خرائط",
+
+    # v2 — morphological / phrase coverage (plurals & "لا تقبل ..." phrasing
+    # weren't matched by the singular/short forms above)
+    "قوالب",            # plural of "قالب" — catches "تستعمل قوالب معلومات"
+    "بوابات",           # plural of "بوابة" — catches "ربط البوابات المعادل"
+    "لا تقبل",          # catches "لا تقبل التصنيف المعادل" / "لا تقبل ربط البوابات المعادل"
+    "تحتاج إلى",        # catches "تحتاج إلى صور" / "تحتاج إلى تدقيق" etc.
+    "مقالات بها",       # "صفحات بها" above doesn't match "مقالات بها أقسام فارغة"
+    "أقسام فارغة",
 )
 
 
