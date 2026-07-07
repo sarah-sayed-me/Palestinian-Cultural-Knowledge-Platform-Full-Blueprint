@@ -123,3 +123,5 @@ htmlcov/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+data/train_corpus_with_entities.json
