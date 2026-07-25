@@ -11,7 +11,10 @@ and retrieval-augmented question answering.
 
 The current implementation focuses on **Arabic Wikipedia** as a clean, licensable first
 source, with the ingestion, quality, deduplication, and named-entity-recognition stages
-working end to end. Everything beyond NER is scaffolded but not yet implemented.
+working end to end. Retrieval-augmented QA (RAG), the knowledge graph, and the analysis
+phases (topic modeling, cultural classification, bias measurement, temporal analysis) are
+fully designed — see `ROADMAP.md` — and under active build in that order, prioritized to
+reach a working RAG system first without narrowing the platform's scope.
 
 ## Goals
 
@@ -27,41 +30,41 @@ working end to end. Everything beyond NER is scaffolded but not yet implemented.
 
 ## Architecture
 
-Config-driven collectors emit a unified `DocumentMetadata` record that every downstream
-stage consumes.
+Config-driven collectors emit a unified `DocumentMetadata` record. Everything downstream —
+RAG, the knowledge graph, and every analysis phase — reads from that same record and its
+sibling `Chunk` / `KGEntity` / `KGRelation` records rather than re-deriving its own shape;
+see `ROADMAP.md` §2 for the full data-contract design.
 
 ```
                  configs/sources.yaml          configs/quality_thresholds.yaml
                         │                                │
    ┌────────────────────▼────────────────────┐          │
    │   Collectors (BaseCollector interface)   │          │
-   │   Wikipedia AR  ✓                         │          │
-   │   GDELT · WAFA · archives · papers  ✗     │          │
+   │   Wikipedia AR  ✓   GDELT · WAFA · archives · papers  ✗
    └────────────────────┬────────────────────┘          │
                         ▼                                │
         Normalization  ──►  Quality scoring  ──►  Deduplication (MinHash / LSH)
         (Arabic clean)      (composite 0–1)  ◄─────────────┘
                         │
                         ▼
-             DocumentMetadata (unified Pydantic schema)
+             DocumentMetadata (unified Pydantic schema — stable, extended via sibling models only)
                         │
-             ┌──────────┴──────────────┐
-             ▼                         ▼
-     JSONL corpus              HF export (Parquet)  ──►  Hugging Face dataset
-             │
-             ▼
-     NER: CAMeL + heritage dictionary  ✓
-             │
-             ▼
-     Entity linking + relation extraction   ✗
-             │
-             ▼
-     Knowledge graph   ✗   ──►   Topic modeling / classification   ✗
-             │
-             ▼
-     Embeddings + RAG (retrieval-augmented QA)   ✗
+        ┌───────────────┼────────────────────────────┬─────────────────────┐
+        ▼               ▼                            ▼                     ▼
+  NER: CAMeL +   Chunk + embed (Qwen3-Embedding)  Topic modeling /   Temporal analysis
+  heritage dict ✓  ──► pgvector index ✗         content classification  (decade buckets) ✗
+        │               │                            (BERTopic/AraBERT) ✗
+        ▼               ▼
+  Entity linking    Retriever ──► Generator (Ollama·Qwen3)
+  + relations ✗       ──► grounded, cited RAG answers ✗
+        │
+        ▼
+  Knowledge graph (Neo4j) ✗ ──► Bias measurement (WEAT / framing / LLM probe) ✗
+        │
+        ▼
+  Dashboard (Streamlit → HF Spaces): Bias Meter · Topic Map · Timeline · KG Explorer ✗
 
-     ✓ implemented   ✗ planned
+  ✓ implemented   ✗ planned — see ROADMAP.md for build order and status
 ```
 
 ## Development Philosophy
@@ -82,19 +85,30 @@ clean, structured, and licensable. Harder inputs (web scraping, OCR, dialectal A
 oral testimony, and non-redistributable licensing) are introduced incrementally so each
 can stress the shared pipeline before we commit to scale.
 
+This same philosophy shapes the build order, not just the corpus: RAG is sequenced before
+the knowledge graph and the analysis phases because it is the fastest way to validate the
+core data contracts (chunking, embeddings, retrieval) against real output — not because the
+KG, topic modeling, cultural classification, bias measurement, or temporal analysis matter
+less. Every one of those phases is fully designed up front precisely so that reaching RAG
+first never forces a redesign later. See `ROADMAP.md` for the full reasoning.
+
 ## Milestones
+
+Full priorities, dependencies, technical-decision rationale, and a two-developer execution
+plan live in **`ROADMAP.md`**. Summary:
 
 | # | Phase | Status |
 |---|-------|--------|
 | 1 | Ingestion — Arabic Wikipedia collection with provenance | **Done (iterating)** |
 | 2 | Text normalization, quality scoring, deduplication | **Done** |
 | 3 | Corpus packaging & publishing (Parquet / Hugging Face) | **Done** |
-| 4 | Multi-source expansion (EN Wikipedia, news, archives, papers) | Planned |
-| 5 | Named Entity Recognition (CAMeL + heritage dictionary) | **Implemented — needs evaluation** |
-| 6 | Entity linking, canonicalization & relation extraction | Planned |
-| 7 | Knowledge graph construction | Planned |
-| 8 | Topic modeling & content classification | Planned |
-| 9 | Embeddings + retrieval-augmented QA (RAG) | Planned |
+| 4 | Named Entity Recognition (CAMeL + heritage dictionary) | **Implemented — eval in progress** |
+| 5 | Retrieval-augmented QA (chunk → embed → pgvector → retrieve → generate) | **Next — critical path** |
+| 6 | Evaluation layer (NER, embeddings, retrieval, RAG) | Planned, gates phase 7 |
+| 7 | Multi-source expansion (EN Wikipedia, news, archives, papers) + licensing gate | Planned |
+| 8 | Entity linking, relation extraction & knowledge graph (Neo4j) | Planned |
+| 9 | Topic modeling, cultural classification, bias measurement, temporal analysis | Planned |
+| 10 | Dashboard (Streamlit → Hugging Face Spaces) | Planned |
 
 ## Repository Structure
 
@@ -105,12 +119,19 @@ src/
     collectors/     Per-source collectors (Wikipedia; base class for the rest)
   preprocessing/    Arabic text normalization
   utils/            Collection logging
+  rag/              Chunking, embedding, pgvector index, retriever, generator (next up — empty)
+  knowlegde_graph/  Entity canonicalization, linking, relations, KG store (planned — empty)
+  nlp/              Topic modeling, cultural classification, bias, temporal analysis (planned — empty)
+  api/              RAG API endpoint (planned — empty)
+  frontend/         Dashboard (planned — empty)
+eval/               Shared evaluation harness — NER, embeddings, retrieval, RAG, KG (planned — not yet created)
 scripts/            Runnable entrypoints (NER, HF export/publish, seed audit)
 tests/              Unit tests for schema, quality, dedup, normalizer, NER, export
 docs/               Publishing guide and supporting documentation
 reports/            Generated audit reports (seed categories)
 data/               Local corpus artifacts (git-ignored)
 main.py             Pipeline entrypoint
+ROADMAP.md          Full milestone breakdown, technical decisions, execution plan
 ```
 
 ## Current Status
@@ -118,7 +139,10 @@ main.py             Pipeline entrypoint
 The Arabic Wikipedia path is functional end to end. A representative run collected ~500
 articles, accepted 484 after quality and duplicate filtering, and NER has been run across
 the accepted corpus. The unified schema, quality/dedup logic, seed-category audit tooling,
-and Hugging Face export are all working and covered by tests.
+and Hugging Face export are all working and covered by tests. RAG (chunking, embedding
+with Qwen3-Embedding, a pgvector index, retriever, and an Ollama/Qwen3 local-first
+generator behind a stable interface) is designed and next up for implementation — see
+`ROADMAP.md` for the critical path and the reasoning behind each technical choice.
 
 Typical run:
 
@@ -129,20 +153,13 @@ python scripts/run_ner.py            # enrich the corpus with entities
 ```
 
 Generated datasets are intentionally git-ignored; see `docs/huggingface_publishing_guide.md`.
-All stages after NER (entity linking, knowledge graph, topic modeling, RAG) are defined in
-the schema and roadmap but not yet implemented.
 
 ## Future Work
 
-- **Incremental collection**: persist the deduplication index and dedup against the existing
-  corpus so the corpus can grow across runs instead of being overwritten.
-- **Multi-source ingestion**: implement collectors for the sources currently defined-but-disabled
-  in `configs/sources.yaml`, including a per-source licensing/rights check before publishing.
-- **NER evaluation**: build a small gold-annotated set and report precision/recall before
-  downstream stages depend on entity output.
-- **Entity linking + relation extraction** to bridge NER into a knowledge graph.
-- **Knowledge graph, topic modeling, and RAG** per phases 7–9.
-- **Collection-time relevance gating** to reduce topical drift into neighboring-country content.
+See `ROADMAP.md` for the complete, prioritized breakdown (Tracks A–H: evaluation,
+multi-source expansion, knowledge graph, topic modeling, cultural classification, bias
+measurement, temporal analysis, dashboard, and infrastructure hardening) with priorities,
+dependencies, and effort estimates for each item.
 
 ## Contributing
 
