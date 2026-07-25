@@ -1,0 +1,38 @@
+# configs/rag.yaml
+# RAG pipeline configuration. Tunable values live here, not in code — same
+# convention as configs/quality_thresholds.yaml. See ROADMAP.md Section 3 for the
+# reasoning behind each default and Section 3.4 for hardware-based model sizing.
+
+chunking:
+  strategy: "recursive-sentence-aware"
+  chunking_version: "recursive-500-v1"   # bump this (not the values below) on any strategy change
+  target_tokens: 500
+  overlap_tokens: 75                     # ~15% of target_tokens
+
+embedding:
+  provider: "sentence-transformers"
+  model: "Qwen/Qwen3-Embedding-0.6B"
+  embedding_version: "qwen3-embedding-0.6b-v1"
+  dimensions: 1024
+  batch_size: 32
+  device: "cuda"                         # "auto" | "cpu" | "cuda"
+
+vector_store:
+  backend: "pgvector"
+  table: "rag_chunks"
+  distance: "cosine"
+
+retrieval:
+  top_k: 5
+  min_credibility_tier: null             # e.g. "tier_2" to exclude tier_3/tier_4 at query time
+
+generation:
+  provider: "ollama"
+  model: "qwen3:14b"                     # pick per available hardware — see ROADMAP.md Section 3.4
+  host_env_var: "OLLAMA_HOST"
+  temperature: 0.2
+  max_output_tokens: 1024
+  fallback:
+    provider: "gemini"
+    model: "gemini-2.5-flash"
+    note: "Free tier; prompts may be used by Google to improve their products — confirm before enabling."

@@ -13,7 +13,7 @@ import yaml
 
 from src.ingestion.collectors.wikipedia_collector import WikipediaCollector
 from src.ingestion.deduplication import DuplicationIndex
-from src.ingestion.quality_checker import check_document
+from src.ingestion.quality_checker import QualityConfig, check_document
 from src.ingestion.schemas import QualityDecision
 
 DEFAULT_SOURCES_CONFIG = Path("configs/sources.yaml")
@@ -54,6 +54,7 @@ def run_wikipedia_arabic_pipeline(
         threshold=float(dedup_config.get("threshold", 0.80)),
         num_perm=int(dedup_config.get("num_perm", 128)),
     )
+    quality_thresholds = QualityConfig.load(quality_path)
     collector = WikipediaCollector(
         language="ar",
         source_config=wikipedia_config,
@@ -89,7 +90,7 @@ def run_wikipedia_arabic_pipeline(
     ) as rejected:
         for document in collector.collect():
             stats["attempted_documents"] += 1
-            quality = check_document(document)
+            quality = check_document(document, quality_thresholds)
             document.quality_score = quality.quality_score
             document.quality_decision = quality.decision
             document.rejection_reason = quality.rejection_reason

@@ -31,11 +31,14 @@ quality_score:
     completeness: 0.20
     language: 0.20
 
-  # Richness breakpoints
+  # Richness breakpoints. Monotonic by construction: minimal/medium are flat
+  # floors, then full..saturation is a continuous ramp starting at the medium
+  # score (0.7) so word_count == full never scores lower than full - 1 did.
   richness:
-    full: 200       # word_count >= this → score 1.0
-    medium: 100     # word_count >= this → score 0.7
-    minimal: 50     # word_count >= this → score 0.4
+    minimal: 50       # word_count >= this → flat score 0.4
+    medium: 100       # word_count >= this → flat score 0.7
+    full: 200         # word_count >= this → ramp begins at 0.7
+    saturation: 1000  # word_count >= this → score reaches 1.0
 
   # Credibility tier scores
   credibility_tier_scores:
