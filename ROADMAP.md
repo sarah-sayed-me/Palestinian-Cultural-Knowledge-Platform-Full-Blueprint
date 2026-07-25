@@ -31,12 +31,13 @@ working system and still the right place to start — but now:
 
 ## 1. Definition of done, by horizon
 
-**MVP (Track B, critical path):** a working Arabic RAG system over the *existing* corpus —
-ask a question, get a grounded, cited answer. Same DoD as the prior roadmap:
+**MVP (Track B, critical path) — ✅ ACHIEVED:** a working Arabic RAG system over the
+*existing* corpus — ask a question, get a grounded, cited answer. Same DoD as the prior
+roadmap, now verified against the real, fully-indexed 484-document / 1282-chunk corpus:
 
 ```powershell
-python scripts/ask.py "ما هي الكنافة النابلسية؟"
-# → grounded Arabic answer + [source: <title>, <url>] citations
+uv run python scripts/ask.py "ما هي الكنافة النابلسية؟"
+# → grounded Arabic answer + [1] Title — URL citations
 ```
 
 **Full platform (everything else):** the corpus is multi-source and licensed for
@@ -228,29 +229,35 @@ Each track is independently schedulable once its dependencies clear. **A/B/C are
 critical path to MVP** (unchanged shape from the prior roadmap, now re-grounded in §2/§3).
 Everything else is fully designed but sequenced after, per the reprioritization in the intro.
 
-### Track A — Foundation (P0, gates B and every later track)
+### Track A — Foundation (P0, gates B and every later track) — ✅ DONE
 
-| ID | Task | Priority | Depends on | Mode | Deliverable | Est. |
-|---|---|:--:|---|---|---|:--:|
-| A1 | Core contracts: `Chunk`, `KGEntity`, `KGRelation`, `EvalReport` (§2) | P0 | — | Sequential — do first, together | `src/rag/schemas.py`, `src/knowlegde_graph/schemas.py`, `eval/schemas.py` | 0.5d |
-| A2 | Dependencies & environment: `pyproject.toml` additions (`anthropic` optional, `ollama`/`sentence-transformers`, `pgvector`/`psycopg2` already present), `docker-compose.yml` for Postgres+pgvector, `configs/rag.yaml`. **Verify install resolves on Python 3.14 day one** (R1 below) | P0 | — | Parallel | Updated `pyproject.toml`, working `uv sync`, running local Postgres | 0.5d |
-| A3 | Fix the known quality-scoring bugs before more data flows through them: non-monotonic richness curve and dead `quality_thresholds.yaml` (config exists but isn't read) in `src/ingestion/quality_checker.py` | P1 | — | Parallel | Passing `tests/test_quality_checker.py` + a regression case for the 200-word boundary | 0.5d |
+| ID | Task | Priority | Depends on | Mode | Deliverable | Est. | Status |
+|---|---|:--:|---|---|---|:--:|---|
+| A1 | Core contracts: `Chunk`, `KGEntity`, `KGRelation`, `EvalReport` (§2) | P0 | — | Sequential — do first, together | `src/rag/schemas.py`, `src/knowlegde_graph/schemas.py`, `eval/schemas.py` | 0.5d | Done |
+| A2 | Dependencies & environment: `pyproject.toml` additions (`ollama`/`sentence-transformers`/`pgvector`; `psycopg2` already present), `docker-compose.yml` for Postgres+pgvector, `configs/rag.yaml`. **Verify install resolves on Python 3.14 day one** (R1 below) | P0 | — | Parallel | Updated `pyproject.toml`, working `uv sync`, running local Postgres | 0.5d | Done — see note below |
+| A3 | Fix the known quality-scoring bugs before more data flows through them: non-monotonic richness curve and dead `quality_thresholds.yaml` (config exists but isn't read) in `src/ingestion/quality_checker.py` | P1 | — | Parallel | Passing `tests/test_quality_checker.py` + a regression case for the 200-word boundary | 0.5d | Done |
 
-### Track B — Path to RAG MVP (critical path, unchanged shape)
+**A2 follow-up (found during Track B, not originally scoped):** the base install (R1) resolved cleanly on Python 3.14, but the *CUDA* build of torch didn't come along for free. `camel-tools`/`sentence-transformers` pull torch in only as a transitive dependency, and `[tool.uv.sources]` overrides only bind to **direct** project dependencies — so torch silently kept resolving the CPU-only PyPI wheel even after adding a `[tool.uv.index]` pointing at PyTorch's CUDA index. Fix: add `torch` as an explicit direct dependency (pinned loosely, `>=2.12.0`) so the source override has something to attach to, then `uv lock --upgrade-package torch`. Also had to pick the right CUDA tag by checking which ones actually publish a `cp314`-`win_amd64` wheel (this project's Python), not just any CUDA tag — landed on `cu130`, matching the driver's reported CUDA 13.0 ceiling. See `pyproject.toml`'s `[tool.uv.sources]`/`[tool.uv.index]` block.
 
-| ID | Task | Priority | Depends on | Mode | Deliverable | Est. |
-|---|---|:--:|---|---|---|:--:|
-| B1 | Chunker — implements §3.3 | P0 | A1 | Sequential | `src/rag/chunker.py` + `data/processed/chunks.jsonl` | 1d |
-| B2 | Embedding pipeline — implements §3.1 default | P0 | A2, B1 | Sequential | `src/rag/embedder.py` | 1d |
-| B3 | Vector index — implements §3.2 default | P0 | B2 | Sequential | `src/rag/index.py`, persisted pgvector table | 1d |
-| B4 | Retriever (dense top-k; filter-then-retrieve per §2) | P0 | B3, A1 | Sequential | `src/rag/retriever.py` | 1d |
-| C1(gen) | Generator — implements §3.4 default, developed against a mock retriever | P0 | A1, A2 | Parallel to B1–B4 | `src/rag/generator.py` | 1.5d |
-| C2(gen) | Citation/answer assembly | P0 | A1 | Parallel to B1–B4 | `src/rag/answer.py` | 0.5d |
-| C3(gen) | CLI (`scripts/ask.py`) | P0 | C1(gen) | Sequential, Parallel track | `scripts/ask.py` | 1d |
-| B5 | **Integration = MVP** | P0 | B4, C1(gen), C2(gen), C3(gen) | Sequential — merge, both devs | Working `RAGPipeline.ask()` end to end | 1d |
+### Track B — Path to RAG MVP (critical path, unchanged shape) — ✅ DONE, verified end to end
+
+| ID | Task | Priority | Depends on | Mode | Deliverable | Est. | Status |
+|---|---|:--:|---|---|---|:--:|---|
+| B1 | Chunker — implements §3.3 | P0 | A1 | Sequential | `src/rag/chunker.py` + `data/processed/chunks.jsonl` | 1d | Done — 484 docs → 1282 chunks |
+| B2 | Embedding pipeline — implements §3.1 default | P0 | A2, B1 | Sequential | `src/rag/embedder.py` | 1d | Done |
+| B3 | Vector index — implements §3.2 default | P0 | B2 | Sequential | `src/rag/index.py`, persisted pgvector table | 1d | Done |
+| B4 | Retriever (dense top-k; filter-then-retrieve per §2) | P0 | B3, A1 | Sequential | `src/rag/retriever.py` | 1d | Done |
+| C1(gen) | Generator — implements §3.4 default, developed against a mock retriever | P0 | A1, A2 | Parallel to B1–B4 | `src/rag/generator.py` | 1.5d | Done |
+| C2(gen) | Citation/answer assembly | P0 | A1 | Parallel to B1–B4 | `src/rag/answer.py` | 0.5d | Done |
+| C3(gen) | CLI (`scripts/ask.py`) | P0 | C1(gen) | Sequential, Parallel track | `scripts/ask.py` | 1d | Done |
+| B5 | **Integration = MVP** | P0 | B4, C1(gen), C2(gen), C3(gen) | Sequential — merge, both devs | Working `RAGPipeline.ask()` end to end | 1d | Done |
 
 *(Labels reuse the prior roadmap's task IDs where the work is identical, so anyone
 cross-referencing the earlier plan can still find it.)*
+
+**Verified, not just built:** the full 484-document corpus was chunked (1282 chunks), embedded with Qwen3-Embedding-0.6B, and indexed into pgvector — on GPU (once the CUDA fix above landed), embedding+indexing all 1282 chunks took **3m11s**; the earlier CPU-only attempt hadn't finished 352 of them after 20+ minutes. `scripts/ask.py "ما هي الكنافة النابلسية؟"` against the full indexed corpus returned a grounded, correctly-cited Arabic answer (verified with the already-pulled `llama3.1:8b` as a stand-in for the configured `qwen3:14b`, which isn't downloaded yet).
+
+**A real finding from that run, not a bug:** none of the 5 retrieved sources were a dedicated "Knafeh" article — checking directly, **no such article exists** in this 484-document corpus (`كنافة` appears only as a passing mention in 8 other documents). The retriever correctly surfaced the closest real matches instead of failing, and the generator stayed grounded in them rather than inventing a source. This is a genuine corpus-coverage gap, exactly the kind of thing Track C's retrieval/RAG evals (below) and Track D's multi-source expansion exist to catch and fix — not a flaw in the RAG mechanics themselves.
 
 ### Track C — Evaluation (P0/P1 — starts immediately after B5, before any expansion)
 

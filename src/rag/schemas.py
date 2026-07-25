@@ -57,3 +57,10 @@ def make_chunk_id(doc_id: str, chunk_index: int, chunking_version: str) -> str:
     """Stable chunk id: same document + same chunker version always yields the same id."""
     fingerprint = f"{doc_id}:{chunk_index}:{chunking_version}"
     return hashlib.sha256(fingerprint.encode("utf-8")).hexdigest()
+
+
+class RetrievedChunk(BaseModel):
+    """A Chunk returned by the retriever, carrying its similarity score for this query."""
+
+    chunk: Chunk
+    score: float = Field(description="Similarity score for the query that produced this result, higher is better")

@@ -10,11 +10,11 @@ dataset. Downstream stages enrich the corpus with named entities, a knowledge gr
 and retrieval-augmented question answering.
 
 The current implementation focuses on **Arabic Wikipedia** as a clean, licensable first
-source, with the ingestion, quality, deduplication, and named-entity-recognition stages
-working end to end. Retrieval-augmented QA (RAG), the knowledge graph, and the analysis
-phases (topic modeling, cultural classification, bias measurement, temporal analysis) are
-fully designed — see `ROADMAP.md` — and under active build in that order, prioritized to
-reach a working RAG system first without narrowing the platform's scope.
+source. Ingestion, quality, deduplication, named-entity-recognition, and a working
+retrieval-augmented QA (RAG) system are all functional end to end over the real corpus. The
+knowledge graph and the analysis phases (topic modeling, cultural classification, bias
+measurement, temporal analysis) are fully designed — see `ROADMAP.md` — and next in the
+build order, which reached RAG first without narrowing the platform's scope.
 
 ## Goals
 
@@ -52,11 +52,11 @@ see `ROADMAP.md` §2 for the full data-contract design.
         ┌───────────────┼────────────────────────────┬─────────────────────┐
         ▼               ▼                            ▼                     ▼
   NER: CAMeL +   Chunk + embed (Qwen3-Embedding)  Topic modeling /   Temporal analysis
-  heritage dict ✓  ──► pgvector index ✗         content classification  (decade buckets) ✗
+  heritage dict ✓  ──► pgvector index ✓         content classification  (decade buckets) ✗
         │               │                            (BERTopic/AraBERT) ✗
         ▼               ▼
   Entity linking    Retriever ──► Generator (Ollama·Qwen3)
-  + relations ✗       ──► grounded, cited RAG answers ✗
+  + relations ✗       ──► grounded, cited RAG answers ✓
         │
         ▼
   Knowledge graph (Neo4j) ✗ ──► Bias measurement (WEAT / framing / LLM probe) ✗
@@ -85,12 +85,12 @@ clean, structured, and licensable. Harder inputs (web scraping, OCR, dialectal A
 oral testimony, and non-redistributable licensing) are introduced incrementally so each
 can stress the shared pipeline before we commit to scale.
 
-This same philosophy shapes the build order, not just the corpus: RAG is sequenced before
-the knowledge graph and the analysis phases because it is the fastest way to validate the
+This same philosophy shapes the build order, not just the corpus: RAG was sequenced before
+the knowledge graph and the analysis phases because it was the fastest way to validate the
 core data contracts (chunking, embeddings, retrieval) against real output — not because the
 KG, topic modeling, cultural classification, bias measurement, or temporal analysis matter
-less. Every one of those phases is fully designed up front precisely so that reaching RAG
-first never forces a redesign later. See `ROADMAP.md` for the full reasoning.
+less. Every one of those phases was fully designed up front precisely so that reaching RAG
+first never forced a redesign later, and none did. See `ROADMAP.md` for the full reasoning.
 
 ## Milestones
 
@@ -103,8 +103,8 @@ plan live in **`ROADMAP.md`**. Summary:
 | 2 | Text normalization, quality scoring, deduplication | **Done** |
 | 3 | Corpus packaging & publishing (Parquet / Hugging Face) | **Done** |
 | 4 | Named Entity Recognition (CAMeL + heritage dictionary) | **Implemented — eval in progress** |
-| 5 | Retrieval-augmented QA (chunk → embed → pgvector → retrieve → generate) | **Next — critical path** |
-| 6 | Evaluation layer (NER, embeddings, retrieval, RAG) | Planned, gates phase 7 |
+| 5 | Retrieval-augmented QA (chunk → embed → pgvector → retrieve → generate) | **Done — verified end to end** |
+| 6 | Evaluation layer (NER, embeddings, retrieval, RAG) | Next, gates phase 7 |
 | 7 | Multi-source expansion (EN Wikipedia, news, archives, papers) + licensing gate | Planned |
 | 8 | Entity linking, relation extraction & knowledge graph (Neo4j) | Planned |
 | 9 | Topic modeling, cultural classification, bias measurement, temporal analysis | Planned |
@@ -119,12 +119,12 @@ src/
     collectors/     Per-source collectors (Wikipedia; base class for the rest)
   preprocessing/    Arabic text normalization
   utils/            Collection logging
-  rag/              Chunking, embedding, pgvector index, retriever, generator (next up — empty)
+  rag/              Chunking, embedding, pgvector index, retriever, generator (done)
   knowlegde_graph/  Entity canonicalization, linking, relations, KG store (planned — empty)
   nlp/              Topic modeling, cultural classification, bias, temporal analysis (planned — empty)
   api/              RAG API endpoint (planned — empty)
   frontend/         Dashboard (planned — empty)
-eval/               Shared evaluation harness — NER, embeddings, retrieval, RAG, KG (planned — not yet created)
+eval/               Shared evaluation harness — report schema done; NER/embedding/retrieval/RAG/KG eval scripts planned
 scripts/            Runnable entrypoints (NER, HF export/publish, seed audit)
 tests/              Unit tests for schema, quality, dedup, normalizer, NER, export
 docs/               Publishing guide and supporting documentation
@@ -136,13 +136,15 @@ ROADMAP.md          Full milestone breakdown, technical decisions, execution pla
 
 ## Current Status
 
-The Arabic Wikipedia path is functional end to end. A representative run collected ~500
-articles, accepted 484 after quality and duplicate filtering, and NER has been run across
-the accepted corpus. The unified schema, quality/dedup logic, seed-category audit tooling,
-and Hugging Face export are all working and covered by tests. RAG (chunking, embedding
-with Qwen3-Embedding, a pgvector index, retriever, and an Ollama/Qwen3 local-first
-generator behind a stable interface) is designed and next up for implementation — see
-`ROADMAP.md` for the critical path and the reasoning behind each technical choice.
+The Arabic Wikipedia path is functional end to end, **including a working RAG system**. A
+representative run collected ~500 articles, accepted 484 after quality and duplicate
+filtering, and NER has been run across the accepted corpus. The unified schema, quality/dedup
+logic, seed-category audit tooling, and Hugging Face export are all working and covered by
+tests. RAG (chunking, embedding with Qwen3-Embedding, a pgvector index, retriever, and an
+Ollama-based local-first generator behind a stable interface) has been built and verified
+against the real corpus — 484 documents chunked into 1282 passages, fully embedded and
+indexed, with `scripts/ask.py` returning grounded, cited answers. See `ROADMAP.md` for the
+technical-decision reasoning and what's next.
 
 Typical run:
 
@@ -150,9 +152,16 @@ Typical run:
 python main.py --max-docs 100        # collect → clean → score → dedup → JSONL + stats
 python scripts/export_to_hf.py       # package accepted docs as Parquet
 python scripts/run_ner.py            # enrich the corpus with entities
+
+docker compose up -d                 # start the pgvector store
+python scripts/chunk_corpus.py       # split accepted docs into retrieval-sized chunks
+python scripts/build_index.py        # embed chunks and load them into pgvector
+python scripts/ask.py "ما هي الكنافة النابلسية؟"   # ask a question, get a grounded, cited answer
 ```
 
 Generated datasets are intentionally git-ignored; see `docs/huggingface_publishing_guide.md`.
+The RAG generator requires [Ollama](https://ollama.com) running locally with the model named
+in `configs/rag.yaml`'s `generation.model` pulled (`ollama pull <model>`).
 
 ## Future Work
 

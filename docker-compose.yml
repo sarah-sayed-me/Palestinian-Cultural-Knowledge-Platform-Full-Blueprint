@@ -8,7 +8,12 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pckp}
       POSTGRES_DB: ${POSTGRES_DB:-pckp}
     ports:
-      - "5432:5432"
+      # Host port 5434: this machine already runs a native Postgres Windows
+      # service on 5432, and a separate project's own pgvector container
+      # (ai_news_db) on 5433 — both silently swallow connections meant for
+      # this project's container instead of failing loudly. Check with
+      # `netstat -ano | findstr :<port>` before ever changing this back.
+      - "${POSTGRES_HOST_PORT:-5434}:5432"
     volumes:
       - pckp_postgres_data:/var/lib/postgresql/data
     healthcheck:
