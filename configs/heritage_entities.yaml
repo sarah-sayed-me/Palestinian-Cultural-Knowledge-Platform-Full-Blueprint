@@ -1,0 +1,87 @@
+# configs/heritage_entities.yaml
+#
+# Seed dictionary of Palestinian cultural entities used by the rule-based
+# heritage matcher in src/ingestion/entity_extractor.py.
+#
+# Each entry:
+#   canonical: the normalized surface form we store as the entity's
+#              canonical name (used later for entity linking / KG nodes)
+#   category:  maps to an entity `type` of HERITAGE_<CATEGORY>
+#   variants:  additional hand-written spellings NOT already covered by the
+#              automatic normalization rules (definite-article "ال" and
+#              common plural/nisba suffixes are generated automatically by
+#              HeritageMatcher — you do not need to list "الكنافة" if
+#              "كنافة" is already listed).
+#
+# Multi-word entries are written space-separated exactly as they should
+# appear in text after normalization (normalize_arabic() removes
+# diacritics/tatweel and unifies alef/teh-marbuta/yeh forms, so write
+# entries in that normalized form).
+
+food:
+  - canonical: كنافة نابلسية
+    variants: ["كنافة نابلسيه"]
+  - canonical: مسخن
+  - canonical: مقلوبة
+  - canonical: مفتول
+  - canonical: دبس تمر
+  - canonical: دبس خروب
+  - canonical: زعتر
+  - canonical: زيت زيتون
+  - canonical: لبنة
+  - canonical: فلافل
+  - canonical: حمص
+  - canonical: قدرة
+  - canonical: علي وعلي
+  - canonical: كعك بالسمسم
+  - canonical: طابون
+
+clothing:
+  - canonical: ثوب فلسطيني
+  - canonical: كوفية
+    variants: ["حطة"]
+  - canonical: تطريز فلسطيني
+    variants: ["تطريز"]
+  - canonical: شرش
+  - canonical: عباية
+  - canonical: طاقية
+
+craft:
+  - canonical: صابون نابلسي
+    variants: ["صابون نابلسيه"]
+  - canonical: فخار
+  - canonical: خزف
+  - canonical: نسيج
+  - canonical: صدف بيت لحم
+  - canonical: خيزران
+
+heritage_practice:
+  - canonical: دبكة
+  - canonical: زجل
+  - canonical: حكواتي
+  - canonical: عرس فلسطيني
+  - canonical: مهر
+  - canonical: زغردة
+
+place:
+  - canonical: بيت لحم
+  - canonical: القدس
+  - canonical: يافا
+  - canonical: حيفا
+  - canonical: نابلس
+  - canonical: الخليل
+  - canonical: عكا
+  - canonical: غزة
+  - canonical: جنين
+  - canonical: رام الله
+  - canonical: بئر السبع
+  - canonical: صفد
+  - canonical: طولكرم
+
+plant:
+  - canonical: زيتون
+  - canonical: صبار
+  - canonical: برتقال يافا
+    variants: ["برتقال يافاوي"]
+  - canonical: ماء ورد
+  - canonical: ماء زهر
