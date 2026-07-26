@@ -13,22 +13,14 @@ import os
 from typing import Optional
 
 import psycopg2
-from dotenv import load_dotenv
 from pgvector.psycopg2 import register_vector
 from psycopg2.extensions import connection as PGConnection
 
-_ENV_LOADED = False
-
-
-def _ensure_env_loaded() -> None:
-    global _ENV_LOADED
-    if not _ENV_LOADED:
-        load_dotenv()
-        _ENV_LOADED = True
+from src.rag.env import ensure_env_loaded
 
 
 def get_database_url() -> str:
-    _ensure_env_loaded()
+    ensure_env_loaded()
     url = os.environ.get("DATABASE_URL")
     if not url:
         raise RuntimeError(

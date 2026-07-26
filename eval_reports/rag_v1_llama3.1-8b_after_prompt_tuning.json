@@ -1,0 +1,229 @@
+{
+  "report": {
+    "eval_name": "rag_v1",
+    "run_at": "2026-07-26T08:43:34.280834+00:00",
+    "dataset_size": 200,
+    "metrics": {
+      "sampled_queries": 30.0,
+      "scored_queries": 30.0,
+      "insufficient_context_count": 0.0,
+      "avg_citation_precision": 0.2689,
+      "avg_citation_recall": 0.9,
+      "avg_groundedness_1to5": 3.4828,
+      "groundedness_4_or_5_rate": 0.6552
+    },
+    "notes": "Evenly-spaced sample of 30/200 gold queries, run through the real end-to-end pipeline (model=llama3.1:8b). Citation precision/recall compares Answer.citations' doc_ids to gold-relevant doc_ids. Groundedness is an LLM-judge 1-5 score (5=fully grounded); no gold answers exist for this query set, so answer-content correctness itself is not scored, only citation accuracy and groundedness — see module docstring."
+  },
+  "per_query": [
+    {
+      "query_id": "q_001",
+      "insufficient_context": false,
+      "citation_precision": 0.2,
+      "citation_recall": 1.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_007",
+      "insufficient_context": false,
+      "citation_precision": 0.2,
+      "citation_recall": 1.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_013",
+      "insufficient_context": false,
+      "citation_precision": 0.0,
+      "citation_recall": 0.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_020",
+      "insufficient_context": false,
+      "citation_precision": 0.0,
+      "citation_recall": 0.0,
+      "groundedness": 3
+    },
+    {
+      "query_id": "q_026",
+      "insufficient_context": false,
+      "citation_precision": 0.3333,
+      "citation_recall": 1.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_033",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_040",
+      "insufficient_context": false,
+      "citation_precision": 0.3333,
+      "citation_recall": 1.0,
+      "groundedness": 1
+    },
+    {
+      "query_id": "q_046",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": 3
+    },
+    {
+      "query_id": "q_053",
+      "insufficient_context": false,
+      "citation_precision": 0.2,
+      "citation_recall": 1.0,
+      "groundedness": 1
+    },
+    {
+      "query_id": "q_060",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": 1
+    },
+    {
+      "query_id": "q_066",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": 5
+    },
+    {
+      "query_id": "q_073",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": 5
+    },
+    {
+      "query_id": "q_080",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_086",
+      "insufficient_context": false,
+      "citation_precision": 0.2,
+      "citation_recall": 1.0,
+      "groundedness": 5
+    },
+    {
+      "query_id": "q_093",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_100",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": 5
+    },
+    {
+      "query_id": "q_106",
+      "insufficient_context": false,
+      "citation_precision": 0.3333,
+      "citation_recall": 1.0,
+      "groundedness": 5
+    },
+    {
+      "query_id": "q_113",
+      "insufficient_context": false,
+      "citation_precision": 0.2,
+      "citation_recall": 1.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_120",
+      "insufficient_context": false,
+      "citation_precision": 0.2,
+      "citation_recall": 1.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_126",
+      "insufficient_context": false,
+      "citation_precision": 0.0,
+      "citation_recall": 0.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_133",
+      "insufficient_context": false,
+      "citation_precision": 0.2,
+      "citation_recall": 1.0,
+      "groundedness": 1
+    },
+    {
+      "query_id": "q_140",
+      "insufficient_context": false,
+      "citation_precision": 0.3333,
+      "citation_recall": 1.0,
+      "groundedness": 2
+    },
+    {
+      "query_id": "q_146",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": null
+    },
+    {
+      "query_id": "q_153",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": 1
+    },
+    {
+      "query_id": "q_160",
+      "insufficient_context": false,
+      "citation_precision": 0.5,
+      "citation_recall": 1.0,
+      "groundedness": 3
+    },
+    {
+      "query_id": "q_166",
+      "insufficient_context": false,
+      "citation_precision": 1.0,
+      "citation_recall": 1.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_173",
+      "insufficient_context": false,
+      "citation_precision": 0.5,
+      "citation_recall": 1.0,
+      "groundedness": 3
+    },
+    {
+      "query_id": "q_180",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_186",
+      "insufficient_context": false,
+      "citation_precision": 0.25,
+      "citation_recall": 1.0,
+      "groundedness": 4
+    },
+    {
+      "query_id": "q_193",
+      "insufficient_context": false,
+      "citation_precision": 0.3333,
+      "citation_recall": 1.0,
+      "groundedness": 5
+    }
+  ]
+}

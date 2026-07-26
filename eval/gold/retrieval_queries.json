@@ -1,0 +1,1730 @@
+[
+  {
+    "query_id": "q_001",
+    "query": "من كاتب رواية الازرق بين السماء والماء؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "afbf94e8601a90abb51fb0295f3394e2bdab1882517705a2a1c0c7a8ea4c525a_p0"
+    ]
+  },
+  {
+    "query_id": "q_002",
+    "query": "ما هو موضوع رواية الازرق بين السماء والماء؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "afbf94e8601a90abb51fb0295f3394e2bdab1882517705a2a1c0c7a8ea4c525a_p1",
+      "afbf94e8601a90abb51fb0295f3394e2bdab1882517705a2a1c0c7a8ea4c525a_p2",
+      "afbf94e8601a90abb51fb0295f3394e2bdab1882517705a2a1c0c7a8ea4c525a_p3"
+    ]
+  },
+  {
+    "query_id": "q_003",
+    "query": "من هو كاتب رواية ام سعد",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "1a63f7df8b67398d21722d7e25e0bf928ffeaa9bb721135f2f68ba6662e63b73_p0"
+    ]
+  },
+  {
+    "query_id": "q_004",
+    "query": "ما هي احداث رواية الشيء الآخر: من قتل ليلى الحايك",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "52859b388d9a9045127789398315119d150dc85e6a6670dbd572cd60711c5ecf_p1"
+    ]
+  },
+  {
+    "query_id": "q_005",
+    "query": "من هو حنظلة",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "1c6ce8f1d3293bf54cdee6160edc1468cc27fae821e5b0146e3285e9799077d0_p0"
+    ]
+  },
+  {
+    "query_id": "q_006",
+    "query": "ما معني مصطلح الغائب الحاضر",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "757d789e27187853f992ef0e6fe7b972d7bbc5192d137f7c5cef05782e40322b_p0",
+      "757d789e27187853f992ef0e6fe7b972d7bbc5192d137f7c5cef05782e40322b_p1",
+      "757d789e27187853f992ef0e6fe7b972d7bbc5192d137f7c5cef05782e40322b_p2"
+    ]
+  },
+  {
+    "query_id": "q_007",
+    "query": "ما هو الحكم العسكري على فلسطينيي 48",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "eb16bfa95a92fccec789ecfe1e11da0cd3b83b8786faa24d7644a6c01e1c1cd3_p0",
+      "eb16bfa95a92fccec789ecfe1e11da0cd3b83b8786faa24d7644a6c01e1c1cd3_p1",
+      "eb16bfa95a92fccec789ecfe1e11da0cd3b83b8786faa24d7644a6c01e1c1cd3_p2",
+      "eb16bfa95a92fccec789ecfe1e11da0cd3b83b8786faa24d7644a6c01e1c1cd3_p3",
+      "eb16bfa95a92fccec789ecfe1e11da0cd3b83b8786faa24d7644a6c01e1c1cd3_p4",
+      "eb16bfa95a92fccec789ecfe1e11da0cd3b83b8786faa24d7644a6c01e1c1cd3_p5",
+      "eb16bfa95a92fccec789ecfe1e11da0cd3b83b8786faa24d7644a6c01e1c1cd3_p6"
+    ]
+  },
+  {
+    "query_id": "q_007",
+    "query": "متى تم عقد اللقاء الرسمي بين الرئيس الفلسطيني ياسر عرفات والرئيس الأمريكي بيل كلينتون مع كبار المستشارين؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "c168eb9e009285ae4f3a3ab84bcc8fc3997d3c4b874d514dd292311211d0de4b_p0"
+    ]
+  },
+  {
+    "query_id": "q_008",
+    "query": "ما تفاصيل الحادث الذي وقع في 13 مارس بالقرب من الحدود الأردنية وأدى إلى مقتل طالبات مدارس؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "c168eb9e009285ae4f3a3ab84bcc8fc3997d3c4b874d514dd292311211d0de4b_p1"
+    ]
+  },
+  {
+    "query_id": "q_009",
+    "query": "لماذا دعا ياسر عرفات لقمة طارئة في غزة بتاريخ 15 مارس وما أبرز ما طالب به؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "c168eb9e009285ae4f3a3ab84bcc8fc3997d3c4b874d514dd292311211d0de4b_p2"
+    ]
+  },
+  {
+    "query_id": "q_010",
+    "query": "متى وقع انفجار القنبلة في مقهى بتل أبيب وما نتائج ذلك الحادث؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "c168eb9e009285ae4f3a3ab84bcc8fc3997d3c4b874d514dd292311211d0de4b_p3"
+    ]
+  },
+  {
+    "query_id": "q_011",
+    "query": "من تم اختياره كرئيس جديد لحزب العمل في 3 يونيو؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "c168eb9e009285ae4f3a3ab84bcc8fc3997d3c4b874d514dd292311211d0de4b_p4"
+    ]
+  },
+  {
+    "query_id": "q_012",
+    "query": "ما الجهة التي أعلنت مسؤوليتها عن العملية الانتحارية المزدوجة في أحد أسواق مدينة القدس بتاريخ 30 يوليو؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "c168eb9e009285ae4f3a3ab84bcc8fc3997d3c4b874d514dd292311211d0de4b_p5"
+    ]
+  },
+  {
+    "query_id": "q_013",
+    "query": "كيف ردت السلطة الفلسطينية على الإجراءات الإسرائيلية في 21 أغسطس؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "c168eb9e009285ae4f3a3ab84bcc8fc3997d3c4b874d514dd292311211d0de4b_p6"
+    ]
+  },
+  {
+    "query_id": "q_014",
+    "query": "كيف نفذ الانتحاريون هجوم 4 سبتمبر في حي التسوق بالقدس الغربية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "c168eb9e009285ae4f3a3ab84bcc8fc3997d3c4b874d514dd292311211d0de4b_p7"
+    ]
+  },
+  {
+    "query_id": "q_015",
+    "query": "من هو غوثيلف فاغنر وما هي أبرز دوافع وأسباب اغتياله في عام 1946؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "60da9840f2d8175ef592b773b3be5681a7bd02ff37eae36ad026ac23d5eb06ac_p0"
+    ]
+  },
+  {
+    "query_id": "q_016",
+    "query": "كيف تم تنفيذ عملية اغتيال غوثيلف فاغنر تفصيلياً في 22 مارس 1946؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "60da9840f2d8175ef592b773b3be5681a7bd02ff37eae36ad026ac23d5eb06ac_p1"
+    ]
+  },
+  {
+    "query_id": "q_017",
+    "query": "ما هي ملابسات وتفاصيل عملية اغتيال زعيم مستعمرات فرسان الهيكل الألمانية غوثيلف فاغنر بما في ذلك الجهة المنفذة وطريقة التنفيذ والدوافع؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "60da9840f2d8175ef592b773b3be5681a7bd02ff37eae36ad026ac23d5eb06ac_p0",
+      "60da9840f2d8175ef592b773b3be5681a7bd02ff37eae36ad026ac23d5eb06ac_p1"
+    ]
+  },
+  {
+    "query_id": "q_018",
+    "query": "ما هي الآرامية الفلسطينية المسيحية (CPA) ومن هي الطائفة التي استخدمتها وفي أي فترة زمنية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p0"
+    ]
+  },
+  {
+    "query_id": "q_019",
+    "query": "ما هو أصل تسميات هذه اللهجة وكيف أشار إليها متحدثوها الأوائل بحسب رواية إيجيريا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p1"
+    ]
+  },
+  {
+    "query_id": "q_020",
+    "query": "كيف نشأ مصطلح السريانية القدسية (syrica Hierosolymitana) ومن قام بتقديمه؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p2"
+    ]
+  },
+  {
+    "query_id": "q_021",
+    "query": "إلى كم فترة يُقسم تاريخ كتابة الآرامية الفلسطينية المسيحية وما هي حدودها الزمنية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p4"
+    ]
+  },
+  {
+    "query_id": "q_022",
+    "query": "ما طبيعة المواد والبقايا النصية التي وصلت إلينا من الفترة المبكرة للآرامية الفلسطينية المسيحية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p5"
+    ]
+  },
+  {
+    "query_id": "q_023",
+    "query": "لماذا بدأت الآرامية الفلسطينية المسيحية تتراجع وتتوقف كلغة منطوقة بعد الفتوحات الإسلامية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p6"
+    ]
+  },
+  {
+    "query_id": "q_024",
+    "query": "متى انقرضت الآرامية الفلسطينية المسيحية حتى كلغة مكتوبة ومتى تمت إعادة اكتشافها؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p7"
+    ]
+  },
+  {
+    "query_id": "q_025",
+    "query": "ما هي التركيبات الأصلية الوحيدة الباقية مكتوبة بالآرامية الفلسطينية المسيحية مقارنة بباقي المؤلفات؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p8"
+    ]
+  },
+  {
+    "query_id": "q_026",
+    "query": "من أين تأتي العديد من الطرس الخاصة بالآرامية الفلسطينية المسيحية وما أهميتها النصية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p9"
+    ]
+  },
+  {
+    "query_id": "q_027",
+    "query": "أين تم عثور على النقوش الخاصة بالآرامية الفلسطينية المسيحية داخل فلسطين وشرق الأردن؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p10"
+    ]
+  },
+  {
+    "query_id": "q_028",
+    "query": "ما هي أبرز محتويات المخطوطات والرسائل البردية المكتشفة المكتوبة بالآرامية الفلسطينية المسيحية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p11"
+    ]
+  },
+  {
+    "query_id": "q_029",
+    "query": "بماذا تختلف الآرامية الفلسطينية المسيحية عن نظيرتيها اليهودية والسامرية من حيث التأثيرات اللغوية والبنية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p12"
+    ]
+  },
+  {
+    "query_id": "q_030",
+    "query": "كيف تُمثل بنية الآرامية الفلسطينية المسيحية مقارنة باللهجات الغربية الأخرى عندما كانت لغات منطوقة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p13"
+    ]
+  },
+  {
+    "query_id": "q_031",
+    "query": "ما هي التسميات المختلفة للآرامية الفلسطينية المسيحية ودلالاتها العلمية والتاريخية المرتبطة بموقعها ومتحدثيها؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p1",
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p2",
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p3"
+    ]
+  },
+  {
+    "query_id": "q_032",
+    "query": "كيف تطور استخدام الآرامية الفلسطينية المسيحية كمكتوب ومنطوق منذ عصورها المبكرة حتى انقراضها واكتشافها الحديث؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p6",
+      "3243e2f86be4445e02997b43cf78417f7c8a3e25534912b58ce2178e3e35d375_p7"
+    ]
+  },
+  {
+    "query_id": "q_033",
+    "query": "أين يقع مقام النبي صالح وما مدى صحة نسبة القبر تاريخياً إليه؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p0"
+    ]
+  },
+  {
+    "query_id": "q_034",
+    "query": "كيف ارتبط مقام النبي صالح تاريخياً بالحياة الثقافية في منطقة بني زيد؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p1"
+    ]
+  },
+  {
+    "query_id": "q_035",
+    "query": "في أي محافظة يقع مقام النبي صالح وكيف يمثل معلماً تراثياً بارزاً للقرية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p2"
+    ]
+  },
+  {
+    "query_id": "q_036",
+    "query": "ما هي الطبقات المعمارية القديمة التي يقوم عليها مقام النبي صالح؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p3"
+    ]
+  },
+  {
+    "query_id": "q_037",
+    "query": "ما هي العناصر المعمارية التي يتألف منها مبنى مقام النبي صالح؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p4"
+    ]
+  },
+  {
+    "query_id": "q_038",
+    "query": "ما تفاصيل مشروع ترميم وتأهيل مركز النبي صالح الثقافي ومساحته؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p5"
+    ]
+  },
+  {
+    "query_id": "q_039",
+    "query": "ما هي المواضع الأخرى المنسوبة إلى النبي صالح خارج قرية النبي صالح؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p6"
+    ]
+  },
+  {
+    "query_id": "q_040",
+    "query": "كيف يُعرض مقام النبي صالح في الدراسات التراثية فيما يتعلق بالذاكرة الشعبية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p7"
+    ]
+  },
+  {
+    "query_id": "q_041",
+    "query": "متى بدأ موسم النبي صالح في قرية النبي صالح ولماذا توقف سنة 2000؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p8"
+    ]
+  },
+  {
+    "query_id": "q_042",
+    "query": "ما هي الفعاليات والأنشطة التي كانت تقام خلال موسم النبي صالح في القرية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p9"
+    ]
+  },
+  {
+    "query_id": "q_043",
+    "query": "كيف كان يُحتفل بموسم النبي صالح التاريخي في مدينة الرملة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p10"
+    ]
+  },
+  {
+    "query_id": "q_044",
+    "query": "ما الوظائف المختلفة التي أدتها المواسم الشعبية المرتبطة بأسبوع النبي صالح في فلسطين؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p11"
+    ]
+  },
+  {
+    "query_id": "q_045",
+    "query": "من ماذا تنبع أهمية مقام النبي صالح في الريف الفلسطيني؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p12"
+    ]
+  },
+  {
+    "query_id": "q_046",
+    "query": "ما الذي يمثله مقام النبي صالح فيما يتعلق باستمرار الذاكرة المحلية والتحول المجتمعي؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p13"
+    ]
+  },
+  {
+    "query_id": "q_047",
+    "query": "ما هو الموقع الجغرافي لمقام النبي صالح وكيف ارتبط تاريخياً ومعمارياً ببقايا كنيسة بيزنطية سابقة؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p2",
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p3",
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p4"
+    ]
+  },
+  {
+    "query_id": "q_048",
+    "query": "كيف تم تنظيم موسم النبي صالح وفعالياته الثقافية والشعبية في قرية النبي صالح قبل توقفه؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p8",
+      "9f920da3d3ee3b88b1d0c66b769c3cd5bef23113296b97e7d4fd5715f44c1e10_p9"
+    ]
+  },
+  {
+    "query_id": "q_049",
+    "query": "من هي وفاء غنيم وكيف بدأت مسيرتها في تعلم فن التطريز الفلسطيني؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p0"
+    ]
+  },
+  {
+    "query_id": "q_050",
+    "query": "كيف أثرت جذور عائلة وفاء وتاريخها مع النكبة على ارتباطها بالتطريز وما أبرز مشروعاتها الأولى؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p1"
+    ]
+  },
+  {
+    "query_id": "q_051",
+    "query": "كيف تطورت مسيرة وفاء غنيم لتصبح مؤرخة أزياء وباحثة في أنماط التطريز الفلسطيني في الشتات؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p2"
+    ]
+  },
+  {
+    "query_id": "q_052",
+    "query": "ما تفاصيل معرض (تراث التطريز) وكتاب وفاء المعنون بـ (ثوبنا)؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p3"
+    ]
+  },
+  {
+    "query_id": "q_053",
+    "query": "ما هو الإنجاز التاريخي لوفاء غنيم في متحف سميثسونيان؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p4"
+    ]
+  },
+  {
+    "query_id": "q_054",
+    "query": "كيف تنشر وفاء غنيم فن التطريز الفلسطيني من خلال المحاضرات والدورات التدريبية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p5"
+    ]
+  },
+  {
+    "query_id": "q_055",
+    "query": "ما طبيعة عمل وفاء مع المتاحف الأمريكية فيما يخص الملابس وأنماط التطريز؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p6"
+    ]
+  },
+  {
+    "query_id": "q_056",
+    "query": "متى صدر كتاب وفاء الأول (التطريز والشاي) وما الذي يصفه؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p7"
+    ]
+  },
+  {
+    "query_id": "q_057",
+    "query": "كيف توارثت وفاء غنيم فن التطريز الفلسطيني عن والدتها وكيف انعكس ذلك على تأسيسها لمعهد التطريز (تطريز وشاي) وإصداراتها؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p0",
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p7"
+    ]
+  },
+  {
+    "query_id": "q_058",
+    "query": "ما هي أبرز إسهامات وفاء غنيم البحثية والتوثيقية في حفظ وتاريخ الزخارف والتطريز الفلسطيني في الشتات من خلال المعارض والكتب؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p2",
+      "a9d9d96507cdae3b5e9bcff693f4caea374c6675faa2e1ede8eb20118074cb4e_p3"
+    ]
+  },
+  {
+    "query_id": "q_059",
+    "query": "ما هي الحواكير في القدس القديمة وكيف اكتسبت خصوصيتها البيئية والعمرانية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p0"
+    ]
+  },
+  {
+    "query_id": "q_060",
+    "query": "كيف ارتبطت الحواكير تاريخياً بنظام الوقف الإسلامي وما أبرز التحديات التي تواجهها اليوم؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p1"
+    ]
+  },
+  {
+    "query_id": "q_061",
+    "query": "ما أصل كلمة حاكورة في اللهجة الفلسطينية والشامية وكيف تختلف عن البستان والعرصة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p2"
+    ]
+  },
+  {
+    "query_id": "q_062",
+    "query": "ما طبيعة المساحات الخضراء والحواكير في القدس خلال العهدين الأيوبي والمملوكي بحسب كتاب \"الأنس الجليل\"؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p3"
+    ]
+  },
+  {
+    "query_id": "q_063",
+    "query": "كيف تغير وضع الحواكير في العهد العثماني وما أبرز المزروعات التي حرصت العائلات المقدسية على زراعتها فيها؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p4"
+    ]
+  },
+  {
+    "query_id": "q_064",
+    "query": "كيف ساهمت الحواكير في تحقيق الأمن الغذائي للسكان خلال فترات الحصار والحروب؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p5"
+    ]
+  },
+  {
+    "query_id": "q_065",
+    "query": "ما الدور المناخي والبيئي الذي تلعبه الحواكير داخل الأحواش والبيوت المكتظة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p6"
+    ]
+  },
+  {
+    "query_id": "q_066",
+    "query": "كيف شكلت الحاكورة مجالاً اجتماعياً آمناً لحفظ خصوصية العائلة المسلمة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p7"
+    ]
+  },
+  {
+    "query_id": "q_067",
+    "query": "كيف ساعدت التربة المكشوفة في الحواكير على تحسين نظام تصريف المياه وتغذية الآبار الجوفية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p8"
+    ]
+  },
+  {
+    "query_id": "q_068",
+    "query": "أي الحارات في القدس القديمة تضم أكبر عدد من الحواكير المتبقية حالياً؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p9"
+    ]
+  },
+  {
+    "query_id": "q_069",
+    "query": "ما مصير حارة المغاربة وحواكيرها الواسعة بعد عام 1967؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p10"
+    ]
+  },
+  {
+    "query_id": "q_070",
+    "query": "كيف أدى الزحف العمراني وأزمة السكن إلى التأثير على مساحات الحواكير داخل الأسوار؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p11"
+    ]
+  },
+  {
+    "query_id": "q_071",
+    "query": "ما الطرق والذرائع التي تستخدمها الجمعيات الاستيطانية للسيطرة على الحواكير غير المبنية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p12"
+    ]
+  },
+  {
+    "query_id": "q_072",
+    "query": "كيف أدى الإهمال ونقص الوعي إلى تحول بعض الحواكير إلى أماكن لتجمع النفايات؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p13"
+    ]
+  },
+  {
+    "query_id": "q_073",
+    "query": "كيف حضرت الحاكورة في الرواية الفلسطينية ورمزية شجرة الليمون في حواكير باب السلسلة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p14"
+    ]
+  },
+  {
+    "query_id": "q_074",
+    "query": "كيف تطور مفهوم الحاكورة وتاريخها العمراني في القدس من العهدين الأيوبي والمملوكي وحتى العهد العثماني مع زيادة عدد السكان؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p3",
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p4"
+    ]
+  },
+  {
+    "query_id": "q_075",
+    "query": "ما هي الأدوار الوظيفية المتعددة للحواكير في توفير الأمن الغذائي وتنظيم المناخ المحلي وحفظ الخصوصية الاجتماعية؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p5",
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p6",
+      "40bc6dce108597d2169395eca312c883a79531281643f4842e1cfbeb66374c88_p7"
+    ]
+  },
+  {
+    "query_id": "q_076",
+    "query": "ما هي جمعية الكمنجاتي وما هي رؤيتها الأساسية تجاه المجتمع الفلسطيني؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p0"
+    ]
+  },
+  {
+    "query_id": "q_077",
+    "query": "على أي فئة ومناطق تركز جمعية الكمنجاتي في عملها وما أهدافها تجاههم؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p1"
+    ]
+  },
+  {
+    "query_id": "q_078",
+    "query": "من هو مؤسس جمعية الكمنجاتي وما هي خلفيته الشخصية ونشأته؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p2"
+    ]
+  },
+  {
+    "query_id": "q_079",
+    "query": "متى تأسست جمعية الكمنجاتي وكيف تطورت شبكات دعمها وتعاونها في فرنسا وإيطاليا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p3"
+    ]
+  },
+  {
+    "query_id": "q_080",
+    "query": "ما هي أبرز النتائج الفنية الملحوظة للتعاون الدولي لجمعية الكمنجاتي في روما وأسلو؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p4"
+    ]
+  },
+  {
+    "query_id": "q_081",
+    "query": "لماذا وُجدت جمعية الكمنجاتي وما دورها في المناطق المهمشة وتوسيع نطاق الثقافة الموسيقية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p6"
+    ]
+  },
+  {
+    "query_id": "q_082",
+    "query": "ما هي أهم القيم والمبادئ التي تقوم عليها جمعية الكمنجاتي في رسالتها المجتمعية والتراثية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p7"
+    ]
+  },
+  {
+    "query_id": "q_083",
+    "query": "كيف تترجم جمعية الكمنجاتي رؤيتها وأهدافها في نشر الثقافة الموسيقية وتعزيز الهوية الوطنية للطفل الفلسطيني في المناطق المهمشة ومخيمات اللاجئين؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p0",
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p1",
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p6"
+    ]
+  },
+  {
+    "query_id": "q_084",
+    "query": "كيف ساهم التأسيس والعلاقات الدولية للجمعية في فرنسا وإيطاليا في بناء شبكة عالمية للتبادل الفني والتعليمي ودعم الموسيقى في فلسطين؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p3",
+      "4baa4ef6624a12ab95e7ec1dcdf157d13cede41989b684feacbd61a95752607c_p4"
+    ]
+  },
+  {
+    "query_id": "q_085",
+    "query": "ما هي الثوابت الوطنية الفلسطينية ومتى ومن صاغها وما هي أبرز القضايا التي تتضمنها؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "dffc6bfae0c2309271d86314e05c9ffd5ea98cf068b28ab93414bfd1ba84c3aa_p0"
+    ]
+  },
+  {
+    "query_id": "q_086",
+    "query": "كيف أصبحت الثوابت الوطنية حجر الزاوية لروح الصراع وكيف تظهر في حياة المجتمع الفلسطيني الثقافية واليومية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "dffc6bfae0c2309271d86314e05c9ffd5ea98cf068b28ab93414bfd1ba84c3aa_p1"
+    ]
+  },
+  {
+    "query_id": "q_087",
+    "query": "ما هي الأهمية التاريخية والثقافية للثوابت الوطنية الفلسطينية بصفتها مبادئ فوق دستوريه وحقوقاً لا يمكن انتهاكها في المجتمع الفلسطيني؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "dffc6bfae0c2309271d86314e05c9ffd5ea98cf068b28ab93414bfd1ba84c3aa_p0",
+      "dffc6bfae0c2309271d86314e05c9ffd5ea98cf068b28ab93414bfd1ba84c3aa_p1"
+    ]
+  },
+  {
+    "query_id": "q_088",
+    "query": "ما هو تعريف تاريخ الفن التشكيلي الفلسطيني وما أبرز محطاته والتحولات السياسية التي أثرت فيه؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p0"
+    ]
+  },
+  {
+    "query_id": "q_089",
+    "query": "كيف تقسم الموسوعة التفاعلية للقضية الفلسطينية تاريخ الفنون البصرية الفلسطينية وما طبيعة هذا التقسيم؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p1"
+    ]
+  },
+  {
+    "query_id": "q_090",
+    "query": "كيف ارتبطت بدايات التصوير الفلسطيني برسم الأيقونات في القدس وكيف تطورت هذه التقنيات لاحقاً؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p2"
+    ]
+  },
+  {
+    "query_id": "q_091",
+    "query": "من هما الفنانان اللذان ساهما في الانتقال من الرسم الديني إلى الرسم ذي الموضوعات الأوسع في أوائل القرن العشرين بحسب الموسوعة وكتاب كمال بلاطة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p3"
+    ]
+  },
+  {
+    "query_id": "q_092",
+    "query": "كيف تأثر الفن الفلسطيني بفترة الانتداب البريطاني واحتكاكه بالمؤسسات التعليمية والرسامين الأجانب قبل عام 1948؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p4"
+    ]
+  },
+  {
+    "query_id": "q_093",
+    "query": "ما تأثير نكبة 1948 على تفكك المجتمع الفلسطيني وانقطاع المسار الفني المحلي وتوزع الفنانين؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p5"
+    ]
+  },
+  {
+    "query_id": "q_094",
+    "query": "كيف استأنف الفنانون الفلسطينيون اللاجئون في البلدان العربية رسوماتهم بعد نكبة 1948 وما دور المدن العربية في ذلك؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p6"
+    ]
+  },
+  {
+    "query_id": "q_095",
+    "query": "كيف انعكست موضوعات الذاكرة والبيت والمنفي والتراث البصري على الأعمال الفنية الفلسطينية بعد النكبة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p7"
+    ]
+  },
+  {
+    "query_id": "q_096",
+    "query": "كيف اتخذ الفن التشكيلي الفلسطيني بعداً مؤسسياً مع نشوء منظمة التحرير الفلسطينية سنة 1964 ودور إسماعيل شموط؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p8"
+    ]
+  },
+  {
+    "query_id": "q_097",
+    "query": "ما هو المعرض الفني العالمي من أجل فلسطين الذي أقيم في بيروت سنة 1978 وما مصيره؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p9"
+    ]
+  },
+  {
+    "query_id": "q_098",
+    "query": "ما هو الموقع الذي احتله الملصق السياسي والفن الغرافيكي في تاريخ الفن الفلسطيني منذ أواخر الستينيات والسبعينيات؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p10"
+    ]
+  },
+  {
+    "query_id": "q_099",
+    "query": "كيف استخدم الملصق الفلسطيني لمواجهة التشتت والحفاظ على حضور الرموز الوطنية قبل وبعد اتفاقية أوسلو؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p11"
+    ]
+  },
+  {
+    "query_id": "q_100",
+    "query": "ما هي الظروف والقيود الجديدة التي واجهها الفنانون الفلسطينيون داخل الضفة الغربية وقطاع غزة والقدس الشرقية بعد حرب 1967؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p12"
+    ]
+  },
+  {
+    "query_id": "q_101",
+    "query": "كيف تعامل الفنانون بعد حرب 1967 مع الرموز البصرية المألوفة مثل الأرض والقرية والمرأة في أعمالهم الفنية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p13"
+    ]
+  },
+  {
+    "query_id": "q_102",
+    "query": "كيف اتسع نطاق الفن التشكيلي والبصري الفلسطيني منذ تسعينيات القرن العشرين من حيث الوسائط والأساليب والاتجاهات الجديدة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p14"
+    ]
+  },
+  {
+    "query_id": "q_103",
+    "query": "ما الذي يتناوله وصف كتاب كمال بلاطة لدى دار الساقي بشأن الوسائط الحديثة ودور الفنانات الفلسطينيات؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p15"
+    ]
+  },
+  {
+    "query_id": "q_104",
+    "query": "ما دور المؤسسات الثقافية مثل المتحف الفلسطيني في بيرزيت في حفظ الذاكرة البصرية وتقديم السرديات؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p16"
+    ]
+  },
+  {
+    "query_id": "q_105",
+    "query": "ما هي أهمية الأرشفة الرقمية وقواعد بيانات المعارض في دراسة الفن والثقافة البصرية الفلسطينية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p17"
+    ]
+  },
+  {
+    "query_id": "q_106",
+    "query": "ما هي الصعوبات التي تواجه كتابة تاريخ الفن التشكيلي الفلسطيني وكيف تتعامل معها الدراسات الحديثة كتاريخ متعدد المراكز؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p18"
+    ]
+  },
+  {
+    "query_id": "q_107",
+    "query": "من هو سالم جبران وما هي نشأته وتعليمه وانضمامه للحزب الشيوعي الإسرائيلي؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "2164fe0976f1a002bbe5d9dd296e76e41e61c28961d86fa7406f137fc871b06d_p0"
+    ]
+  },
+  {
+    "query_id": "q_108",
+    "query": "ما هي المحطات والمناصب الصحفية التي شغلها سالم جبران خلال مسيرته المهنية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "2164fe0976f1a002bbe5d9dd296e76e41e61c28961d86fa7406f137fc871b06d_p1"
+    ]
+  },
+  {
+    "query_id": "q_109",
+    "query": "متى ولماذا استقال سالم جبران من صحيفة الاتحاد وانشق عن الحزب الشيوعي الإسرائيلي؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "2164fe0976f1a002bbe5d9dd296e76e41e61c28961d86fa7406f137fc871b06d_p2"
+    ]
+  },
+  {
+    "query_id": "q_110",
+    "query": "ما هي أبرز الدواوين الشعرية التي أصدرها سالم جبران واللغات التي ترجمت إليها قصائده؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "2164fe0976f1a002bbe5d9dd296e76e41e61c28961d86fa7406f137fc871b06d_p3"
+    ]
+  },
+  {
+    "query_id": "q_111",
+    "query": "كيف تأثر وعي سالم جبران السياسي والثقافي بنشأته وسط آلام النكبة في الجليل الأعلى؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "2164fe0976f1a0024bb..._p4"
+    ]
+  },
+  {
+    "query_id": "q_112",
+    "query": "ما هو الدور النضالي والسياسي لسالم جبران في الجبهة الديمقراطية للسلام والمساواة وإيمانه بالنضال المشترك؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "2164fe0976f1a002bbe5d9dd296e76e41e61c28961d86fa7406f137fc871b06d_p7"
+    ]
+  },
+  {
+    "query_id": "q_113",
+    "query": "متى توفي سالم جبران وما هو الإرث الثقافي والفكري الذي ترك وراءه في المجتمع الفلسطيني داخل الخط الأخضر؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "2164fe0976f1a002bbe5d9dd296e76e41e61c28961d86fa7406f137fc871b06d_p8"
+    ]
+  },
+  {
+    "query_id": "q_114",
+    "query": "كيف تأثر الفن التشكيلي الفلسطيني تاريخياً بالتحولات السياسية الكبرى مثل نهاية العهد العثماني والانتداب البريطاني والنكبة والنكسة؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p0",
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p4",
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p5"
+    ]
+  },
+  {
+    "query_id": "q_115",
+    "query": "كيف تجسدت تجربة المنفى والشتات واستعادة المكان المفقود في أعمال الفنانين الفلسطينيين بعد عام 1948؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p6",
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p7"
+    ]
+  },
+  {
+    "query_id": "q_116",
+    "query": "ما هو دور منظمة التحرير الفلسطينية والمؤسسات الثقافية في استخدام المعارض والملصقات السياسية كوسيلة للدبلوماسية الثقافية؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p8",
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p10",
+      "ba913ae4c10c148dae9899ea92ff55915f2f899c146541c306f9c0a5c97afb4f_p11"
+    ]
+  },
+  {
+    "query_id": "q_117",
+    "query": "كيف جمع سالم جبران بين نشاطه السياسي في الحزب الشيوعي والجبهة الديمقراطية وبين مسيرته الغنية في الشعر والصحافة الفلسطينية؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "2164fe0976f1a002bbe5d9dd296e76e41e61c28961d86fa7406f137fc871b06d_p0",
+      "2164fe0976f1a002bbe5d9dd296e76e41e61c28961d86fa7406f137fc871b06d_p1",
+      "2164fe0976f1a002bbe5d9dd296e76e41e61c28961d86fa7406f137fc871b06d_p2",
+      "2164fe0976f1a002bbe5d9dd296e76e41e61c28961d86fa7406f137fc871b06d_p3"
+    ]
+  },
+  {
+    "query_id": "q_118",
+    "query": "من هو جهاد الترباني وما هي أبرز اهتماماته ومؤلفاته وبرامجه الإعلامية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "7942a2bab3532b6bb8641729752207275ecb04a2d259d4b88529facac986db4a_p0",
+      "7942a2bab3532b6bb8641729752207275ecb04a2d259d4b88529facac986db4a_p1"
+    ]
+  },
+  {
+    "query_id": "q_119",
+    "query": "ما هي أشهر القصائد الشعرية لجهاد الترباني ومن أنشدها؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "7942a2bab3532b6bb8641729752207275ecb04a2d259d4b88529facac986db4a_p2"
+    ]
+  },
+  {
+    "query_id": "q_120",
+    "query": "ما هي الموضوعات والأفكار الأساسية التي يناقشها كتاب \"مدرسة الحب\" لجهاد الترباني؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "7942a2bab3532b6bb8641729752207275ecb04a2d259d4b88529facac986db4a_p3"
+    ]
+  },
+  {
+    "query_id": "q_121",
+    "query": "كيف تتكامل مساهمات جهاد الترباني الأدبية والتاريخية من خلال مؤلفاته وبرامجه مثل العظماء المائة وقصائده الثورية؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "7942a2bab3532b6bb8641729752207275ecb04a2d259d4b88529facac986db4a_p0",
+      "7942a2bab3532b6bb8641729752207275ecb04a2d259d4b88529facac986db4a_p1",
+      "7942a2bab3532b6bb8641729752207275ecb04a2d259d4b88529facac986db4a_p2"
+    ]
+  },
+  {
+    "query_id": "q_122",
+    "query": "من هو القاضي الفاضل وما هو لقبه ومكانته لدى السلطان صلاح الدين الأيوبي؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "58e5ed17c974e02dfefc61a1efa1c72d65a0d59d516b2706e8711285b40e0f6b_p0"
+    ]
+  },
+  {
+    "query_id": "q_123",
+    "query": "أين ولادته وتنقلاته وما أبرز صفاته ومناصبه وشهادة العماد الأصفهاني فيه؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "58e5ed17c974e02dfefc61a1efa1c72d65a0d59d516b2706e8711285b40e0f6b_p1"
+    ]
+  },
+  {
+    "query_id": "q_124",
+    "query": "ما هي المقولة الشهيرة للقاضي الفاضل حول كتابة الإنسان ونقص البشر؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "58e5ed17c974e02dfefc61a1efa1c72d65a0d59d516b2706e8711285b40e0f6b_p2"
+    ]
+  },
+  {
+    "query_id": "q_125",
+    "query": "كيف كانت وفاة القاضي الفاضل في عام 596 هجري وعمره؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "58e5ed17c974e02dfefc61a1efa1c72d65a0d59d516b2706e8711285b40e0f6b_p3"
+    ]
+  },
+  {
+    "query_id": "q_126",
+    "query": "لماذا أطلقت مدرسة الفاضلية التاريخية في طولكرم هذا الاسم؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "58e5ed17c974e02dfefc61a1efa1c72d65a0d59d516b2706e8711285b40e0f6b_p4"
+    ]
+  },
+  {
+    "query_id": "q_127",
+    "query": "كيف تتكامل مسيرة القاضي الفاضل بين بلاغته الوزارية وإنجازاته في صناعة الإنشاء وتخليد اسمه في التراث الفلسطيني؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "58e5ed17c974e02dfefc61a1efa1c72d65a0d59d516b2706e8711285b40e0f6b_p0",
+      "58e5ed17c974e02dfefc61a1efa1c72d65a0d59d516b2706e8711285b40e0f6b_p1",
+      "58e5ed17c974e02dfefc61a1efa1c72d65a0d59d516b2706e8711285b40e0f6b_p4"
+    ]
+  },
+  {
+    "query_id": "q_128",
+    "query": "ما هي البلدة القديمة في الخليل وأين تقع وما أبرز معالمها المعمارية والدينية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "11364548a0986dc19bc987caf8fe714c8b2d2e68b97e898b059fb0a6d7117ceb_p0"
+    ]
+  },
+  {
+    "query_id": "q_129",
+    "query": "ما هو الواقع الديموغرافي والعسكري والسياسي الحالي للبلدة القديمة في الخليل؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "11364548a0986dc19bc987caf8fe714c8b2d2e68b97e898b059fb0a6d7117ceb_p1"
+    ]
+  },
+  {
+    "query_id": "q_130",
+    "query": "متى أدرجت اليونسكو البلدة القديمة في الخليل على قائمة التراث العالمي المهدد بالخطر ولماذا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "11364548a0986dc19bc987caf8fe714c8b2d2e68b97e898b059fb0a6d7117ceb_p2"
+    ]
+  },
+  {
+    "query_id": "q_131",
+    "query": "ما هي الأهمية الدينية والتاريخية للمسجد الابراهيمي في الخليل بحسب معتقدات أتباع الديانات السماوية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "11364548a0986dc19bc987caf8fe714c8b2d2e68b97e898b059fb0a6d7117ceb_p3"
+    ]
+  },
+  {
+    "query_id": "q_132",
+    "query": "كيف تشكل النسيج العمراني للحارات القديمة في الخليل خلال فترتي الحكم المملوكي والعثماني؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "11364548a0986dc19bc987caf8fe714c8b2d2e68b97e898b059fb0a6d7117ceb_p4"
+    ]
+  },
+  {
+    "query_id": "q_133",
+    "query": "ما هي المواقع الاستيطانية اليهودية الموجودة داخل مدينة الخليل وفي محيطها؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "11364548a0986dc19bc987caf8fe714c8b2d2e68b97e898b059fb0a6d7117ceb_p5"
+    ]
+  },
+  {
+    "query_id": "q_134",
+    "query": "ما هي تفاصيل اتفاق الخليل عام 1997 وتقسيم المدينة إلى منطقتي H1 وH2 إثر مجزرة المسجد الابراهيمي؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "11364548a0986dc19bc987caf8fe714c8b2d2e68b97e898b059fb0a6d7117ceb_p6"
+    ]
+  },
+  {
+    "query_id": "q_135",
+    "query": "كيف أثر الاحتلال الإسرائيلي وإقامة المستوطنات والتقسيمات الأمنية على الواقع العمراني والاجتماعي للبلدة القديمة في الخليل؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "11364548a0986dc19bc987caf8fe714c8b2d2e68b97e898b059fb0a6d7117ceb_p1",
+      "11364548a0986dc19bc987caf8fe714c8b2d2e68b97e898b059fb0a6d7117ceb_p5",
+      "11364548a0986dc19bc987caf8fe714c8b2d2e68b97e898b059fb0a6d7117ceb_p6"
+    ]
+  },
+  {
+    "query_id": "q_136",
+    "query": "ما هو دير الأربعين وأين يقع وما أبرز أهميته الأثرية في مدينة الخليل؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p0"
+    ]
+  },
+  {
+    "query_id": "q_137",
+    "query": "من هم أبرز الرحالة والعلماء الذين وثقوا ووصفوا موقع دير الأربعين تاريخياً مثل صندوق استكشاف فلسطين ومادير؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p1"
+    ]
+  },
+  {
+    "query_id": "q_138",
+    "query": "ما هي المكونات المعمارية والأبعاد الهندسية لمبنى دير الأربعين وغرفه المقببة وهيكله المركزي؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p2"
+    ]
+  },
+  {
+    "query_id": "q_139",
+    "query": "ما هو الاسم القديم للعين التي يطل عليها مبنى دير الأربعين في الخليل؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p3"
+    ]
+  },
+  {
+    "query_id": "q_140",
+    "query": "كيف وصف المسح الجغرافي لفلسطين الآثار والأقبية والأساسات المعمارية لموقع دير الأربعين؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p4"
+    ]
+  },
+  {
+    "query_id": "q_141",
+    "query": "كيف تناول المؤرخ مجير الدين وصف دير الأربعين وما تفسير تسميته بهذا الاسم وفقاً للمؤرخ موشي شارون؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p5"
+    ]
+  },
+  {
+    "query_id": "q_142",
+    "query": "كيف تطورت الروايات التاريخية والتقاليد الدينية حول تحول دير الأربعين من كنيسة إلى مسجد وارتباطه بقابيل وهابيل؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p6"
+    ]
+  },
+  {
+    "query_id": "q_143",
+    "query": "ما هي ملاحظات المستشرقين والرحالة مثل فرانشيسكو كواريسمي وجورج روزن حول الأقبار والمعتقدات في دير الأربعين؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p7"
+    ]
+  },
+  {
+    "query_id": "q_144",
+    "query": "ما هي الروايات والشهادات التاريخية للرحالة اليهود والحاخامات حول وجود قبر يسي وراعوث في موقع دير الأربعين؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p8"
+    ]
+  },
+  {
+    "query_id": "q_145",
+    "query": "ما تفاصيل القبر والنقش التاريخي الموجود في أقبية السقاواتي في موقع دير الأربعين؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p9"
+    ]
+  },
+  {
+    "query_id": "q_146",
+    "query": "كيف تتبعت المصادر التاريخية ووصف الرحالة والمؤرخين تطور مبنى دير الأربعين وتسمياته المختلفة وعمارته عبر العصور؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p1",
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p5",
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p6",
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p7"
+    ]
+  },
+  {
+    "query_id": "q_147",
+    "query": "ما هي الروايات التاريخية المختلفة حول الأقمار والمدفونين في موقع دير الأربعين مثل قبر يسي وراعوث وقبر الشيخ المجاهد والسقاواتي؟",
+    "query_type": "multi_answer",
+    "relevant_para_ids": [
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p8",
+      "e7a1adc202731ede52ccdeb7f95b48c17b083b1f68c8b73d773c2daaf3a1f8bd_p9"
+    ]
+  },
+  {
+    "query_id": "q_148",
+    "query": "ما هو تعريف العمارة الإسلامية في عكا وما هو إطارها الزمني وأبرز سماتها الدفاعية والمعمارية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p0",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p1"
+    ]
+  },
+  {
+    "query_id": "q_149",
+    "query": "كيف تحولت عكا في القرن الثالث عشر الميلادي إلى المعقل الحربي الأخير للمملكة الصليبية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p2"
+    ]
+  },
+  {
+    "query_id": "q_150",
+    "query": "ما تفاصيل الحملة العسكرية المملوكية بقيادة السلطان الأشرف خليل بن قلاوون لتحرير عكا عام 1291م وقرار الهدم الاستراتيجي لأسوارها؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p3",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p4"
+    ]
+  },
+  {
+    "query_id": "q_151",
+    "query": "كيف تحولت عكا طوال العهد المملوكي وبداية العهد العثماني إلى قرية صيادين وثغر مرابطة وكيف أديرت إدارياً وعسكرياً؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p5"
+    ]
+  },
+  {
+    "query_id": "q_152",
+    "query": "كيف أعزل الأمير ضاهر العمر الزيداني إحياء مدينة عكا اقتصادياً ومعمارياً ابتداءً من عام 1750م؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p6"
+    ]
+  },
+  {
+    "query_id": "q_153",
+    "query": "ما هي أبرز شبكة التحصينات والمبان النوعية التي شيدها المماليك لإيواء الحامية المرابطة وادارة الثغر بحرياً؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p7",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p8",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p9",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p10"
+    ]
+  },
+  {
+    "query_id": "q_154",
+    "query": "ما هي تفاصيل رباط الشيخ غانم بن علي الأنصاري ومقره العسكري والدعوي في عكا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p11",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p12",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p13"
+    ]
+  },
+  {
+    "query_id": "q_155",
+    "query": "ما هي هندسة ودور القصر الإداري والمستودع الاستراتيجي لنائب السلطنة المملوكية في عكا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p14",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p15",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p16"
+    ]
+  },
+  {
+    "query_id": "q_156",
+    "query": "ما هي فلسفة الدفاع الباليستي العميق وعمارة التدوير التي اعتمدها حكام عكا العثمانيون؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p17",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p18",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p19"
+    ]
+  },
+  {
+    "query_id": "q_157",
+    "query": "من هم أبرز الحكام الثلاثة الذين قادوا حملات إعمار وتوسيع مدينة عكا وما أبرز إنجازاتهم؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p20",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p21",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p22",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p23"
+    ]
+  },
+  {
+    "query_id": "q_158",
+    "query": "ما هي الخصائص المعمارية والتخطيطية لجامع الجزار في عكا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p26",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p27"
+    ]
+  },
+  {
+    "query_id": "q_159",
+    "query": "ما هي تفاصيل نظام التحصينات والأسوار المزدوجة والأبراج العسكرية لمدينة عكا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p28",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p29"
+    ]
+  },
+  {
+    "query_id": "q_160",
+    "query": "ما هي هندسة وتخطيط خان العمدان وبرج ساعته في عكا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p30",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p31"
+    ]
+  },
+  {
+    "query_id": "q_161",
+    "query": "كيف عملت قناة الجزار المائية على توفير المياه العذبة وحماية عكا من التعطيش؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p32",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p33"
+    ]
+  },
+  {
+    "query_id": "q_162",
+    "query": "ما هي المكونات المعمارية وتقنيات التدفئة الهيدروليكية في الحمام الجزار (الباشا) بعكا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p34",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p35"
+    ]
+  },
+  {
+    "query_id": "q_163",
+    "query": "ما هي هندسة ودور خان الإفرانج (خان القناصل) في عكا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p36",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p37"
+    ]
+  },
+  {
+    "query_id": "q_164",
+    "query": "ما هي خصائص جامع الزيتونة كأقدم مسجد أميري باق في عكا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p38",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p39"
+    ]
+  },
+  {
+    "query_id": "q_165",
+    "query": "ما هي الهندسة المعمارية والتصميم التبريدي للسوق الأبيض المسقوف في عكا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p40",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p41"
+    ]
+  },
+  {
+    "query_id": "q_166",
+    "query": "كيف نجحت تحصينات عكا المعمارية وأنظمتها المائية في إفشال حصار نابليون بونابرت عام 1799م؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p42",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p43",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p44"
+    ]
+  },
+  {
+    "query_id": "q_167",
+    "query": "ما هي التحديات الجيوسياسية والمعمارية المعاصرة التي تواجه العمارة الإسلامية في عكا عام 2026؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p45",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p46",
+      "5c656edd3a3ac744f6a7599489b54bf40cde09925eb8655b09abca1e54dbfbe9_p47"
+    ]
+  },
+  {
+    "query_id": "q_168",
+    "query": "متى تأسس الاتحاد الفلسطيني لرفع الأثقال وما هي أبرز محطات انضمامه للاتحادات العربية والقارية والدولية ومن هو رئيسه الحالي؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "23bef47abec1aa2decd16cf42e328e7c1d46b4ee6bc9688624f7a6b3ea0dc8c7_p0"
+    ]
+  },
+  {
+    "query_id": "q_169",
+    "query": "ما هي المهام والأنشطة والمسؤوليات التي يتولى إدارتها الاتحاد الفلسطيني لرفع الأثقال في الضفة الغربية وقطاع غزة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "23bef47abec1aa2decd16cf42e328e7c1d46b4ee6bc9688624f7a6b3ea0dc8c7_p1"
+    ]
+  },
+  {
+    "query_id": "q_170",
+    "query": "ما هو مفهوم الوقف بشكل عام وما هو الوقف المسيحي وما هي أهدافه؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a3af9351819dc4c44367926adfd67e2c20dd72666a55d9d3994ce9cf2ff72c47_p0",
+      "a3af9351819dc4c44367926adfd67e2c20dd72666a55d9d3994ce9cf2ff72c47_p1"
+    ]
+  },
+  {
+    "query_id": "q_171",
+    "query": "كيف تأثرت الأوقاف المسيحية والإسلامية في فلسطين بعد النكبة وتعرضها لصفقات التسريب والبيع للسلطات الإسرائيلية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a3af9351819dc4c44367926adfd67e2c20dd72666a55d9d3994ce9cf2ff72c47_p2",
+      "a3af9351819dc4c44367926adfd67e2c20dd72666a55d9d3994ce9cf2ff72c47_p3"
+    ]
+  },
+  {
+    "query_id": "q_172",
+    "query": "ما هو حجم وتوزيع ملكية الأوقاف المسيحية في فلسطين وفقاً للمصادر والإحصائيات مثل موقع جلوبس الإسرائيلي؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a3af9351819dc4c44367926adfd67e2c20dd72666a55d9d3994ce9cf2ff72c47_p4"
+    ]
+  },
+  {
+    "query_id": "q_173",
+    "query": "ما هي سياسة البطريركية اليونانية في القدس تجاه الأوقاف الفلسطينية الأرثوذكسية وموقف رعايا الطائفة منها؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a3af9351819dc4c44367926adfd67e2c20dd72666a55d9d3994ce9cf2ff72c47_p5",
+      "a3af9351819dc4c44367926adfd67e2c20dd72666a55d9d3994ce9cf2ff72c47_p6"
+    ]
+  },
+  {
+    "query_id": "q_174",
+    "query": "ما هو تعريف دولة إسرائيل من الناحية الجغرافية والسياسية وموقعها وحدودها وعاصمتها الرسمية والمركز الاقتصادي لها؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p0"
+    ]
+  },
+  {
+    "query_id": "q_175",
+    "query": "ما هي المراحل التاريخية والحضارات المتعاقبة التي شهدتها أرض فلسطين وإسرائيل منذ الهجرة البشرية المبكرة والعصور القديمة وحتى العهد العثماني؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p1",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p19",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p20",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p21",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p22",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p23",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p24",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p25",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p26",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p27",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p28",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p29",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p30"
+    ]
+  },
+  {
+    "query_id": "q_176",
+    "query": "كيف تأسست دولة إسرائيل عام 1948 وما هي تفاصيل قرار التقسيم والحروب العربية الإسرائيلية والاحتلالات العسكرية اللاحقة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p2",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p34",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p35",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p37",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p38"
+    ]
+  },
+  {
+    "query_id": "q_177",
+    "query": "ما هي الخصائص الديمقراطية والسياسية والاقتصادية والاجتماعية لإسرائيل، وما هي أبرز المؤشرات الدولية التي تحتلها؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p3"
+    ]
+  },
+  {
+    "query_id": "q_178",
+    "query": "ما هي أصل تسمية إسرائيل تاريخياً ودينياً ولغوياً، وما هي البدائل التي تم اقتراحها لتسمية الدولة حديثاً؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p4",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p5",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p8",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p9",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p10",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p12",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p13",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p14",
+      "ed4adb944833b818e2dbe15b2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p15",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p16",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p17",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p18"
+    ]
+  },
+  {
+    "query_id": "q_179",
+    "query": "ما هي الأسماء التاريخية المختلفة التي أُطلقت على منطقة فلسطين وإسرائيل عبر العصور؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p6"
+    ]
+  },
+  {
+    "query_id": "q_180",
+    "query": "ما هو مفهوم وتداعيات استخدام مصطلح 'الكيان الصهيوني' من قبل بعض الحكومات والجماعات العربية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p7"
+    ]
+  },
+  {
+    "query_id": "q_181",
+    "query": "كيف نشأت الحركة الصهيونية في القرن التاسع عشر وتطورات هجرة اليهود إلى فلسطين ودور وعد بلفور والانتداب البريطاني؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p11",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p31",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p32",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p33",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p54"
+    ]
+  },
+  {
+    "query_id": "q_182",
+    "query": "كيف تتم إدارة الحكم في إسرائيل، طبيعة القوانين الأساسية، عدم وجود دستور رسمي، وتشكيلة الحكومة الحالية والتطورات السياسية فيها؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p41",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p42",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p43",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p44",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p45",
+      "ed4adb944833b818e2dbe1fb2b27509fd8c9_p46",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p47",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p48"
+    ]
+  },
+  {
+    "query_id": "q_183",
+    "query": "ما هي طبيعة علاقات إسرائيل الدبلوماسية الدولية والعربية، والدول التي لا تقيم معها علاقات دبلوماسية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p39",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p40",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p49",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p50",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p51",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p52",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p53"
+    ]
+  },
+  {
+    "query_id": "q_184",
+    "query": "ما هي الموقف والرفض العربي والشعبي لوجود إسرائيل والجدل حول طبيعتها كدولة قومية دينية في مواجهة الطابع الديمقراطي العلماني؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p36",
+      "ed4adb944833b818e2dbe1fb2b275c9fb803f79cb5a43b6812c4ef7d2c0d98c9_p55"
+    ]
+  },
+  {
+    "query_id": "q_185",
+    "query": "ما هو الاسم الكامل لصائب عريقات، وكياته، ولقباه الشهيران، وتاريخ ومكان ولادته ووفاته، وأبرز المناصب التي شغلها؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p0"
+    ]
+  },
+  {
+    "query_id": "q_186",
+    "query": "ما هي تفاصيل عائلة صائب عريقات ونشأته الأولى في أبو ديس وسبب تسميته؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p1"
+    ]
+  },
+  {
+    "query_id": "q_187",
+    "query": "ما هي المراحل التعليمية والشهادات الأكاديمية التي حصل عليها صائب عريقات ومؤسساتها التعليمية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p2"
+    ]
+  },
+  {
+    "query_id": "q_188",
+    "query": "ما هي تفاصيل حياة صائب عريقات العائلية وأنشطته المهنية المبكرة في التدريس والصحافة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p3"
+    ]
+  },
+  {
+    "query_id": "q_189",
+    "query": "متى كانت المرة الأولى التي اعتقل فيها جيش الاحتلال الإسرائيلي صائب عريقات وما السبب؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p4"
+    ]
+  },
+  {
+    "query_id": "q_190",
+    "query": "لماذا أثارت مقالات وأنشطة صائب عريقات الأكاديمية الجدل واتهامات بالخيانة في جامعة النجاح عامي 1982 و1983؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p5"
+    ]
+  },
+  {
+    "query_id": "q_191",
+    "query": "ما هي تفاصيل اعتقال صائب عريقات عام 1986 والحكم العسكري الصادر بحقه عام 1987؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p6"
+    ]
+  },
+  {
+    "query_id": "q_192",
+    "query": "ما هو الدور الذي لعبه صائب عريقات في مؤتمر مدريد ومباحثات واشنطن والمفاوضات الفلسطينية الإسرائيلية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p7",
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p8"
+    ]
+  },
+  {
+    "query_id": "q_193",
+    "query": "ما هي الحقائب الوزارية والمناصب المتعلقة بشؤون المفاوضات التي شغلها صائب عريقات في الحكومات الفلسطينية المتعاقبة؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p9"
+    ]
+  },
+  {
+    "query_id": "q_194",
+    "query": "ما هي المناصب القيادية التي تولاها صائب عريقات في منظمة التحرير الفلسطينية ودائرة شؤون المفاوضات ومجلس الأمن القومي؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p10",
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p11",
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p12"
+    ]
+  },
+  {
+    "query_id": "q_195",
+    "query": "متى عين صائب عريقات رئيسا للجنة الوطنية العليا للمتابعة مع المحكمة الجنائية الدولية؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p13"
+    ]
+  },
+  {
+    "query_id": "q_196",
+    "query": "ما هي تفاصيل أزمة تسريبات الوثائق الفلسطينية عبر قناة الجزيرة وعلاقتها باستقالة صائب عريقات؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p14",
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p15"
+    ]
+  },
+  {
+    "query_id": "q_197",
+    "query": "ما هي مواقف صائب عريقات المطالبة بمحاسبة إسرائيل دوليا ورفضه لاتفاقيات التطبيع العربي (الإماراتية والبحرينية)؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p16",
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p17",
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p18"
+    ]
+  },
+  {
+    "query_id": "q_198",
+    "query": "ما هي التطورات الصحية وعمليات زراعة الرئة التي خضع لها صائب عريقات قبل وفاته؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p19"
+    ]
+  },
+  {
+    "query_id": "q_199",
+    "query": "كيف كانت تفاصيل إصابة صائب عريقات بفيروس كورونا ونقله للمستشفى ووفاته وتكفينه وتكريمه لاحقا؟",
+    "query_type": "single_answer",
+    "relevant_para_ids": [
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p20",
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p21",
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p22",
+      "a80e747bd2b5adbbc28e22fed5c09e82b6516017e0ea523faf9c131e340f7a2d_p23"
+    ]
+  }
+]

@@ -1,0 +1,84 @@
+{
+  "report": {
+    "eval_name": "ner_v1",
+    "run_at": "2026-07-26T08:52:59.921180+00:00",
+    "dataset_size": 108,
+    "metrics": {
+      "precision_exact": 0.46,
+      "recall_exact": 0.4829,
+      "f1_exact": 0.4712,
+      "tp_exact": 184.0,
+      "fp_exact": 216.0,
+      "fn_exact": 197.0,
+      "precision_normalized": 0.4625,
+      "recall_normalized": 0.4856,
+      "f1_normalized": 0.4738,
+      "tp_normalized": 185.0,
+      "fp_normalized": 215.0,
+      "fn_normalized": 196.0
+    },
+    "notes": "exact = raw string match (as annotated). normalized = diacritics/alef/teh-marbuta-insensitive match. Per-type breakdown (exact match) written alongside this report."
+  },
+  "per_type": {
+    "PERSON": {
+      "precision": 0.56,
+      "recall": 0.6437,
+      "f1": 0.5989,
+      "support": 87
+    },
+    "LOCATION": {
+      "precision": 0.5056,
+      "recall": 0.523,
+      "f1": 0.5141,
+      "support": 174
+    },
+    "MISC": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 1
+    },
+    "HERITAGE_PLACE": {
+      "precision": 0.7097,
+      "recall": 0.6875,
+      "f1": 0.6984,
+      "support": 32
+    },
+    "ORGANIZATION": {
+      "precision": 0.3333,
+      "recall": 0.1687,
+      "f1": 0.224,
+      "support": 83
+    },
+    "HERITAGE_CLOTHING": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 0
+    },
+    "HERITAGE_HERITAGE_PRACTICE": {
+      "precision": 0.25,
+      "recall": 0.25,
+      "f1": 0.25,
+      "support": 4
+    },
+    "HERITAGE_PLANT": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 0
+    },
+    "HERITAGE_FOOD": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 0
+    },
+    "HERITAGE_CRAFT": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 0
+    }
+  }
+}

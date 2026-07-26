@@ -102,9 +102,9 @@ plan live in **`ROADMAP.md`**. Summary:
 | 1 | Ingestion — Arabic Wikipedia collection with provenance | **Done (iterating)** |
 | 2 | Text normalization, quality scoring, deduplication | **Done** |
 | 3 | Corpus packaging & publishing (Parquet / Hugging Face) | **Done** |
-| 4 | Named Entity Recognition (CAMeL + heritage dictionary) | **Implemented — eval in progress** |
+| 4 | Named Entity Recognition (CAMeL + heritage dictionary) | **Done — F1 0.47 (see ROADMAP.md)** |
 | 5 | Retrieval-augmented QA (chunk → embed → pgvector → retrieve → generate) | **Done — verified end to end** |
-| 6 | Evaluation layer (NER, embeddings, retrieval, RAG) | Next, gates phase 7 |
+| 6 | Evaluation layer (NER, embeddings, retrieval, RAG) | **Done — Recall@5 0.93, see ROADMAP.md** |
 | 7 | Multi-source expansion (EN Wikipedia, news, archives, papers) + licensing gate | Planned |
 | 8 | Entity linking, relation extraction & knowledge graph (Neo4j) | Planned |
 | 9 | Topic modeling, cultural classification, bias measurement, temporal analysis | Planned |
@@ -124,7 +124,7 @@ src/
   nlp/              Topic modeling, cultural classification, bias, temporal analysis (planned — empty)
   api/              RAG API endpoint (planned — empty)
   frontend/         Dashboard (planned — empty)
-eval/               Shared evaluation harness — report schema done; NER/embedding/retrieval/RAG/KG eval scripts planned
+eval/               Evaluation harness (done for NER/retrieval/RAG — see eval/gold/, eval_reports/, ROADMAP.md); KG eval planned
 scripts/            Runnable entrypoints (NER, HF export/publish, seed audit)
 tests/              Unit tests for schema, quality, dedup, normalizer, NER, export
 docs/               Publishing guide and supporting documentation

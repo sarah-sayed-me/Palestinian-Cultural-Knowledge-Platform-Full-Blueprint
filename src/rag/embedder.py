@@ -14,6 +14,7 @@ import logging
 from typing import List
 
 from src.rag.config import EmbeddingConfig
+from src.rag.env import ensure_env_loaded
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +45,11 @@ def _resolve_device(device: str) -> str:
 class Embedder:
     def __init__(self, config: EmbeddingConfig):
         from sentence_transformers import SentenceTransformer
+
+        # Must happen before SentenceTransformer() below, which is what talks to
+        # the HuggingFace Hub — otherwise HF_TOKEN in .env is loaded too late to
+        # matter (see src/rag/env.py docstring for how this bug actually surfaced).
+        ensure_env_loaded()
 
         self.config = config
         device = _resolve_device(config.device)

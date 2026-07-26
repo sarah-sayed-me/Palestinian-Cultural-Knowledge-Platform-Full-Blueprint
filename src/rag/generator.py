@@ -31,7 +31,10 @@ an English question gets an English answer).
 3. After every claim, cite the source(s) it came from using bracketed numbers, e.g. [1] or \
 [1][2], matching the numbered sources below. Do not cite a source number that wasn't given \
 to you.
-4. Be concise and factual."""
+4. Cite ONLY the specific sources a claim actually draws from — not every source you were \
+given. Most answers will not need all of the numbered sources below; citing one you didn't \
+actually use is as wrong as citing one that doesn't exist.
+5. Be concise and factual."""
 
 _ARABIC_RE = re.compile(r"[؀-ۿ]")
 

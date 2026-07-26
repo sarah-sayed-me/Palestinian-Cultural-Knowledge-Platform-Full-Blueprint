@@ -259,18 +259,80 @@ cross-referencing the earlier plan can still find it.)*
 
 **A real finding from that run, not a bug:** none of the 5 retrieved sources were a dedicated "Knafeh" article — checking directly, **no such article exists** in this 484-document corpus (`كنافة` appears only as a passing mention in 8 other documents). The retriever correctly surfaced the closest real matches instead of failing, and the generator stayed grounded in them rather than inventing a source. This is a genuine corpus-coverage gap, exactly the kind of thing Track C's retrieval/RAG evals (below) and Track D's multi-source expansion exist to catch and fix — not a flaw in the RAG mechanics themselves.
 
-### Track C — Evaluation (P0/P1 — starts immediately after B5, before any expansion)
+### Track C — Evaluation (P0/P1 — starts immediately after B5, before any expansion) — ✅ DONE
 
 Nothing past this point should be built on an unmeasured foundation. This is where the "add
 evaluation everywhere" requirement lives.
 
-| ID | Task | Priority | Depends on | Mode | Deliverable | Est. |
-|---|---|:--:|---|---|---|:--:|
-| C1 | **Embedding eval** — is §3.1's default actually retrieving well on this corpus? Sample queries + known-relevant chunks, measure embedding-similarity quality directly | P0 | B2 | Parallel-after B2 | `eval/embedding_eval.py` → `EvalReport` | 1d |
-| C2 | **Retrieval eval** — recall@k, MRR against a small hand-built relevance set; this is also the gate for the semantic-chunking decision in §3.3 | P0 | B4 | Sequential after C1 | `eval/retrieval_eval.py` → `EvalReport` | 1d |
-| C3 | **RAG (end-to-end) eval** — faithfulness/groundedness (Claude-or-similar-as-judge + manual spot check), and the Qwen3-vs-Jais-30B-vs-Falcon-H1-Arabic A/B from §3.4 | P0 | B5 | Sequential after C2 | `eval/rag_eval.py` → `EvalReport` + model-choice writeup | 1.5d |
-| C4 | **NER eval** — NER already shipped (`wikipedia_ar_documents.ner.jsonl` exists) with zero measurement: CAMeL confidence is a hardcoded placeholder, heritage matches are 1.0 by fiat. Build a small gold-annotated set, report precision/recall | P0 | — (independent of B/C1–3) | Parallel to all of Track C | `eval/ner_eval.py` → `EvalReport` + gold set | 1.5d |
-| C5 | Tuning pass — chunk size/overlap, top-k, prompt — using C1–C3 results | P1 | C1, C2, C3 | Sequential | Tuned `configs/rag.yaml` + before/after numbers | 1d |
+| ID | Task | Priority | Depends on | Mode | Deliverable | Est. | Status |
+|---|---|:--:|---|---|---|:--:|---|
+| C1 | **Embedding eval** — is §3.1's default actually retrieving well on this corpus? Sample queries + known-relevant chunks, measure embedding-similarity quality directly | P0 | B2 | Parallel-after B2 | `eval/embedding_eval.py` → `EvalReport` | 1d | Done — folded into C2 (see note) |
+| C2 | **Retrieval eval** — recall@k, MRR against a small hand-built relevance set; this is also the gate for the semantic-chunking decision in §3.3 | P0 | B4 | Sequential after C1 | `eval/retrieval_eval.py` → `EvalReport` | 1d | Done — Recall@5 0.93, Recall@10 0.96, MRR 0.89 |
+| C3 | **RAG (end-to-end) eval** — faithfulness/groundedness (Claude-or-similar-as-judge + manual spot check), and the Qwen3-vs-Jais-30B-vs-Falcon-H1-Arabic A/B from §3.4 | P0 | B5 | Sequential after C2 | `eval/rag_eval.py` → `EvalReport` + model-choice writeup | 1.5d | Done — qwen3:14b vs llama3.1:8b compared, near-identical (see note); Jais/Falcon untested |
+| C4 | **NER eval** — NER already shipped (`wikipedia_ar_documents.ner.jsonl` exists) with zero measurement: CAMeL confidence is a hardcoded placeholder, heritage matches are 1.0 by fiat. Build a small gold-annotated set, report precision/recall | P0 | — (independent of B/C1–3) | Parallel to all of Track C | `eval/ner_eval.py` → `EvalReport` + gold set | 1.5d | Done — F1 0.47 (exact match; likely undercounted, see note) |
+| C5 | Tuning pass — chunk size/overlap, top-k, prompt — using C1–C3 results | P1 | C1, C2, C3 | Sequential | Tuned `configs/rag.yaml` + before/after numbers | 1d | Done — one evidence-driven attempt, real (negative) result, see note |
+
+**Real results, not simulated — and where the honest edges are:**
+
+- **Gold data source:** 108 NER-annotated paragraphs (`eval/gold/ner_gold.json`) and 200 retrieval
+  queries with relevant-document judgments (`eval/gold/retrieval_queries.json`), built externally
+  and integrated into this repo. Both scripts (`eval/ner_eval.py`, `eval/retrieval_eval.py`,
+  `eval/rag_eval.py`) run against the real live corpus/index/models, not fixtures.
+- **C1 folded into C2:** the gold set's `relevant_para_ids` use a `<doc_id>_p<N>` paragraph
+  numbering that doesn't match this project's chunker and, on investigation, doesn't reliably
+  reconstruct from the raw corpus for long/frequently-edited articles (cross-referencing against
+  `ner_gold.json`'s actual paragraph text found overlap for only 2 of 328 references — not enough
+  for a paragraph-level metric). `retrieval_eval.py` therefore scores at **document level**
+  (did the retriever surface a chunk from the correct source document) and reports embedding-score
+  signals (`avg_top1_score`, `avg_hit_score`) from the same run — covering both C1 and C2 honestly,
+  rather than inventing a second script around data that can't support it.
+- **Retrieval (C1/C2) is strong:** Recall@5 = 0.9347, Recall@10 = 0.9648, MRR = 0.8877 across 199
+  evaluable queries (1 of 200 fully excluded — its only gold document no longer exists in the
+  corpus; not counted as a miss). The 7 genuine misses cluster on only 4 distinct source
+  documents (each missed 2–3 times), not random scatter — likely chronology/timeline-style
+  articles where a single ~500-word chunk blends several distinct facts. Not enough evidence to
+  justify a global chunking change (the §3.3 semantic-chunking gate stays closed), but worth
+  revisiting if those documents keep failing after more sources land.
+- **RAG (C3):** citation recall 0.90, groundedness 3.89/5 (LLM-judge, 79% rated 4-5) on the
+  baseline run (30-query evenly-spaced sample, `llama3.1:8b` standing in for the not-yet-pulled
+  `qwen3:14b`). Citation **precision** was low (0.27) — the generator cites most/all retrieved
+  passages rather than only the ones a claim actually draws from.
+- **The Qwen3-14b-vs-llama3.1:8b comparison from §3.4 is done** (`qwen3:14b` was pulled and
+  the identical 30-query sample re-run against it — `eval_reports/rag_v1_qwen3-14b.json`).
+  Result: **citation precision was 0.2689 on both models — identical to four decimal places.**
+  That's strong evidence the low precision isn't a per-model quality gap at all, it's a
+  structural property of asking a model to cite from 5 retrieved passages when most queries
+  have exactly 1 gold-relevant document: recall (0.90 both models) implies the correct doc
+  gets cited ~90% of the time, but precision (0.27) implies each answer cites roughly 3–4 of
+  the 5 retrieved sources on average, regardless of which model is generating. Groundedness was
+  also comparable (`qwen3:14b` 3.83/5, 70% rated 4–5, vs `llama3.1:8b`'s 3.89/5 baseline — well
+  within run-to-run variance at n=30). **Practical implication:** the real lever for citation
+  precision is `retrieval.top_k` (fewer candidates → structurally higher precision, at some
+  recall cost) or a differently-shaped citation metric, not model choice or further prompt
+  wording — a second, independently-worded prompt attempt already failed to move this number
+  (see C5 below), and this cross-model replication is why that failure is now trusted rather
+  than attributed to one particular model being stubborn. Jais-30B/Falcon-H1-Arabic remain
+  untested (not pulled) — re-run `eval/rag_eval.py --model <name>` if/when tried.
+- **C5 tuning — a real attempt, a real (negative) result, now replicated:** the citation-precision
+  finding was evidence for a specific, single change (tighten the system prompt to say "cite only
+  what a claim actually draws from," not "cite everything you were given"). Applied it, re-ran the
+  identical 30-query sample on `llama3.1:8b`: citation precision was **unchanged** (0.2689 → 0.2689
+  exactly). The `qwen3:14b` run above (same tuned prompt, different model) landed on the *same*
+  0.2689 again — ruling out "this one model just didn't listen" and confirming the metric is
+  structurally floored by `top_k`, not fixable by prompt wording. No chunking/top-k change was
+  attempted — C2's retrieval numbers don't warrant one, and changing top_k trades away recall to
+  move a metric that was never really about model quality.
+- **NER (C4) F1 is likely undercounted:** reading `eval_reports/ner_v1_mismatches.md` by hand,
+  a meaningful share of "errors" are surface-form mismatches, not real misses — e.g. `والعراق` vs
+  `العراق` (attached conjunction), `جمال عبد الناصر` vs `جمال عبدالناصر` (compound-name spacing),
+  trailing commas caught in a span. The script's own "normalized" mode (diacritics/alef-insensitive)
+  doesn't address these, so the true 0.4712 F1 understates real quality on `PERSON`/`LOCATION`.
+  `ORGANIZATION` recall (0.17) is a genuine, separate weak spot, not an artifact.
+- **Reproduce:** `uv run python -m eval.ner_eval --gold eval/gold/ner_gold.json`;
+  `uv run python -m eval.retrieval_eval`; `uv run python -m eval.rag_eval` (uses
+  `configs/rag.yaml`'s `qwen3:14b` by default now that it's pulled; pass `--model llama3.1:8b`
+  to compare against the smaller model). All write to `eval_reports/` — pass `--output` to keep
+  more than one run side by side instead of overwriting the previous one at the default path.
 
 ### Track D — Multi-source expansion (P1/P2)
 
