@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from typing import Optional
 
@@ -11,6 +12,8 @@ try:
     _HAS_DATASKETCH = True
 except ImportError:
     _HAS_DATASKETCH = False
+
+logger = logging.getLogger(__name__)
 
 NUM_PERM = 128
 SHINGLE_SIZE = 3
@@ -34,8 +37,14 @@ class DuplicationIndex:
         self._count = 0
         self._duplicate_count = 0
 
-    def check_and_register(self, doc_id: str, text: str) -> DupResult:
-        """Check whether text is a near-duplicate, registering unique docs."""
+    def check_and_register(self, doc_id: str, text: str, source_id: Optional[str] = None) -> DupResult:
+        """Check whether text is a near-duplicate, registering unique docs.
+
+        source_id is accepted-but-ignored here so callers (pipeline.py) can
+        treat DuplicationIndex and PersistentDuplicationIndex identically —
+        only the persistent subclass actually uses it (to tag which source
+        first collected a document).
+        """
         if not _HAS_DATASKETCH:
             return self._check_and_register_fallback(doc_id, text)
 
@@ -101,3 +110,86 @@ def _jaccard(left: set[bytes], right: set[bytes]) -> float:
     if not union:
         return 0.0
     return len(left & right) / len(union)
+
+
+class PersistentDuplicationIndex(DuplicationIndex):
+    """A DuplicationIndex that loads existing signatures from Postgres on
+    construction and persists new ones back, so near-duplicate detection works
+    ACROSS pipeline runs and sources — not just within one run, which was the
+    gap ROADMAP.md Track D6 flagged: the plain DuplicationIndex is rebuilt from
+    scratch every run, so re-running (or adding a second source) couldn't catch
+    a document already collected.
+
+    Degrades to in-memory-only (a logged warning, not silent data loss) if
+    Postgres isn't reachable, so ingestion doesn't hard-depend on the RAG
+    vector store being up — cross-run dedup is degraded, not broken.
+    """
+
+    TABLE = "ingestion_dedup_index"
+
+    def __init__(self, threshold: float = 0.70, num_perm: int = NUM_PERM, conn=None):
+        super().__init__(threshold=threshold, num_perm=num_perm)
+        self._conn = conn
+        self._persistent = conn is not None and _HAS_DATASKETCH
+        if conn is not None and not _HAS_DATASKETCH:
+            logger.warning(
+                "datasketch is not installed; persistent dedup requires it (the "
+                "shingle fallback has no serializable signature). Falling back "
+                "to in-memory-only, same as a plain DuplicationIndex."
+            )
+        if self._persistent:
+            self._create_schema()
+            self._load_existing()
+
+    def _create_schema(self) -> None:
+        with self._conn.cursor() as cur:
+            cur.execute(
+                f"""
+                CREATE TABLE IF NOT EXISTS {self.TABLE} (
+                    doc_id TEXT PRIMARY KEY,
+                    source_id TEXT,
+                    minhash_seed BIGINT NOT NULL,
+                    minhash_values BYTEA NOT NULL,
+                    first_seen_at TIMESTAMPTZ DEFAULT now()
+                );
+                """
+            )
+        self._conn.commit()
+
+    def _load_existing(self) -> None:
+        import numpy as np
+
+        with self._conn.cursor() as cur:
+            cur.execute(f"SELECT doc_id, minhash_seed, minhash_values FROM {self.TABLE};")
+            rows = cur.fetchall()
+        for doc_id, seed, values_bytes in rows:
+            values = np.frombuffer(bytes(values_bytes), dtype=np.uint64)
+            minhash = MinHash(num_perm=self.num_perm, seed=seed, hashvalues=values)
+            self._lsh.insert(doc_id, minhash)
+            self._signatures[doc_id] = minhash
+        if rows:
+            logger.info("Loaded %d existing dedup signatures from %s.", len(rows), self.TABLE)
+
+    def check_and_register(self, doc_id: str, text: str, source_id: Optional[str] = None) -> DupResult:
+        result = super().check_and_register(doc_id, text)
+        if self._persistent and not result.is_duplicate:
+            self._persist(doc_id, source_id)
+        return result
+
+    def _persist(self, doc_id: str, source_id: Optional[str]) -> None:
+        minhash = self._signatures[doc_id]
+        with self._conn.cursor() as cur:
+            cur.execute(
+                f"""
+                INSERT INTO {self.TABLE} (doc_id, source_id, minhash_seed, minhash_values)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (doc_id) DO NOTHING;
+                """,
+                (doc_id, source_id, int(minhash.seed), minhash.hashvalues.tobytes()),
+            )
+        self._conn.commit()
+
+    def stats(self) -> dict:
+        base = super().stats()
+        base["persistent"] = self._persistent
+        return base

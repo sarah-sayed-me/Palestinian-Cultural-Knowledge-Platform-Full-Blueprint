@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-from email import generator
 import json
 from pathlib import Path
-from random import seed
 from typing import Generator, Iterable, Optional
 from urllib.parse import quote
 
@@ -17,6 +15,7 @@ from src.ingestion.schemas import (
     CredibilityTier,
     DocumentMetadata,
     Language,
+    LicenseStatus,
     SourceType,
     make_doc_id,
 )
@@ -79,6 +78,49 @@ def is_diaspora_terminal_category(category_name: str) -> bool:
     exclude any host-country term.
     """
     return any(pattern in category_name for pattern in DIASPORA_TERMINAL_PATTERNS)
+
+
+# Real drift observed in a collection run (see ROADMAP.md Track D5): categories
+# combining a generic culture/heritage topic word with ANOTHER country's name —
+# "مطبخ أردني" (Jordanian cuisine), "مواقع أثرية في إسرائيل" (archaeological
+# sites in Israel) — surfaced while traversing from a shared parent like "Arab
+# cuisine". This is a corpus-SCOPE precision rule, not a judgment about any
+# nation: the corpus is specifically about Palestinian culture/history, so a
+# "Jordanian cuisine" category is out of scope here for the same reason a
+# "French cuisine" one would be. A category naming Palestine itself is never
+# excluded by this rule, however many other countries also appear in its title.
+OFF_TARGET_NATIONALITY_TERMS = (
+    "الأردن", "أردني", "أردنية",          # Jordan / Jordanian
+    "سوريا", "سوري", "سورية",             # Syria / Syrian
+    "لبنان", "لبناني", "لبنانية",         # Lebanon / Lebanese
+    "العراق", "عراقي", "عراقية",          # Iraq / Iraqi
+    "إسرائيل", "إسرائيلي", "إسرائيلية",   # Israel / Israeli
+    "مصر", "مصري", "مصرية",               # Egypt / Egyptian
+    "تركيا", "تركي", "تركية",             # Turkey / Turkish
+    "إيران", "إيراني", "إيرانية",         # Iran / Iranian
+)
+
+GENERIC_TOPIC_TERMS = (
+    "مطبخ", "عمارة", "أدب", "فن", "موسيقى", "تراث", "أثري", "ثقافة",
+)
+
+PALESTINIAN_QUALIFIER_TERMS = ("فلسطين", "فلسطيني", "فلسطينية", "فلسطينيون")
+
+
+def is_off_target_category(category_name: str) -> bool:
+    """True if category_name pairs a generic culture/heritage topic with a
+    non-Palestinian nationality (e.g. "مطبخ أردني") rather than being about
+    Palestine specifically. See the module comment above
+    OFF_TARGET_NATIONALITY_TERMS for why this isn't a nationality blocklist —
+    a category naming Palestine is never excluded regardless of what else it
+    also mentions.
+    """
+    if any(term in category_name for term in PALESTINIAN_QUALIFIER_TERMS):
+        return False
+    has_generic_topic = any(term in category_name for term in GENERIC_TOPIC_TERMS)
+    has_off_target_nationality = any(term in category_name for term in OFF_TARGET_NATIONALITY_TERMS)
+    return has_generic_topic and has_off_target_nationality
+
 
 class WikipediaCollector(BaseCollector):
     """Collect Palestine-related articles from Wikipedia category seeds."""
@@ -233,6 +275,8 @@ class WikipediaCollector(BaseCollector):
                 member_title = str(getattr(member, "title", ""))
                 if is_maintenance_category(member_title):
                     continue
+                if is_off_target_category(member_title):
+                    continue
                 if is_diaspora_terminal_category(member_title):
                     # Harvest this category's own articles only; stop here.
                     yield from self._walk_category(
@@ -302,6 +346,7 @@ class WikipediaCollector(BaseCollector):
                 source_url=source_url,
                 source_domain=f"{self.language}.wikipedia.org",
                 credibility=CredibilityTier(source_info.get("credibility_tier", credibility.tier)),
+                license_status=LicenseStatus.CLEAR,  # CC BY-SA 4.0 — see docs/licensing_checklist.md
                 wikipedia_page_id=self._optional_int(page, "pageid"),
                 wikipedia_revid=self._optional_int(page, "revision_id", "revid", "lastrevid"),
                 wikipedia_categories=categories,

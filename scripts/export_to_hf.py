@@ -13,19 +13,45 @@ DEFAULT_INPUT = Path("data/processed/wikipedia_ar_documents.jsonl")
 DEFAULT_OUTPUT_DIR = Path("data/processed/hf/wikipedia_ar")
 
 
+def _is_clear(record: dict[str, Any]) -> bool:
+    """True if license_status == 'clear', used only when --clear-only is passed.
+
+    This project currently exports for private research use (not public
+    redistribution) — see docs/licensing_checklist.md and ROADMAP.md Track D
+    for the reasoning. license_status is still recorded on every document as
+    provenance, but does not gate the default export. Pass --clear-only
+    if/when preparing a subset for public release.
+    """
+    return record.get("license_status") == "clear"
+
+
 def export_to_hf_dataset(
     *,
     input_path: Path = DEFAULT_INPUT,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     write_jsonl_copy: bool = False,
+    clear_only: bool = False,
 ) -> dict[str, Any]:
-    """Convert accepted processed documents into Parquet dataset artifacts."""
+    """Convert accepted processed documents into Parquet dataset artifacts.
+
+    Includes everything by default (private research corpus). Pass
+    clear_only=True to restrict to license_status == "clear" — e.g. when
+    preparing a subset intended for public release.
+    """
     if not input_path.exists():
         raise FileNotFoundError(f"Processed input not found: {input_path}")
 
-    records = _read_jsonl(input_path)
-    if not records:
+    all_records = _read_jsonl(input_path)
+    if not all_records:
         raise ValueError(f"No records found in {input_path}")
+
+    records = [r for r in all_records if _is_clear(r)] if clear_only else all_records
+    excluded_count = len(all_records) - len(records)
+    if not records:
+        raise ValueError(
+            f"No 'clear' records in {input_path} ({excluded_count} excluded by --clear-only). "
+            f"Drop --clear-only to export everything."
+        )
 
     output_dir.mkdir(parents=True, exist_ok=True)
     dataframe = pd.DataFrame(records)
@@ -45,6 +71,7 @@ def export_to_hf_dataset(
         "train_parquet": str(train_path),
         "jsonl_copy": str(jsonl_copy) if jsonl_copy else None,
         "num_rows": len(records),
+        "excluded_as_not_clear": excluded_count,
         "columns": list(dataframe.columns),
         "total_words": int(dataframe.get("word_count", pd.Series(dtype=int)).sum()),
     }
@@ -77,11 +104,17 @@ def main() -> None:
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--write-jsonl-copy", action="store_true")
+    parser.add_argument(
+        "--clear-only",
+        action="store_true",
+        help="Restrict to license_status == 'clear' — for preparing a public-release subset.",
+    )
     args = parser.parse_args()
     summary = export_to_hf_dataset(
         input_path=args.input,
         output_dir=args.output_dir,
         write_jsonl_copy=args.write_jsonl_copy,
+        clear_only=args.clear_only,
     )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 

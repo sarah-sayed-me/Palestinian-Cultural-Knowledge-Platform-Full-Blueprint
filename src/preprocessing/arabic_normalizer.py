@@ -40,7 +40,8 @@ _BOILERPLATE_PATTERNS = [
     re.compile(r"اقرأ أيضا.*", re.IGNORECASE),
     re.compile(r"Read more.*", re.IGNORECASE),
     re.compile(r"تم النشر في.*"),
-    re.compile(r"Published on.*", re.IGNORECASE)
+    re.compile(r"Published on.*", re.IGNORECASE),
+    re.compile(r"مواضيع ذات صلة.*", re.DOTALL),  # WAFA "related articles" footer widget
 ]
 
 _WIKI_SECTION_RE = re.compile(

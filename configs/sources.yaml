@@ -65,21 +65,38 @@ wikipedia:
   timeout: 30
 
 gdelt:
-  enabled: false
-  country_codes: ["PS"]
-  date_start: "2010-01-01"
-  date_end: null
+  enabled: true
   source_id: "gdelt"
-  credibility_tier: "tier_1"
-  credibility_score: 0.88
+  # No blanket credibility_tier here on purpose: GDELT aggregates from many
+  # different, unknown-in-advance domains, so each document's credibility is
+  # looked up per-source-domain against credibility_map below (falling back to
+  # its "default" entry) — see src/ingestion/collectors/gdelt_collector.py.
+  rate_limit_delay: 5.0   # GDELT's own rate-limit response asks for >=5s between requests
+  max_retries: 3
+  timeout: 30
+  max_records_per_query: 250
+  # "sourcecountry:PS" returned genuinely empty results in testing (not just
+  # rate-limited) — GDELT's sourcecountry operator may not carry a distinct
+  # entry for Palestine in its source-monitoring list. Plain keyword queries
+  # confirmed to return real data instead; revisit sourcecountry filtering
+  # separately if precise Palestinian-outlet-only filtering is wanted later.
+  queries:
+    - "Palestinian culture"
+    - "Palestinian heritage"
+    - "Gaza culture"
+    - "West Bank culture"
 
 wafa:
-  enabled: false
-  base_url: "https://wafa.ps"
+  enabled: true
+  base_url: "https://www.wafa.ps"
   source_id: "wafa-news"
   credibility_tier: "tier_2"
   credibility_score: 0.75
   rate_limit_delay: 2.0
+  max_retries: 3
+  timeout: 30
+  # How many days of daily sitemaps to walk backward from today per run.
+  max_days_back: 60
 
 nakba_archive:
   enabled: false
@@ -98,10 +115,15 @@ palestine_remembered:
   rate_limit_delay: 3.0
 
 semantic_scholar:
-  enabled: false
+  enabled: true
   source_id: "semantic-scholar"
   credibility_tier: "tier_1"
   credibility_score: 0.91
+  # Public API, unauthenticated, shared rate limit across all callers — observed
+  # to 429 quickly in practice. Higher delay + more retries than other sources.
+  rate_limit_delay: 3.0
+  max_retries: 5
+  timeout: 30
   queries:
     - "Palestinian culture"
     - "Palestine NLP"

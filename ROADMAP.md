@@ -334,20 +334,133 @@ evaluation everywhere" requirement lives.
   to compare against the smaller model). All write to `eval_reports/` — pass `--output` to keep
   more than one run side by side instead of overwriting the previous one at the default path.
 
-### Track D — Multi-source expansion (P1/P2)
+### Track D — Multi-source expansion (P1/P2) — ✅ D1/D2/D3/D4/D5/D6/D7 all done
 
 `BaseCollector` (`src/ingestion/base_collector.py`) is already the right abstraction —
-every source below is a new subclass, not a redesign.
+every source below is a new subclass, not a redesign. That held for all four collectors
+built in this track (Wikipedia extensions aside): D4, D2, D3 were each a new subclass,
+zero changes to the base interface.
 
-| ID | Task | Priority | Depends on | Mode | Deliverable | Est. |
-|---|---|:--:|---|---|---|:--:|
-| D1 | Licensing/rights gate — a per-source checklist (redistribution rights, attribution requirements) that must pass before a collector's output reaches the published corpus. Wikipedia (CC-BY-SA) already clears it; news/archive sources generally do not by default | P1 | — | Parallel | `docs/licensing_checklist.md` + a `license_status` field check in the export step | 1d |
-| D2 | GDELT collector (config already stubbed, disabled) | P2 | D1 | Parallel across sources | `src/ingestion/collectors/gdelt_collector.py` | 2d |
-| D3 | WAFA / archive-source collectors (config already stubbed, disabled) | P2 | D1 | Parallel across sources | `src/ingestion/collectors/*_collector.py` | 2d each |
-| D4 | Semantic Scholar collector (academic sources) | P2 | D1 | Parallel across sources | `src/ingestion/collectors/semantic_scholar_collector.py` | 2d |
-| D5 | Collection-time relevance gating — reuse the existing seed-audit script's `RELEVANCE_KEYWORDS` as a live accept filter, not just a post-hoc audit (addresses the topical-drift finding: Jordanian/Lebanese/Syrian/Israeli cuisine leaking into seed-category traversal) | P1 | — | Parallel | Updated `wikipedia_collector.py` filter | 0.5d |
-| D6 | Persistent / incremental deduplication — the LSH index is currently in-memory-per-run and outputs open in overwrite mode, so nothing dedups against the existing corpus. This becomes a real blocker once D2–D4 land, not before | P1 | D2 (or first new source) | Sequential, gates further expansion | Persisted `DuplicationIndex` (e.g. serialized MinHash bands in Postgres alongside `Chunk`) | 1.5d |
-| D7 | English pipeline — `pipeline.py` currently hardcodes `ar`; `sources.yaml` already has an `en` config block ready | P2 | — | Parallel | Parameterized `pipeline.py --language en` | 1d |
+**Posture change, mid-track (2026-07-26):** D2/D3 were originally deferred on licensing
+grounds (see the "deliberately deferred" note this section used to carry). The project
+owner then clarified the corpus is **private research use** — shared with at most one
+teammate, not published or redistributed — and asked to prioritize source coverage and
+diversity over licensing enforcement, with licensing revisited only if/when a public
+release is considered. In response:
+
+- `scripts/export_to_hf.py` **no longer gates on `license_status` by default** — it
+  exports everything, and `license_status` is kept accurate on every document purely as
+  provenance so a `--clear-only` public-release subset stays possible later without
+  re-collecting anything. See `_is_clear()`/`export_to_hf_dataset(clear_only=...)`.
+- D2 (GDELT) and D3 (WAFA) were un-deferred and implemented for real (below).
+- D4 (Semantic Scholar) was extended to fetch full open-access paper text, not just
+  abstracts, per the same "richer content for downstream NLP/RAG/KG" request.
+- Two exceptions were **kept in place regardless of the private-use reframing**, because
+  neither is actually a licensing/redistribution question: **Palestine Remembered** stays
+  `blocked` — that's a refusal to bypass live Cloudflare bot-detection, not a copyright
+  judgment, and holds no matter how the corpus is used. **Nakba Archive** stays
+  un-collected pending a direct answer from the project owner — its blocker is informed
+  consent for reusing survivor-testimony content, which private-use framing doesn't
+  resolve on its own.
+
+| ID | Task | Priority | Depends on | Mode | Deliverable | Est. | Status |
+|---|---|:--:|---|---|---|:--:|---|
+| D1 | Licensing/rights gate — a per-source checklist (redistribution rights, attribution requirements) that must pass before a collector's output reaches the published corpus. Wikipedia (CC-BY-SA) already clears it; news/archive sources generally do not by default | P1 | — | Parallel | `docs/licensing_checklist.md` + a `license_status` field check in the export step | 1d | Done — later reframed as provenance-only, not export-gating (see posture change above) |
+| D2 | GDELT collector (config already stubbed, disabled) | P2 | D1 | Parallel across sources | `src/ingestion/collectors/gdelt_collector.py` | 2d | Done — 13 real docs collected |
+| D3 | WAFA / archive-source collectors (config already stubbed, disabled) | P2 | D1 | Parallel across sources | `src/ingestion/collectors/*_collector.py` | 2d each | Done — WAFA implemented and verified; Nakba Archive/Palestine Remembered still held (see posture change above) |
+| D4 | Semantic Scholar collector (academic sources) | P2 | D1 | Parallel across sources | `src/ingestion/collectors/semantic_scholar_collector.py` | 2d | Done — extended to full OA text; 25 real docs collected |
+| D5 | Collection-time relevance gating — reuse the existing seed-audit script's `RELEVANCE_KEYWORDS` as a live accept filter, not just a post-hoc audit (addresses the topical-drift finding: Jordanian/Lebanese/Syrian/Israeli cuisine leaking into seed-category traversal) | P1 | — | Parallel | Updated `wikipedia_collector.py` filter | 0.5d | Done |
+| D6 | Persistent / incremental deduplication — the LSH index is currently in-memory-per-run and outputs open in overwrite mode, so nothing dedups against the existing corpus. This becomes a real blocker once D2–D4 land, not before | P1 | D2 (or first new source) | Sequential, gates further expansion | Persisted `DuplicationIndex` (e.g. serialized MinHash bands in Postgres alongside `Chunk`) | 1.5d | Done — landed alongside D4, as its own gate predicted |
+| D7 | English pipeline — `pipeline.py` currently hardcodes `ar`; `sources.yaml` already has an `en` config block ready | P2 | — | Parallel | Parameterized `pipeline.py --language en` | 1d | Done — real run, 15 English docs |
+
+**Real results:**
+
+- **D1 licensing findings, with evidence, not assumptions:** checked `robots.txt` for the
+  three archive/community sources as a legitimate, non-scraping diligence step (reading a
+  site's own published crawl policy). WAFA's `robots.txt` explicitly allows crawling.
+  Nakba Archive: inconclusive technically, but the real blocker is ethical
+  (survivor-testimony consent), not copyright — held pending the project owner's answer.
+  **Palestine Remembered's `robots.txt` request returned an active Cloudflare bot-detection
+  JavaScript challenge, not a policy** — a clear, current signal against automated access.
+  Marked `blocked`; this project will not attempt to bypass it, regardless of corpus use.
+  Full assessment: `docs/licensing_checklist.md`.
+- **D2 GDELT — real, working, with two corrections found by actually running it.**
+  (1) The originally-configured `sourcecountry:PS` query returned genuinely empty results
+  in testing (not rate-limiting) — GDELT's `sourcecountry` operator appears not to carry a
+  distinct Palestine entry in its source-monitoring list. Switched to plain keyword queries
+  (`"Palestinian culture"`, `"Palestinian heritage"`, `"Gaza culture"`, `"West Bank
+  culture"`), confirmed to return real data. (2) A live 15-doc run collected 13 accepted
+  documents (9,087 words); `seed_category_distribution` showed publishing-outlet countries
+  (Spain, Argentina, Egypt, ...) rather than "Palestine" — this looked like a bug at first
+  glance but is correct, intended behavior (`seed_category` reports the article's
+  *publishing outlet's* country, by design). Spot-checking the actual collected documents
+  confirmed genuinely on-topic, high-value content this project's other sources would never
+  surface: international coverage of a Madrid ministerial conference on Palestinian
+  culture, UNESCO reporting on Gaza heritage-site damage, and Egyptian press coverage of
+  Palestinian author Liana Badr's new novel. The collector also has a real safety
+  mechanism — a per-domain `robots.txt` check (bounded-timeout fetch, "absent robots.txt =
+  allowed" per convention) before scraping any GDELT-linked article — and degraded
+  correctly on one domain during the real run (an SSL certificate failure, retried 3x, then
+  skipped without crashing the batch).
+- **D3 WAFA — real, working, extraction pattern verified against live pages.** Discovers
+  articles via WAFA's own daily sitemap (`wafa.ps/sitemap.xml`), walking backward up to
+  `max_days_back` days. Title/body/date/category extraction was verified against real
+  fetched pages, not guessed once and shipped — the category extractor in particular went
+  through a real fix: an initial guess at a breadcrumb HTML element didn't exist on the
+  actual page (confirmed by a live run showing `{"unknown": 17}`), so it was rebuilt to
+  parse the label directly out of the same content block already used for title/body
+  (`"الرئيسية <category> تاريخ النشر: ..."`), then re-verified against live data
+  (`{"انتهاكات إسرائيلية": 14, "محلية": 3}`).
+- **D4 Semantic Scholar — extended to full open-access text, verified per-document, not
+  just by aggregate stats.** Previously title+abstract only; now attempts to fetch and
+  extract the paper's actual PDF text (`pdfplumber`) whenever Semantic Scholar reports an
+  `openAccessPdf` URL, with a content-type check and a minimum-length threshold, falling
+  back to the abstract if extraction fails or comes back too short. A live 25-doc run
+  collected all 25 (49,786 words, avg. 1,991 words/doc — far above the ~130–200 word/doc
+  average from abstract-only runs). Spot-checking individual documents confirmed **7 of 25
+  got real full text** (e.g. a 3,413-word and a 5,044-word paper — clearly full papers, not
+  abstracts) and **18 of 25 correctly fell back to abstract-only**, which is the expected
+  outcome (not every OA-flagged paper has an extractable PDF). Two real failure modes were
+  observed and handled correctly rather than crashing the run: one PDF URL actually served
+  HTML (content-type check caught it), and one Wiley URL returned `403 Forbidden` (retried,
+  then fell back). Still rate-limited on the shared unauthenticated API tier in practice —
+  same finding as the original abstract-only run, unchanged by this extension.
+- **D6 landed together with D4, exactly as this table's own dependency note predicted.**
+  `PersistentDuplicationIndex` loads existing MinHash signatures from Postgres on startup
+  and persists new ones back — verified for real with a cross-instance test (register a
+  doc, discard the index object, construct a fresh one against the same connection,
+  confirm it still catches the duplicate) and in production by every source's stats
+  (`"persistent": true`, rows visible in `ingestion_dedup_index`). `pipeline.py`'s
+  accepted/rejected JSONL outputs are append-mode, not overwrite — re-running (or adding a
+  source) grows the corpus instead of replacing it. Degrades to in-memory-only with a
+  logged warning if Postgres isn't reachable, so ingestion still works standalone.
+- **D5's filter is precisely scoped, not a broad keyword ban:** targets categories that
+  pair a generic culture/heritage word (مطبخ/عمارة/أدب/...) with an*other* country's name
+  — the exact pattern behind the originally-observed drift (`مطبخ أردني`, `مواقع أثرية في
+  إسرائيل`). A category naming Palestine is never excluded regardless of what else it also
+  mentions, and broader ambiguous regional categories (`مطبخ عربي`, `عمارة إسلامية`) are
+  deliberately left alone — the evidence supported excluding specific-other-country
+  pairings, not general regional overlap.
+- **D7:** most of the work turned out to already exist — `WikipediaCollector` already
+  handled `language="en"` internally (category prefixes, `Language.ENGLISH` mapping);
+  the only real gap was `pipeline.py` hardcoding `ar` and no CLI flag. Fixed as part of
+  generalizing `pipeline.py` for D6 (see below) — `--language en` now works, verified with
+  a real 15-document run into `data/processed/wikipedia_en_documents.jsonl` (a separate
+  file from the Arabic corpus, confirmed the existing 484-doc Arabic corpus was untouched).
+- **A structural side-effect worth naming:** generalizing `pipeline.py` for D4/D6 meant
+  extracting `run_collection_pipeline()` — the quality/dedup/write/stats loop every source
+  shares — out of what was a Wikipedia-only function, plus a `_SIMPLE_SOURCE_REGISTRY` +
+  `run_simple_source_pipeline()` so each new source (Semantic Scholar, WAFA, GDELT) is a
+  registry entry and a thin wrapper, not a new copy of the orchestration loop. This is the
+  "avoid future rewrites" principle actually paying off across three real sources, not just
+  a hoped-for property.
+- **Additional-sources research (scoping pass, no new collector yet):**
+  `palestine-studies.org` explicitly disallows AI-training/`ClaudeBot` crawling in its
+  `robots.txt` — respected, not pursued. UNRWA's site returned the same kind of active
+  bot-detection challenge as Palestine Remembered — held for the same reason. A guessed
+  `libraries.birzeit.edu` domain failed to resolve at all (not a real candidate). **B'Tselem
+  (`btselem.org`) is a genuinely viable next candidate** — permissive `robots.txt`, no
+  AI-specific disallow — documented here but not yet implemented.
 
 ### Track E — Knowledge layer (P1/P2)
 

@@ -93,6 +93,22 @@ class QualityDecision(str, Enum):
     HARD_REJECT = "hard_reject"
 
 
+class LicenseStatus(str, Enum):
+    """Per-document redistribution-rights provenance — see docs/licensing_checklist.md.
+
+    Set per-collector (each collector knows its own source's clearance), never
+    defaulted to CLEAR: a new collector that forgets to set this explicitly gets
+    NEEDS_REVIEW. This corpus is currently private research use, so
+    export_to_hf.py does NOT gate on this by default — but the field is kept
+    accurate on every document so a `--clear-only` public-release subset stays
+    possible later without re-collecting anything.
+    """
+
+    CLEAR = "clear"
+    NEEDS_REVIEW = "needs_review"
+    BLOCKED = "blocked"
+
+
 # ---------------------------------------------------------------------------
 # Main document model
 # ---------------------------------------------------------------------------
@@ -139,6 +155,13 @@ class DocumentMetadata(BaseModel):
     source_url: Optional[str] = None
     source_domain: Optional[str] = None
     credibility: CredibilityTier
+    license_status: LicenseStatus = Field(
+        default=LicenseStatus.NEEDS_REVIEW,
+        description="Redistribution-rights status for this document's source — see "
+        "docs/licensing_checklist.md. Defaults to NEEDS_REVIEW, not CLEAR: a collector "
+        "must explicitly assert clearance, so a forgotten field fails safe (excluded "
+        "from publish) rather than silently publishing something unreviewed.",
+    )
 
     # --- Wikipedia-specific (None for non-Wikipedia sources) ---
     wikipedia_page_id: Optional[int] = Field(
