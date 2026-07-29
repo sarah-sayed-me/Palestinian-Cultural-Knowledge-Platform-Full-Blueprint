@@ -1,0 +1,128 @@
+[
+  {
+    "canonical_name": "فلسطين",
+    "type": "LOCATION",
+    "linked_qid": "Q219060",
+    "expected_qid": "Q219060",
+    "notes": "State of Palestine. Was previously mislinked to Q12231001 (a newspaper named 'Felesteen') before the anchor-entity fix — the anchor QID itself was never fetched by the original SPARQL query, since it only fetches items *pointing at* Q219060, not Q219060 itself."
+  },
+  {
+    "canonical_name": "القدس",
+    "type": "LOCATION",
+    "linked_qid": "Q1218",
+    "expected_qid": "Q1218",
+    "notes": "Jerusalem (the city). Was previously mislinked to Q941828 (Quds Governorate, a different administrative entity) before re-verification."
+  },
+  {
+    "canonical_name": "غزة",
+    "type": "LOCATION",
+    "linked_qid": "Q39760",
+    "expected_qid": "Q39760",
+    "notes": "Gaza Strip. Was previously mislinked to Q1395229, a Wikimedia disambiguation page, before the _EXCLUDED_INSTANCE_OF fix."
+  },
+  {
+    "canonical_name": "الخليل",
+    "type": "HERITAGE_PLACE",
+    "linked_qid": "Q168225",
+    "expected_qid": "Q168225",
+    "notes": "Hebron. Verified directly against Wikidata."
+  },
+  {
+    "canonical_name": "نابلس",
+    "type": "HERITAGE_PLACE",
+    "linked_qid": "Q214178",
+    "expected_qid": "Q214178",
+    "notes": "Nablus. Verified directly against Wikidata."
+  },
+  {
+    "canonical_name": "رام الله",
+    "type": "HERITAGE_PLACE",
+    "linked_qid": "Q158119",
+    "expected_qid": "Q158119",
+    "notes": "Ramallah. Verified directly against Wikidata."
+  },
+  {
+    "canonical_name": "الضفة الغربية",
+    "type": "LOCATION",
+    "linked_qid": "Q36678",
+    "expected_qid": "Q36678",
+    "notes": "West Bank. Verified directly against Wikidata."
+  },
+  {
+    "canonical_name": "حماس",
+    "type": "ORGANIZATION",
+    "linked_qid": "Q38799",
+    "expected_qid": "Q38799",
+    "notes": "Hamas — Palestinian Islamist political and military organization. Verified directly against Wikidata."
+  },
+  {
+    "canonical_name": "بيت لحم",
+    "type": "LOCATION",
+    "linked_qid": "Q5776",
+    "expected_qid": "Q5776",
+    "notes": "Bethlehem. Verified directly against Wikidata."
+  },
+  {
+    "canonical_name": "احمد ياسين",
+    "type": "PERSON",
+    "linked_qid": "Q188653",
+    "expected_qid": "Q188653",
+    "notes": "Sheikh Ahmed Yassin, Hamas founder. Verified directly against Wikidata."
+  },
+  {
+    "canonical_name": "دبكة",
+    "type": "HERITAGE_HERITAGE_PRACTICE",
+    "linked_qid": "Q1156570",
+    "expected_qid": "Q1156570",
+    "notes": "Dabke, Levantine folk dance. Verified directly against Wikidata."
+  },
+  {
+    "canonical_name": "فلسطين،",
+    "type": "LOCATION",
+    "linked_qid": "Q219060",
+    "expected_qid": "Q219060",
+    "notes": "Fuzzy match (score 0.923) — a CAMeL NER span-boundary artifact (trailing Arabic comma included in the entity span) correctly resolved to the same QID as the clean 'فلسطين' entity."
+  },
+  {
+    "canonical_name": "القدس،",
+    "type": "LOCATION",
+    "linked_qid": "Q1218",
+    "expected_qid": "Q1218",
+    "notes": "Same trailing-punctuation NER artifact as above, correctly resolved by the fuzzy tier (score 0.909)."
+  },
+  {
+    "canonical_name": "اسرائيل",
+    "type": "LOCATION",
+    "linked_qid": null,
+    "expected_qid": null,
+    "notes": "1,210 mentions, correctly abstained. Israel is out of scope BY DESIGN — the alias dump only contains items whose Wikidata P17/P27/P495 points at Q219060 (Palestine); Israel itself is never fetched. Not a bug, but worth knowing: this linker cannot resolve any entity outside Palestine's own Wikidata neighborhood, however prominent."
+  },
+  {
+    "canonical_name": "الاردن",
+    "type": "LOCATION",
+    "linked_qid": null,
+    "expected_qid": null,
+    "notes": "315 mentions, correctly abstained for the same out-of-scope-by-design reason as Israel (Jordan)."
+  },
+  {
+    "canonical_name": "حيفا",
+    "type": "HERITAGE_PLACE",
+    "linked_qid": null,
+    "expected_qid": null,
+    "notes": "227 mentions, correctly abstains post-fix (previously mislinked to a 1996 film). A DIFFERENT and more interesting scope gap than Israel/Jordan: Haifa is a real Wikidata city, but its P17 (country) is Israel, not Palestine, since Wikidata's country property reflects present-day sovereignty, not historical/cultural Palestinian identity. A strict P17=Palestine query structurally cannot surface pre-1948 Palestinian population centers now administered by Israel (Haifa, Jaffa, Acre, ...). Closing this gap needs a supplementary, manually curated list of such places — not attempted here; flagged as a real, named limitation rather than silently missed."
+  },
+  {
+    "canonical_name": "يافا",
+    "type": "HERITAGE_PLACE",
+    "linked_qid": null,
+    "expected_qid": null,
+    "notes": "113 mentions, correctly abstains for the same historically-Palestinian-now-Israeli-administered reason as Haifa (Jaffa)."
+  },
+  {
+    "canonical_name": "الامم المتحدة",
+    "type": "ORGANIZATION",
+    "linked_qid": null,
+    "expected_qid": null,
+    "notes": "212 mentions, correctly abstains given this linker's declared scope: the United Nations has no Wikidata P17/P27/P495 pointing at Palestine, so it was never a candidate for inclusion in this Palestine-scoped alias dump in the first place."
+  }
+]

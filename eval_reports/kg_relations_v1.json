@@ -1,0 +1,11 @@
+{
+  "eval_name": "kg_relations_v1",
+  "run_at": "2026-07-29T09:38:59.225043+00:00",
+  "dataset_size": 40,
+  "metrics": {
+    "precision": 0.6,
+    "correct": 24.0,
+    "total": 40.0
+  },
+  "notes": "Precision only (see module docstring for why recall isn't reported). Per-predicate breakdown: {\"born_in\": {\"correct\": 0, \"total\": 2}, \"associated_with\": {\"correct\": 3, \"total\": 3}, \"entered_in\": {\"correct\": 1, \"total\": 1}, \"located_in\": {\"correct\": 9, \"total\": 19}, \"located_between\": {\"correct\": 1, \"total\": 2}, \"part_of\": {\"correct\": 0, \"total\": 2}, \"located_next_to\": {\"correct\": 1, \"total\": 1}, \"parent_of\": {\"correct\": 1, \"total\": 1}, \"occurred_in\": {\"correct\": 0, \"total\": 1}, \"controlled_by\": {\"correct\": 1, \"total\": 1}, \"arrested_at\": {\"correct\": 1, \"total\": 1}, \"traveled_to\": {\"correct\": 1, \"total\": 1}, \"operates_in\": {\"correct\": 1, \"total\": 1}, \"captured_by\": {\"correct\": 1, \"total\": 1}, \"related_to\": {\"correct\": 1, \"total\": 1}, \"occupied_in\": {\"correct\": 1, \"total\": 1}, \"worked_for\": {\"correct\": 1, \"total\": 1}}"
+}

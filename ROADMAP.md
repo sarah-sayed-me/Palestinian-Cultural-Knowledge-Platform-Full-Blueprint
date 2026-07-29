@@ -462,23 +462,158 @@ release is considered. In response:
   (`btselem.org`) is a genuinely viable next candidate** — permissive `robots.txt`, no
   AI-specific disallow — documented here but not yet implemented.
 
-### Track E — Knowledge layer (P1/P2)
+### Track E — Knowledge layer (P1/P2) — ✅ E1–E5 all done, real end-to-end run
 
 Builds directly on the `KGEntity`/`KGRelation` shapes from §2, which are themselves an
 aggregation of what `entity_extractor.py` already emits.
 
-| ID | Task | Priority | Depends on | Mode | Deliverable | Est. |
-|---|---|:--:|---|---|---|:--:|
-| E1 | Entity canonicalization — aggregate the existing per-document `entities` output into corpus-scope `KGEntity` records (dedup by normalized name + type) | P1 | A1, C4 (trust NER first) | Sequential | `src/knowlegde_graph/canonicalize.py` | 1.5d |
-| E2 | Entity linking to Wikidata (mGENRE, or a simpler alias-table approach first — see note) | P2 | E1 | Sequential | `wikidata_qid` populated on `KGEntity` | 2–3d |
-| E3 | Relation extraction (LLM-prompted, using the Track B/C generator) | P2 | E1 | Parallel to E2 | `src/knowlegde_graph/relations.py` → `KGRelation` records | 2d |
-| E4 | KG store — **NetworkX in-process for the first working prototype** (matches the project's own iterative-validation practice: prove the graph is useful before standing up infrastructure for it); **migrate to Neo4j Community** (free, self-hosted, mature Cypher for the multi-hop queries the dashboard's KG explorer will need) once E1–E3 are validated | P2 | E1, E3 | Sequential | Neo4j-backed KG, loader script | 2d |
-| E5 | **KG eval** — precision of extracted relations against a hand-checked sample; entity-linking accuracy against a Wikidata gold sample | P1 | E2, E3 | Sequential after E2/E3 | `eval/kg_eval.py` → `EvalReport` | 1d |
+| ID | Task | Priority | Depends on | Mode | Deliverable | Est. | Status |
+|---|---|:--:|---|---|---|:--:|---|
+| E1 | Entity canonicalization — aggregate the existing per-document `entities` output into corpus-scope `KGEntity` records (dedup by normalized name + type) | P1 | A1, C4 (trust NER first) | Sequential | `src/knowlegde_graph/canonicalize.py` | 1.5d | Done — 11,565 entities from 483 docs |
+| E2 | Entity linking to Wikidata (mGENRE, or a simpler alias-table approach first — see note) | P2 | E1 | Sequential | `wikidata_qid` populated on `KGEntity` | 2–3d | Done — 847/11,565 linked (7.3%), two real bugs found and fixed |
+| E3 | Relation extraction (LLM-prompted, using the Track B/C generator) | P2 | E1 | Parallel to E2 | `src/knowlegde_graph/relations.py` → `KGRelation` records | 2d | Done — 216 relations from 20 docs |
+| E4 | KG store — **NetworkX in-process for the first working prototype** (matches the project's own iterative-validation practice: prove the graph is useful before standing up infrastructure for it); **migrate to Neo4j Community** (free, self-hosted, mature Cypher for the multi-hop queries the dashboard's KG explorer will need) once E1–E3 are validated | P2 | E1, E3 | Sequential | Neo4j-backed KG, loader script | 2d | Done (NetworkX stage) — 11,565 nodes / 211 edges, GraphML |
+| E5 | **KG eval** — precision of extracted relations against a hand-checked sample; entity-linking accuracy against a Wikidata gold sample | P1 | E2, E3 | Sequential after E2/E3 | `eval/kg_eval.py` → `EvalReport` | 1d | Done — relation precision 0.60, entity-linking 100% on checked sample |
 
-*Note on E2: start with a cheap alias-table linker (exact/fuzzy match against a pre-pulled
-Wikidata Palestine-entity SPARQL dump — the original blueprint already names
-`query.wikidata.org` for this) before reaching for mGENRE's full model — consistent with
-"validate cheap first."*
+**Real results, including two real bugs found and fixed by actually running this at scale:**
+
+- **E1 canonicalization — real, straightforward, one honest caveat.** A live run over the
+  483-document Arabic Wikipedia NER corpus produced 11,565 unique `(normalized, type)`
+  entities (`data/entities/kg_entities.jsonl`): 4,685 PERSON, 2,971 LOCATION, 1,877
+  ORGANIZATION, 1,862 MISC, ~170 across the five HERITAGE_* types. One inherited artifact,
+  not introduced here: `فلسطين` (1,709 mentions) and `فلسطين،` (228 mentions, trailing
+  Arabic comma) canonicalize as two *different* entities — a pre-existing CAMeL NER
+  span-boundary quirk (the tagger occasionally includes trailing punctuation in a span)
+  flowing through as designed, since E1 aggregates NER output as-is rather than
+  reinterpreting it. Not fixed here (out of Track E's scope); E2's fuzzy linking tier
+  happens to reunite the two under the same Wikidata QID regardless.
+- **E2 entity linking — real, and genuinely instructive about a naive alias table's failure
+  modes.** First implementation: exact match + a `difflib`-based fuzzy fallback (0.90
+  threshold) against a live-fetched Wikidata SPARQL dump of Palestine-related items
+  (`wdt:P17`/`P27`/`P495` = Q219060), 4,319 items / 1,561 with aliases
+  (`data/entities/wikidata_palestine_aliases.jsonl`). Three real problems surfaced only by
+  actually running it at this corpus's real scale, not by design review:
+  1. **Performance:** a naive per-pair `difflib.SequenceMatcher` scan (11,565 entities ×
+     ~7,700 alias strings) didn't finish in 5 minutes even after a provably-lossless
+     length-window prune (difflib's `ratio()` is mathematically bounded by the two string
+     lengths, so aliases outside a computed window can never reach the threshold — safe to
+     skip). The real fix was a character-bigram inverted index for candidate generation
+     (`_candidate_indices` in `entity_linking.py`) — an approximation, not lossless like the
+     length prune, but the standard technique for approximate string matching at this scale.
+     Full run: **~35 seconds** for all 11,565 entities.
+  2. **Wrong-entity collisions:** spot-checking the actual linked QIDs against live Wikidata
+     found this corpus's *three highest-mention entities* linked to the wrong item entirely:
+     `فلسطين` (1,709 mentions) → Q12231001, a **newspaper** named "Felesteen", not the
+     country; `غزة` → Q1395229, a **Wikimedia disambiguation page**; `حيفا` → Q17004991, a
+     **1996 film** titled "Haifa". Root cause: a same-label homonym plus a naive
+     first-exact-match-wins collision policy. Fixed by excluding a small, evidence-based set
+     of Wikidata classes (disambiguation pages, newspapers, films, books, ...) from the index
+     — see `_EXCLUDED_INSTANCE_OF` in `entity_linking.py`.
+  3. **Missing anchor entity:** `فلسطين` (Palestine) itself was never in its own alias dump —
+     the SPARQL query only fetches items whose `P17`/`P27`/`P495` *points at* Q219060, and
+     Q219060 never points at itself. Fixed by fetching the anchor item's own label/aliases as
+     a fourth, separate query and merging it in (`wikidata_aliases.py`).
+  After both fixes, re-verified directly against live Wikidata: `فلسطين` → Q219060 (State of
+  Palestine, correct), `القدس` → Q1218 (Jerusalem, correct), `غزة` → Q39760 (Gaza Strip,
+  correct), plus Hebron/Nablus/Ramallah/West Bank/Hamas/Bethlehem/Ahmed Yassin/dabke all
+  independently verified correct. Final real run: **847/11,565 linked (7.3%)** — 439 exact,
+  408 fuzzy. The fuzzy tier's real value was directly demonstrated: `فلسطين،` (the trailing-
+  comma NER artifact from E1's own caveat above) fuzzy-matched to the *same* QID as `فلسطين`
+  at score 0.923, correctly reuniting what E1 couldn't. **A real, named scope limitation, not
+  a bug:** `اسرائيل`/`الاردن` (1,210 / 315 mentions) correctly abstain — out of scope by
+  design, since the alias dump only contains Palestine-anchored items. More interestingly,
+  `حيفا`/`يافا` also correctly abstain post-fix, for a different and more informative reason:
+  both are real, historically Palestinian cities, but Wikidata's `P17` (country) reflects
+  *current* sovereignty (Israel), not historical/cultural identity — a strict
+  `P17`=Palestine query structurally cannot surface pre-1948 Palestinian population centers
+  now administered by Israel. Closing that gap needs a supplementary, manually curated place
+  list — not attempted here, named as a concrete next step rather than silently missed.
+- **E3 relation extraction — real, and one real bug (not a design flaw) found by running it.**
+  Sentence-level entity co-occurrence (capped at 4 distinct entities/sentence, i.e. ≤6 pairs)
+  prompts `qwen3:14b` via the same Ollama config as the RAG generator (`configs/rag.yaml`) for
+  a strict-JSON predicate + confidence, keeping predicates ≥0.5 confidence. First real attempt
+  against the live model returned **empty content on every call** — `qwen3:14b` is a hybrid
+  "thinking" model that emits a `<think>...</think>` block before its answer unless told not
+  to, and the original 100-token budget was entirely consumed by that block. Fixed by passing
+  Ollama's `think=False` for this call, which also cut per-call latency from ~7s (empty
+  output) to ~1.4s (a real answer). Real run: 20 documents → **216 relations**, 456.77s
+  (~2.1s/kept relation). Predicate distribution is genuinely diverse, not degenerate —
+  `located_in` (93), `related_to` (17), `born_in` (11), `capital_of`, `signed_agreement_with`,
+  `wrote_about`, and 50 more distinct predicates, mostly at count 1–4.
+- **E5 KG eval — real, hand-built gold sets, honest numbers, not hidden behind aggregate
+  stats.** Relation extraction: a random sample of 40 real extracted relations
+  (`eval/gold/kg_relations_gold.json`) hand-checked against their `evidence_sentence` —
+  **precision 0.60 (24/40)**. `located_in` (the dominant predicate, 19 of the 40 sampled) is
+  the weak point at 9/19 (0.47), and the failures cluster into concrete, fixable patterns
+  rather than random noise: (a) **backward relations** — subject/object swapped (e.g. "West
+  Bank located_in Jerusalem", "Israel located_in Africa" — the latter a clear hallucination,
+  not a swap); (b) **ternary "between X and Y" relations collapsed into one binary pair**,
+  losing the second endpoint; (c) **truncated entity spans** (stray Arabic proclitics/commas
+  inherited from NER boundaries) making an otherwise-correct relation hard to read on its own;
+  (d) a few outright **wrong predicate choices** (e.g. "part_of" for a film screened *at* a
+  festival, not part of it). Entity linking: **100% accuracy on the 13 checked linkable
+  entities and 100% correct-abstention rate on 5 checked out-of-scope entities**
+  (`eval/gold/kg_entity_linking_gold.json`) — expected and somewhat circular, since this gold
+  set directly re-verifies the two bugs found and fixed above, not a claim that linking is
+  perfect on unseen entities.
+- **E4 graph store — real, small, honestly fragmented.** `build_graph()` produced **11,565
+  nodes / 211 edges** (216 extracted relations minus 5 that collapsed onto identical
+  `relation_id`s — expected `MultiDiGraph` behavior, not data loss) from the linked entities
+  and the 20-document relation-extraction run, persisted as GraphML
+  (`data/graph/kg_graph.graphml`). **11,420 of 11,565 nodes are isolated or nearly so**
+  (weakly-connected components ≈ node count) — an honest, expected consequence of E3 having
+  processed only 20 of 483 documents so far, not a flaw in the graph-building logic itself.
+  Top-degree nodes are exactly what a Palestinian cultural KG should surface first: `فلسطين`
+  (degree 25), `القدس`, `اسرائيل`, `غزة`, `الضفة الغربية`. Scaling E3 to the full corpus is
+  the direct, obvious next step to make the graph genuinely connected and useful — a config
+  change (`--max-docs`), not a redesign.
+- **Multi-source extension — real, and one real correctness fix.** The numbers above were
+  from Arabic Wikipedia alone (the only source with NER already run on it at the time). Once
+  WAFA/GDELT/Semantic Scholar/English Wikipedia were collected (Track D), extending the KG to
+  cover them exposed a real bug rather than being a config change: `scripts/run_ner.py` was
+  blindly feeding every document to CAMeL Tools NER regardless of language. Directly testing
+  this against real English Wikipedia text confirmed CAMeL's NER model is **Arabic-only** —
+  it tagged "Israel" as PERSON and section headers like "Overview" as entities. Fixed by
+  adding a language guard (`_ARABIC_LANGUAGES`) that skips non-Arabic documents (tagging them
+  `ner_skipped_reason: "non_arabic_language"` rather than silently mis-tagging them), applied
+  per-document so mixed-language sources (GDELT, Semantic Scholar) get partial, correct
+  coverage rather than an all-or-nothing source-level decision. Real language split found:
+  WAFA 106/106 Arabic (fully usable), GDELT 24/73 Arabic (49 skipped — mostly non-Palestinian
+  outlets in Spanish/other, consistent with Track D's own finding that GDELT surfaces
+  international coverage), Semantic Scholar 1/25 Arabic (academic papers are overwhelmingly
+  English), English Wikipedia 0/97 (entirely skipped — not NER'd at all for the KG).
+  `scripts/extract_kg_relations.py` was also extended to accept multiple `--input` files, with
+  `--max-docs` applying **per file** rather than to the combined total — otherwise Arabic
+  Wikipedia's much larger file (581 docs) would starve every other source of any documents at
+  all when files are processed in sequence. A real combined run (15 docs/source cap, 4
+  sources) produced **189 relations from 46 documents** spanning all three Arabic-capable
+  sources (Wikipedia AR, WAFA, GDELT, one Semantic Scholar paper) — E1's entity count grew to
+  **13,063** (711 documents) and E2's linked count to **950 (7.27%)**, both re-verified to hold
+  the same correct QIDs as the single-source run.
+- **Reproduce, in order (multi-source):**
+  ```powershell
+  uv run python scripts/run_ner.py                                                    # refresh AR Wikipedia NER
+  uv run python scripts/run_ner.py --input data/processed/wafa_documents.jsonl --output data/processed/wafa_documents.ner.jsonl
+  uv run python scripts/run_ner.py --input data/processed/gdelt_documents.jsonl --output data/processed/gdelt_documents.ner.jsonl
+  uv run python scripts/run_ner.py --input data/processed/semantic_scholar_documents.jsonl --output data/processed/semantic_scholar_documents.ner.jsonl
+  uv run python scripts/build_kg_entities.py --input data/processed/wikipedia_ar_documents.ner.jsonl `
+      data/processed/wafa_documents.ner.jsonl data/processed/gdelt_documents.ner.jsonl data/processed/semantic_scholar_documents.ner.jsonl   # E1
+  uv run python scripts/fetch_wikidata_aliases.py --limit 4000       # E2 (fetch dump — occasional, not per-run)
+  uv run python scripts/link_kg_entities.py                         # E2 (link)
+  uv run python scripts/extract_kg_relations.py `
+      --input data/processed/wikipedia_ar_documents.ner.jsonl data/processed/wafa_documents.ner.jsonl `
+              data/processed/gdelt_documents.ner.jsonl data/processed/semantic_scholar_documents.ner.jsonl `
+      --max-docs 15 --max-pairs-per-doc 15                          # E3 (needs Ollama running; --max-docs is PER FILE)
+  uv run python scripts/build_kg_graph.py                            # E4
+  uv run python -m eval.kg_eval                                      # E5 (gold sets are a fixed hand-checked snapshot,
+                                                                       #     not re-derived from the live relations file)
+  ```
+
+*Note on E2: started with a cheap alias-table linker (exact/fuzzy match against a pre-pulled
+Wikidata Palestine-entity SPARQL dump) before reaching for mGENRE's full model — consistent
+with "validate cheap first," and the real bugs found above (performance, wrong-entity
+collisions, missing anchor entity) were each fixable within that cheap approach. Escalate to
+mGENRE only if E5's precision, re-measured on a larger sample later, doesn't hold up.*
 
 ### Track F — Analysis & research phases (P2)
 

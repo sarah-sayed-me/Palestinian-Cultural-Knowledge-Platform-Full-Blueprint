@@ -45,6 +45,18 @@ class DuplicationIndex:
         only the persistent subclass actually uses it (to tag which source
         first collected a document).
         """
+        if doc_id in self._signatures or doc_id in self._fallback_shingles:
+            # The same doc_id was already indexed (e.g. the same URL
+            # re-collected while live-page content like ads/related-links
+            # shifted slightly). doc_id equality is a stronger, deterministic
+            # duplicate signal than the LSH/Jaccard similarity check below,
+            # which is probabilistic and can miss this case — and re-inserting
+            # an existing key into the LSH raises, rather than just missing a
+            # duplicate, so this must be checked first.
+            self._count += 1
+            self._duplicate_count += 1
+            return DupResult(is_duplicate=True, canonical_id=doc_id)
+
         if not _HAS_DATASKETCH:
             return self._check_and_register_fallback(doc_id, text)
 

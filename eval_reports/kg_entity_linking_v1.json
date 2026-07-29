@@ -1,0 +1,12 @@
+{
+  "eval_name": "kg_entity_linking_v1",
+  "run_at": "2026-07-29T09:38:59.225276+00:00",
+  "dataset_size": 18,
+  "metrics": {
+    "accuracy_on_linkable_entities": 1.0,
+    "linkable_sample_size": 13.0,
+    "correct_abstention_rate": 1.0,
+    "no_qid_expected_sample_size": 5.0
+  },
+  "notes": "linked_qid is what WikidataAliasLinker actually chose; expected_qid is the hand-verified correct Wikidata QID, or null if no correct entity exists in the alias dump (i.e. the linker should abstain, not guess)."
+}

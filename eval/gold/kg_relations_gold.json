@@ -1,0 +1,402 @@
+[
+  {
+    "relation_id": "49ae321d1b85cf233d310d7ea340df5b9a80664e8114363c752c55ccd9d7feba",
+    "subject": "ابو عرب (PERSON)",
+    "predicate": "born_in",
+    "object": "الشجرة (LOCATION)",
+    "confidence": 0.7,
+    "evidence_sentence": "اكتسب ابو عرب موهبته الشعرية من جده لامه الشيخ علي الاحمد احد وجهاء قرية الشجرة الذي كان يكتب الشعر.",
+    "is_correct": false,
+    "reason": "Sentence says his grandfather was a notable of this village, not that he was born there"
+  },
+  {
+    "relation_id": "b37526eca0d0c2993699d9f07849f10154bdc4469f01fa65723bbb8f106a33c4",
+    "subject": "كوفية (HERITAGE_CLOTHING)",
+    "predicate": "associated_with",
+    "object": "فلسطين (LOCATION)",
+    "confidence": 0.85,
+    "evidence_sentence": "اعتاد الفلاح ان يضع الكوفية لتجفيف عرقه اثناء حراثة الارض ولوقايته من حر الصيف وبرد الشتاء، ارتبط اسم الكوفية بالكفاح الوطني منذ ثورة 1936 في فلسطين، حيث تلثم الفلاحون الثوار بالكوفية لاخفاء ملامحهم اثناء مقاومة القوات البريطانية في فلسطين",
+    "is_correct": true,
+    "reason": "Directly supported: keffiyeh tied to national struggle since the 1936 revolt"
+  },
+  {
+    "relation_id": "ca80f9a81f8fc27974f40bee04a1f6d96733f661edeac0ddc9db3df2a79e8d4f",
+    "subject": "مصر (LOCATION)",
+    "predicate": "entered_in",
+    "object": "غزة (HERITAGE_PLACE)",
+    "confidence": 0.8,
+    "evidence_sentence": "في عام 1917، سقطت فلسطين بيد الجيش الانجليزي، ودخلت مدن فلسطين مظلة الانتداب البريطاني علي فلسطين عام 1920 والذي سمح للهجرة اليهودية الي فلسطين، وقد قامت مصر بدخول قطاع غزة عام 1948، كما قام الاردن بدخول الضفة الغربية.",
+    "is_correct": true,
+    "reason": "Directly stated: Egypt entered the Gaza Strip in 1948"
+  },
+  {
+    "relation_id": "1868cd19a22a2b6c054172eebade85f8dbaf721820591be476ab8e3554fa42e8",
+    "subject": "بينالي (MISC)",
+    "predicate": "located_in",
+    "object": "بنغلادش (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "معرض بينالي دكا الدولي، بنغلادش 1995.",
+    "is_correct": true,
+    "reason": "Biennale exhibition held in Bangladesh (Dhaka)"
+  },
+  {
+    "relation_id": "7a7eab951d35384ddc0a38d2f658769113e34b35d410e9dda2cd1392c8240651",
+    "subject": "ابل القمح (LOCATION)",
+    "predicate": "located_between",
+    "object": "دمشق (LOCATION)",
+    "confidence": 0.85,
+    "evidence_sentence": "تحت الحكم المملوكي في عام 1226، يشير الجغرافي العربي، ياقوت الحموي، الي «ابل القمح» بوصفها قرية تنتمي الي بانياس، بين دمشق والبحر الابيض المتوسط.",
+    "is_correct": false,
+    "reason": "Ternary between-X-and-Y relation collapsed into one binary pair, losing the second endpoint (the Mediterranean)"
+  },
+  {
+    "relation_id": "63e9c5dcaf305cb12680a95c1743d9fa98d79cd4be1d5c17482c6e5aef456671",
+    "subject": "ابل (LOCATION)",
+    "predicate": "part_of",
+    "object": "تبنين، (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "في عام 1517، ادمجت ابل القمح في الامبراطورية العثمانية، وبحلول عام 1596، كانت تحت ادارة ناحية تبنين، وهي جزء من سنجق صفد، واطلق عليها اسم ابل القمح، ويبلغ عدد سكانها 143 نسمة.",
+    "is_correct": false,
+    "reason": "Wrong object: sentence says part of Sanjak Safad, not Tabnin (which is only the administering Nahiya)"
+  },
+  {
+    "relation_id": "211eb712dcf60cc4421751d362f9339d13ccd75ca5bc7267ec16f611daaaaec0",
+    "subject": "صفد (LOCATION)",
+    "predicate": "located_in",
+    "object": "الجليل، (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "ولم يكن هناك قتال في القرية، ولكن بعد سقوط صفد في يد اسرائيل ومن «حملة همس» قام بها زعماء يهود محليون الي رؤساء القري العربية (مخاتير) لتحذيرهم من التعزيزات اليهودية الضخمة التي وصلت الي الجليل، فر سكان ابل القمح.",
+    "is_correct": false,
+    "reason": "Safad falling and reinforcements reaching the Galilee are two separate clauses; not an explicit located_in statement in this sentence"
+  },
+  {
+    "relation_id": "2ccb4b8c7254ccb1b06a79f3b31c535396253d6192a5801c91a87c256c4fd460",
+    "subject": "غزة (LOCATION)",
+    "predicate": "located_next_to",
+    "object": "البحر الابيض المتوسط (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "يتاثر مطبخ قطاع غزة بمصر المجاورة وموقعه علي ساحل البحر الابيض المتوسط.",
+    "is_correct": true,
+    "reason": "Directly supported: Gaza is on the Mediterranean coast"
+  },
+  {
+    "relation_id": "75eaf55f4e6889bd752c83e73ddda72dd795758cb9af3a5cf84809bc6e264431",
+    "subject": "بينالي (MISC)",
+    "predicate": "located_in",
+    "object": "دكا (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "معرض بينالي دكا الدولي، بنغلادش 1995.",
+    "is_correct": true,
+    "reason": "Biennale exhibition held in Dhaka"
+  },
+  {
+    "relation_id": "62810757f8d4349b76b4018f1dd4bd19ab4943bac793989891c3ec2531c53ecc",
+    "subject": "كوفية (HERITAGE_CLOTHING)",
+    "predicate": "associated_with",
+    "object": "فلسطين (LOCATION)",
+    "confidence": 0.9,
+    "evidence_sentence": "اعتاد الفلاح ان يضع الكوفية لتجفيف عرقه اثناء حراثة الارض ولوقايته من حر الصيف وبرد الشتاء، ارتبط اسم الكوفية بالكفاح الوطني منذ ثورة 1936 في فلسطين، حيث تلثم الفلاحون الثوار بالكوفية لاخفاء ملامحهم اثناء مقاومة القوات البريطانية في فلسطين",
+    "is_correct": true,
+    "reason": "Duplicate of the keffiyeh/Palestine relation above, also correct"
+  },
+  {
+    "relation_id": "85ce5d2e8e8d659c3724166f396506d0fbeb738058f7ff76e580fab9ff3e79ef",
+    "subject": "ابو عرب (PERSON)",
+    "predicate": "parent_of",
+    "object": "محمد، (PERSON)",
+    "confidence": 0.95,
+    "evidence_sentence": "خلف ابو عرب خمسة ابناء: محمد، ومعن ، وعرب، مثني، ومهند، وست بنات: مكارم، وازدهار، وتماضر، ومنال، وريم، ورشا.",
+    "is_correct": true,
+    "reason": "Directly stated as his son"
+  },
+  {
+    "relation_id": "9655bf74eab30eda7f9df6fcd1b3ec1506bb55cb435027d4f4b5c284c2380748",
+    "subject": "حماس (ORGANIZATION)",
+    "predicate": "occurred_in",
+    "object": "نيويورك (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "24 يوليو 1995: اعتقال رئيس المكتب السياسي لحركة حماس موسي ابو مرزوق في مطار جون كيندي في نيويورك.",
+    "is_correct": false,
+    "reason": "Nonsensical: the arrest occurred in New York, not \"Hamas occurred in New York\" — org/location relation misapplied"
+  },
+  {
+    "relation_id": "31ef2f03f0e9c059fcefa954a8a7d3bc02a69ff7f7bce7f0f150098d7bebfe1d",
+    "subject": "الضفة الغربية (LOCATION)",
+    "predicate": "located_in",
+    "object": "القدس، (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "كذلك عدد كبير من طلاب جامعات فلسطينية كجامعة بيرزيت وجامعة بيت لحم، حيث تتم هذه الفعاليات في عدة مراكز ثقافية فلسطينية في الضفة الغربية منها المسرح الوطني الفلسطيني - القدس، ومسرح القصبة - رام الله، ودار الندوة - بيت لحم، ومتحف دار الطفل العربي - القدس، ومسرح الحرية - جنين.",
+    "is_correct": false,
+    "reason": "Backward: West Bank is not located in Jerusalem"
+  },
+  {
+    "relation_id": "af94b019560646f41332154bad3cfa629e5d9381a352525409ed3d68e56d0d16",
+    "subject": "فلسطين، (LOCATION)",
+    "predicate": "located_in",
+    "object": "القدس (LOCATION)",
+    "confidence": 0.85,
+    "evidence_sentence": "بعد معركة اجنادين وانتصار المسلمين فيها بدا المسلمون يسيطرون علي اراضي فلسطين، وقد استولي العرب المسلمون علي القدس من البيزنطيين سنة 637 م، اعرب الخليفة عمر بن الخطاب عن احترامه للمدينة بان تقبل بنفسه استسلامها، وكتب لهم وثيقة امان عرفت فيما بعد بالعهدة العمرية، ووصف الفتح والوثيقة بانها فريدة لتلك العصور حيث اعطت الوثيقة امانا لانفسهم واموالهم وكنائسهم وصلبانهم، فمن خرج منها فهو امن ومن اقام فهو امن، وشهد علي ذلك خالد بن الوليد وعبد الرحمن بن عوف وعمرو بن العاص، ومعاوية ابن ابي سفيان، وقد وكان الاسم العربي الذي اطلق علي القدس هو بيت المقدس، كمقابل للبيت الحرام.",
+    "is_correct": false,
+    "reason": "Backward: Palestine is not located in Jerusalem"
+  },
+  {
+    "relation_id": "a4d51504781d7c9b28baadd9b3df960ca61119231265d340bebd9c9e54d48971",
+    "subject": "الدرج (LOCATION)",
+    "predicate": "located_in",
+    "object": "غزة، (LOCATION)",
+    "confidence": 0.95,
+    "evidence_sentence": "مسجد السيد الهاشم: يقع المسجد في حي الدرج شرق مدينة غزة، ويعتقد ان ضريح جد الرسول صلي الله عليه وسلم هاشم بن عبد مناف يوجد فيه، ولهذا ارتبط اسمه باسم غزة فسميت بغزة هاشم، وفي يوم الثلاثاء 7 ديسمبر 2023، تسببت النيران التي اشتعلت في المسجد جراء غارة جوية للاحتلال الاسرائيلي باضرار جسيمة.",
+    "is_correct": true,
+    "reason": "Directly supported: mosque in Al-Daraj neighborhood, east of Gaza city"
+  },
+  {
+    "relation_id": "809b89cc5fc2d5a87b8ce22ef0c40ef9621b9be1fea94bffc4e54f080e3c2109",
+    "subject": "فلسطين (LOCATION)",
+    "predicate": "located_in",
+    "object": "غزة (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "وقد احتفظ معظم اللاجئين الفلسطينيين بوضعهم كلاجئين وما زالوا يقيمون في مخيمات اللاجئين، بما في ذلك داخل دولة فلسطين في الضفة الغربية وقطاع غزة.",
+    "is_correct": false,
+    "reason": "Backward: Palestine is not located in Gaza"
+  },
+  {
+    "relation_id": "510d2619ea0de587340d9275ab34286066d2a2e84c57ecebaecedf7761ce8cf7",
+    "subject": "غزة (HERITAGE_PLACE)",
+    "predicate": "located_in",
+    "object": "فلسطين (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "وقد تشكلت في غزة حكومة في 23 سبتمبر 1948 هي حكومة عموم فلسطين وذلك خلال حرب 1948 برئاسة احمد حلمي عبد الباقي.",
+    "is_correct": true,
+    "reason": "Correctly-oriented version of the Gaza/Palestine fact: All-Palestine Government formed in Gaza"
+  },
+  {
+    "relation_id": "45048554945fe4cc78e7baf03dd225bf9667d2176fc11da2a23bbf24899d784b",
+    "subject": "الضفة الغربية (LOCATION)",
+    "predicate": "controlled_by",
+    "object": "بالاردن (LOCATION)",
+    "confidence": 0.7,
+    "evidence_sentence": "وفي ذاك التاريخ ولدت مسالة اللاجئين بخروج اكثر من 700 الف فلسطيني من ديارهم الي الضفة الغربية (التي اتبعت بالاردن لاحقا) وقطاع غزة (الذي ضمته مصر ايضا)، بالاضافة لدول الجوار والمهجر، ليبدا الصراع العربي الاسرائيلي.",
+    "is_correct": true,
+    "reason": "Directly supported: West Bank later annexed by Jordan"
+  },
+  {
+    "relation_id": "d3f7f4cb198f3fd3257e855be8b84fbd5b4e546aff6311516e8086d918b7a2b7",
+    "subject": "لفلسطين (LOCATION)",
+    "predicate": "located_in",
+    "object": "والقدس (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "يري البعض ان تفضيل الامويين لفلسطين والقدس سياسي الي حد ما، لان مكة المكرمة كانت في يد خصوم بني امية في العقود الاولي، ولكن حتي بعدما دانت مكة المكرمة والمدينة المنورة بالولاء للامويين سنة 692 م، فان الخليفة السابع سليمان، نصب علي كرسي الخلافة في القدس ثم في العاصمة دمشق بعد ذلك، كما انه بني مدينة الرملة بالكامل ومن قبل لم يكن لها وجود.",
+    "is_correct": false,
+    "reason": "Bad entity spans (stray Arabic proclitics attached) plus backward relation"
+  },
+  {
+    "relation_id": "10405962e3d4a81fbe396a3472d2773b38d86f61bc1466546916d19f9a1dfa65",
+    "subject": "صفد (HERITAGE_PLACE)",
+    "predicate": "located_in",
+    "object": "الجليل، (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "ولم يكن هناك قتال في القرية، ولكن بعد سقوط صفد في يد اسرائيل ومن «حملة همس» قام بها زعماء يهود محليون الي رؤساء القري العربية (مخاتير) لتحذيرهم من التعزيزات اليهودية الضخمة التي وصلت الي الجليل، فر سكان ابل القمح.",
+    "is_correct": false,
+    "reason": "Duplicate of the Safad/Galilee relation above, same issue"
+  },
+  {
+    "relation_id": "b3d3565030a32b5e26a51c7f5d1e3288b313e67b5a6618bb33f5bb62a64989f4",
+    "subject": "ابل (LOCATION)",
+    "predicate": "located_in",
+    "object": "بيت معكة (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "وكانت تقع في موقع مدينة ابل بيت معكة الانجيلية.",
+    "is_correct": true,
+    "reason": "Directly supported: located at the site of the biblical city of Abil Beit Ma'akah"
+  },
+  {
+    "relation_id": "e7078c3076747ca56dfa2d534959413a4dbd74e25dc69039bb5af7cf9231cb15",
+    "subject": "اسرائيل، (LOCATION)",
+    "predicate": "located_in",
+    "object": "افريقيا (LOCATION)",
+    "confidence": 0.7,
+    "evidence_sentence": "في شهر كانون الثاني من عام 2018 تم الاعلان بان الاكتشافات للبشر المعاصرين التي عثر عليها في كهف ميسليا، اسرائيل، في عام 2002، تم تقدير عمرها بحوالي 185,000 سنة، مما يعطي تاريخا اقدم للهجرة الي خارج افريقيا.",
+    "is_correct": false,
+    "reason": "Geographically false hallucination: Israel is not located in Africa; sentence is about human migration OUT of Africa"
+  },
+  {
+    "relation_id": "13fbd030998ea30f73e39a183b9243e32952bdda70d3db048a3dad6ea5f86164",
+    "subject": "بني صالح (ORGANIZATION)",
+    "predicate": "located_in",
+    "object": "خان يونس (LOCATION)",
+    "confidence": 0.85,
+    "evidence_sentence": "في 24 اغسطس 2024، هاجمت قوات الاحتلال الاسرائيلي مسجد بني صالح التاريخي الذي يبلغ عمره 96 عاما في خان يونس ودمرته، حيث اهانوا القران الكريم ايضا ثم اشعلوا النار فيه.",
+    "is_correct": true,
+    "reason": "Directly supported: historic Bani Salih mosque in Khan Yunis"
+  },
+  {
+    "relation_id": "e4a250fde04996696b825cc937dd0b83ba7fc6530462e9a724a6193540e4c37c",
+    "subject": "موسي ابو مرزوق (PERSON)",
+    "predicate": "arrested_at",
+    "object": "جون كيندي (LOCATION)",
+    "confidence": 0.9,
+    "evidence_sentence": "24 يوليو 1995: اعتقال رئيس المكتب السياسي لحركة حماس موسي ابو مرزوق في مطار جون كيندي في نيويورك.",
+    "is_correct": true,
+    "reason": "Directly supported: arrest at JFK airport"
+  },
+  {
+    "relation_id": "e902ae4ea62ccf664e738f7543d9f3fda2293532555d07eed1f02c7cc987567e",
+    "subject": "اسرائيل (LOCATION)",
+    "predicate": "located_in",
+    "object": "فلسطين (LOCATION)",
+    "confidence": 0.7,
+    "evidence_sentence": "واجه المهرجان صعوبات كثيرة وضعهتا اسرائيل بوجه الجمهور الفلسطيني والاجنبي، تقول الكاتبة اهداف سويف، رئيسة مؤسسة Engaged Events المنظمة للاحتفالية، «اننا في اول عام تتحقق فيه هذه الاحتفالية الادبية لا نستطيع ان نقول اننا اتينا الي فلسطين حاملين كل ما نود حمله، فلن نستطيع ان نزور كل المدن التي نحب ان نزورها، ولا ان نلتقي كل الناس الذين نود ان نلتقيهم.",
+    "is_correct": false,
+    "reason": "Not supported by this sentence; sensitive claim asserted without textual basis"
+  },
+  {
+    "relation_id": "9c59bddb194a35cb8efed70d48b9e231b8cda85ce79026bf48d47b5b01791293",
+    "subject": "احمد حمد الحمود (PERSON)",
+    "predicate": "associated_with",
+    "object": "بصالح العرميط (PERSON)",
+    "confidence": 0.85,
+    "evidence_sentence": "بطل الرواية الحقيقي هو محمد المحمود (او احمد حمد الحمود) من قرية طمون، الذي التقي بصالح العرميط من قرية بيتا، وشكلا معا مجموعة مسلحة تحصنت في جبال نابلس لاستهداف الدوريات البريطانية وقوافل المستوطنين وسماسرة الاراضي، مما منحهما حاضنة شعبية واسعة تجسدت في المثل الشعبي الفلسطيني الذائع: \"ابو جلدة والعرميط ياما كسروا برانيط\".",
+    "is_correct": true,
+    "reason": "Reasonably supported: the two met and formed a group together (minor stray proclitic on the object span)"
+  },
+  {
+    "relation_id": "ee45dabb8c1d99bfb7e588522a76686df879379803308605f0b968e0fda583ee",
+    "subject": "الحجر الاحمر (MISC)",
+    "predicate": "part_of",
+    "object": "بوسطن، (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "واختير فيلمه الحجر الاحمر في مهرجان بوسطن، وبريستول، ولندن، وحصل علي جائزة الاختيار الخاصة بلجنة التحكيم من مهرجان تورونتو السينمائي في كندا.",
+    "is_correct": false,
+    "reason": "Wrong predicate: the film was screened/selected at these festivals, not \"part of\" them"
+  },
+  {
+    "relation_id": "237e3ce232a5b0ee920b8eda02c1ce67d940e2583a596bf93b7457823e130232",
+    "subject": "ابو عرب (PERSON)",
+    "predicate": "traveled_to",
+    "object": "لبنان (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "فنزح ابو عرب الي قرية عرابة البطوف ومكث فيها مدة شهرين ليتوجه بعدها الي لبنان ثم الي سوريا وتونس ومخيمات الشتات في العالم.",
+    "is_correct": true,
+    "reason": "Directly supported: fled to Lebanon then Syria, Tunisia, diaspora"
+  },
+  {
+    "relation_id": "7742f0e41d4cdf3996cc28fd78f408de2f93bc7cdee5be01abc8910c5eeecf84",
+    "subject": "الضامن (PERSON)",
+    "predicate": "located_in",
+    "object": "واشنطن (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "بعد تركه العمل في شبكة الشرق الاوسط، عمل الضامن كمحرر في مؤسسة الاذاعة الوطنية العامة الامريكية (ان بي ار) في العاصمة الاميركية واشنطن.",
+    "is_correct": true,
+    "reason": "Factually right (worked in Washington) though \"located_in\" is an imprecise predicate for a person"
+  },
+  {
+    "relation_id": "76b00ce32271052bd322ec0bc0d0a231cd5b54c4cd6baf7c61d93719435d8184",
+    "subject": "القبر (MISC)",
+    "predicate": "located_in",
+    "object": "باناجيا (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "يقع مقر اخوية القبر المقدس الدير المركزي للقديسين قسطنطين وهيلين في جهة الشمال الشرقي من دير ميغالي باناجيا بمدينة القدس.",
+    "is_correct": false,
+    "reason": "Both entity spans truncated (lost \"the Brotherhood\" / \"Megali Monastery\" context), making the extracted relation misleading on its own"
+  },
+  {
+    "relation_id": "9f7c4bcc867d99f3a6ebff0434566af6b0738b8a5148c2afa120337179d86f87",
+    "subject": "الاونروا (ORGANIZATION)",
+    "predicate": "operates_in",
+    "object": "وسوريا (LOCATION)",
+    "confidence": 0.85,
+    "evidence_sentence": "4 مليون من اللاجئين الفلسطينيين المسجلين، ثلثهم تقريبا، في 58 مخيما للاجئين تعترف بها الاونروا في الاردن ولبنان وسوريا وقطاع غزة والضفة الغربية.",
+    "is_correct": true,
+    "reason": "Correct despite a stray leading conjunction on the object span; UNRWA does operate in Syria"
+  },
+  {
+    "relation_id": "4f41a8c2a86ee639808b035ef77fdfa3a2990d372a9686489c889a66fb506426",
+    "subject": "صفد (LOCATION)",
+    "predicate": "captured_by",
+    "object": "اسرائيل (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "ولم يكن هناك قتال في القرية، ولكن بعد سقوط صفد في يد اسرائيل ومن «حملة همس» قام بها زعماء يهود محليون الي رؤساء القري العربية (مخاتير) لتحذيرهم من التعزيزات اليهودية الضخمة التي وصلت الي الجليل، فر سكان ابل القمح.",
+    "is_correct": true,
+    "reason": "Directly supported: Safad fell into Israel's hand"
+  },
+  {
+    "relation_id": "314468729abd062fe85ff396e7928bfecc155e30e64b9f55ab7f16dcbd4443b7",
+    "subject": "فلسطين (LOCATION)",
+    "predicate": "related_to",
+    "object": "الاستانة (LOCATION)",
+    "confidence": 0.8,
+    "evidence_sentence": "لقد تاثرت فلسطين بالنمط المعماري العثماني اكثر مما تاثرت بغيره في الحقبات الاستعمارية، وذلك لسببين: الاول الفترة الطويلة للحكم والذي استمر 400 عام، الي جانب العلاقة القوية بين فلسطين والاستانة، وهو ما تمثل بايلاء مدن دينية في فلسطين كالقدس اهمية خاصة حيث تبع بعض المدن في شكل مباشر الي الاستانة بسبب اهميتها الدينية والجغرافية ومركزيتها للعالمين الغربي والشرقي، وعلي راسها مدينة القدس ويافا وعكا ونابلس.",
+    "is_correct": true,
+    "reason": "Directly supported: strong relationship between Palestine and Istanbul"
+  },
+  {
+    "relation_id": "806efb413d34643021113192a7797a132893e74d3106080ff03ff585be887f1b",
+    "subject": "السيد الهاشم (PERSON)",
+    "predicate": "located_in",
+    "object": "غزة، (LOCATION)",
+    "confidence": 0.85,
+    "evidence_sentence": "مسجد السيد الهاشم: يقع المسجد في حي الدرج شرق مدينة غزة، ويعتقد ان ضريح جد الرسول صلي الله عليه وسلم هاشم بن عبد مناف يوجد فيه، ولهذا ارتبط اسمه باسم غزة فسميت بغزة هاشم، وفي يوم الثلاثاء 7 ديسمبر 2023، تسببت النيران التي اشتعلت في المسجد جراء غارة جوية للاحتلال الاسرائيلي باضرار جسيمة.",
+    "is_correct": true,
+    "reason": "Relation itself correct (mosque located in Gaza); the PERSON type tag on the mosque name is an upstream NER error, not an E3 issue"
+  },
+  {
+    "relation_id": "df9d766ebc53d315357a38293743393a0ac9ff57cecdb7d99d2de73d1c44e019",
+    "subject": "بانياس، (LOCATION)",
+    "predicate": "located_between",
+    "object": "دمشق (LOCATION)",
+    "confidence": 0.85,
+    "evidence_sentence": "تحت الحكم المملوكي في عام 1226، يشير الجغرافي العربي، ياقوت الحموي، الي «ابل القمح» بوصفها قرية تنتمي الي بانياس، بين دمشق والبحر الابيض المتوسط.",
+    "is_correct": true,
+    "reason": "Baniyas genuinely lies between Damascus and the Mediterranean per the sentence"
+  },
+  {
+    "relation_id": "be19b35b977c14b134c3063c83643d1304e0c8c1bfdd6e2b29d810b21286ae31",
+    "subject": "اسرائيل (LOCATION)",
+    "predicate": "occupied_in",
+    "object": "غزة (HERITAGE_PLACE)",
+    "confidence": 0.8,
+    "evidence_sentence": "تقوم علي حدود المنطقة التاريخية اليوم عدة كيانات سياسية متراكبة: دولة اسرائيل (التي اقيمت في حرب 1948 بعد تهجير مئات الاف الفلسطينيين من وطنهم) والضفة الغربية وقطاع غزة التي احتلتها اسرائيل في حرب عام 1967.",
+    "is_correct": true,
+    "reason": "Directly supported: Gaza Strip occupied by Israel in the 1967 war"
+  },
+  {
+    "relation_id": "314794e70acf3493cf467dbd32e8e0d0c318eb5f54505082823cb24372d3e8ef",
+    "subject": "سليم عرفات (PERSON)",
+    "predicate": "born_in",
+    "object": "غزة (LOCATION)",
+    "confidence": 0.7,
+    "evidence_sentence": "ويمثل كتاب الباحث سليم عرفات المبيض \"حلمي مصباح ابو شعبان: الاديب الشاعر والصحفي الثائر\" الصادر في غزة عام 2004، مرجعا اساسيا في تحليل هذه الابعاد الفكرية والادبية لانتاج ابو شعبان الروائي والقصصي.",
+    "is_correct": false,
+    "reason": "Wrong predicate/subject: the sentence says the BOOK was published in Gaza, not that the author was born there"
+  },
+  {
+    "relation_id": "5426561c933b6123002930cc2316ec9ea888c7d9cb090daf5264b6f26248c03f",
+    "subject": "الضامن (PERSON)",
+    "predicate": "worked_for",
+    "object": "ان بي ار (ORGANIZATION)",
+    "confidence": 0.95,
+    "evidence_sentence": "بعد تركه العمل في شبكة الشرق الاوسط، عمل الضامن كمحرر في مؤسسة الاذاعة الوطنية العامة الامريكية (ان بي ار) في العاصمة الاميركية واشنطن.",
+    "is_correct": true,
+    "reason": "Directly supported: worked as editor at NPR"
+  },
+  {
+    "relation_id": "e5cc81bc8b8884a17b3261d595b488563092604108893dd3a8902452e03b07b6",
+    "subject": "القبر (MISC)",
+    "predicate": "located_in",
+    "object": "القدس (LOCATION)",
+    "confidence": 0.9,
+    "evidence_sentence": "تاسست اخوية القبر المقدس في شكلها الحالي اثناء الانتداب البريطاني في فلسطين (في الفترة ما بين عامي 1920-1948)، وكان يتراسها بطريرك القدس للروم الارثوذكس، وتدير الاخوية ايضا الكنيسة الارثوذكسية اليونانية في القدس، وتقوم بتعيين المطارنة، ورؤساء الاساقفة، والاساقفة، والرهبان.",
+    "is_correct": true,
+    "reason": "Reasonably supported: the Brotherhood administers a church in Jerusalem"
+  },
+  {
+    "relation_id": "d3c1d1879b7a9b56c897c52747d09d6daa4d1200f97fffab0ca9b3a828e80073",
+    "subject": "حيفا (LOCATION)",
+    "predicate": "located_in",
+    "object": "موشاف (MISC)",
+    "confidence": 0.8,
+    "evidence_sentence": "اجزم: تقع الي الجنوب من حيفا وتبعد عنها 28 كم، ازالتها سلطات الاحتلال عام 1948م، واقامت علي اراضيها والبالغة مساحتها 46900 دونما مستوطنة (موشاف كيريم مهرال) التي اقيمت عام 1926م، بلغ عدد سكانها عام 1922م حوالي 1610 نسمة ارتفع الي 2160 نسمة عام 1931، والي 2970 نسمة عام 1945م.",
+    "is_correct": false,
+    "reason": "Backward and truncated: the settlement was built on the depopulated village's land, not \"Haifa located in the Moshav\""
+  }
+]

@@ -5,6 +5,17 @@ combined CAMeL Tools NER + heritage dictionary pipeline in document batches
 (CAMeL inference is batched across ALL sentences in a batch — not one call
 per document), and writes the enriched records back out as JSONL.
 
+CAMeL Tools' NER model is Arabic-only — confirmed directly by running it on
+English Wikipedia text, which produced nonsense ("Israel" tagged PERSON,
+section headers like "Overview" tagged as entities). Documents whose
+`language` field isn't an Arabic variant are therefore left un-enriched
+(`ner_skipped_reason: "non_arabic_language"`, no `entities` key added) rather
+than fed to a model that will confidently produce garbage for them — this
+also means downstream KG stages (which skip any document without an
+`entities` field) correctly exclude them without needing their own language
+check. Re-run with a non-Arabic-capable NER model later if English-language
+sources are ever meant to feed the KG.
+
 Usage:
     uv run python scripts/run_ner.py
     uv run python scripts/run_ner.py --batch-size 64 --no-gpu
@@ -31,6 +42,11 @@ from src.ingestion.entity_extractor import CamelNERBackend, EntityExtractor, Her
 DEFAULT_INPUT = Path("data/processed/wikipedia_ar_documents.jsonl")
 DEFAULT_OUTPUT = Path("data/processed/wikipedia_ar_documents.ner.jsonl")
 DEFAULT_HERITAGE_CONFIG = Path("configs/heritage_entities.yaml")
+
+# Language.ARABIC_MSA / ARABIC_PAL / ARABIC_OTHER values from src/ingestion/schemas.py,
+# duplicated as plain strings here to avoid this script depending on the full
+# ingestion schema module for one enum.
+_ARABIC_LANGUAGES = {"ar-MSA", "ar-PAL", "ar-OTHER"}
 
 
 def _read_jsonl(path: Path) -> Iterator[dict[str, Any]]:
@@ -71,23 +87,35 @@ def run(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     total_docs = 0
     total_entities = 0
+    total_skipped_non_arabic = 0
 
     with output_path.open("w", encoding="utf-8") as out_handle:
         for batch in _batched(_read_jsonl(input_path), batch_size):
-            texts = [doc.get("text", "") for doc in batch]
+            arabic_docs = [d for d in batch if d.get("language") in _ARABIC_LANGUAGES]
+            skipped_docs = [d for d in batch if d.get("language") not in _ARABIC_LANGUAGES]
+
+            texts = [doc.get("text", "") for doc in arabic_docs]
             entities_per_doc = extractor.extract_many(texts)
-            for doc, entities in zip(batch, entities_per_doc):
+            for doc, entities in zip(arabic_docs, entities_per_doc):
                 doc["entities"] = entities
                 total_entities += len(entities)
                 out_handle.write(json.dumps(doc, ensure_ascii=False) + "\n")
+
+            for doc in skipped_docs:
+                doc["ner_skipped_reason"] = "non_arabic_language"
+                out_handle.write(json.dumps(doc, ensure_ascii=False) + "\n")
+
+            total_skipped_non_arabic += len(skipped_docs)
             total_docs += len(batch)
 
+    documents_processed = total_docs - total_skipped_non_arabic
     summary = {
         "input": str(input_path),
         "output": str(output_path),
-        "documents_processed": total_docs,
+        "documents_processed": documents_processed,
+        "documents_skipped_non_arabic": total_skipped_non_arabic,
         "total_entities": total_entities,
-        "average_entities_per_doc": round(total_entities / total_docs, 2) if total_docs else 0.0,
+        "average_entities_per_doc": round(total_entities / documents_processed, 2) if documents_processed else 0.0,
         "camel_available": camel_backend.available,
         "camel_device": camel_backend.device,
         "duration_seconds": round(time.time() - started, 2),

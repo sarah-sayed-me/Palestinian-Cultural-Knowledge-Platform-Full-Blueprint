@@ -17,6 +17,7 @@ dependencies = [
     "langdetect>=1.0.9",
     "langid>=1.1.6",
     "lxml>=6.1.1",
+    "networkx>=3.6.0",
     "ollama>=0.6.0",
     "pandas>=3.0.3",
     "pdfplumber>=0.11.10",

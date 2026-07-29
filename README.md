@@ -10,11 +10,13 @@ dataset. Downstream stages enrich the corpus with named entities, a knowledge gr
 and retrieval-augmented question answering.
 
 The current implementation focuses on **Arabic Wikipedia** as a clean, licensable first
-source. Ingestion, quality, deduplication, named-entity-recognition, and a working
-retrieval-augmented QA (RAG) system are all functional end to end over the real corpus. The
-knowledge graph and the analysis phases (topic modeling, cultural classification, bias
-measurement, temporal analysis) are fully designed — see `ROADMAP.md` — and next in the
-build order, which reached RAG first without narrowing the platform's scope.
+source. Ingestion, quality, deduplication, named-entity-recognition, a working
+retrieval-augmented QA (RAG) system, and a first real knowledge graph (entity
+canonicalization, Wikidata linking, LLM-prompted relation extraction, NetworkX graph store)
+are all functional end to end over the real corpus. The remaining analysis phases (topic
+modeling, cultural classification, bias measurement, temporal analysis) are fully designed —
+see `ROADMAP.md` — and next in the build order, which reached RAG and a first KG pass without
+narrowing the platform's scope.
 
 ## Goals
 
@@ -56,11 +58,11 @@ see `ROADMAP.md` §2 for the full data-contract design.
         │               │                            (BERTopic/AraBERT) ✗
         ▼               ▼
   Entity linking    Retriever ──► Generator (Ollama·Qwen3)
-  + relations ✗       ──► grounded, cited RAG answers ✓
+  (Wikidata) ✓         ──► grounded, cited RAG answers ✓
         │
         ▼
-  Knowledge graph (Neo4j) ✗ ──► Bias measurement (WEAT / framing / LLM probe) ✗
-        │
+  Relation extraction (LLM) ✓ ──► Knowledge graph (NetworkX) ✓ ──► Bias measurement ✗
+        │                                                          (WEAT / framing / LLM probe)
         ▼
   Dashboard (Streamlit → HF Spaces): Bias Meter · Topic Map · Timeline · KG Explorer ✗
 
@@ -106,7 +108,7 @@ plan live in **`ROADMAP.md`**. Summary:
 | 5 | Retrieval-augmented QA (chunk → embed → pgvector → retrieve → generate) | **Done — verified end to end** |
 | 6 | Evaluation layer (NER, embeddings, retrieval, RAG) | **Done — Recall@5 0.93, see ROADMAP.md** |
 | 7 | Multi-source expansion (EN Wikipedia, Semantic Scholar w/ full-text OA, GDELT, WAFA) + persistent dedup | **Done — see ROADMAP.md; Nakba Archive/Palestine Remembered held on ethical/access grounds** |
-| 8 | Entity linking, relation extraction & knowledge graph (Neo4j) | Planned |
+| 8 | Entity canonicalization, Wikidata linking, LLM relation extraction, NetworkX KG | **Done — see ROADMAP.md; Neo4j migration deferred until the graph scales past the NetworkX prototype** |
 | 9 | Topic modeling, cultural classification, bias measurement, temporal analysis | Planned |
 | 10 | Dashboard (Streamlit → Hugging Face Spaces) | Planned |
 
@@ -120,11 +122,11 @@ src/
   preprocessing/    Arabic text normalization
   utils/            Collection logging
   rag/              Chunking, embedding, pgvector index, retriever, generator (done)
-  knowlegde_graph/  Entity canonicalization, linking, relations, KG store (planned — empty)
+  knowlegde_graph/  Entity canonicalization, Wikidata linking, LLM relation extraction, NetworkX graph store (done)
   nlp/              Topic modeling, cultural classification, bias, temporal analysis (planned — empty)
   api/              RAG API endpoint (planned — empty)
   frontend/         Dashboard (planned — empty)
-eval/               Evaluation harness (done for NER/retrieval/RAG — see eval/gold/, eval_reports/, ROADMAP.md); KG eval planned
+eval/               Evaluation harness (done for NER/retrieval/RAG/KG — see eval/gold/, eval_reports/, ROADMAP.md)
 scripts/            Runnable entrypoints (collection, NER, HF export/publish, seed audit)
 tests/              Unit tests for schema, quality, dedup, normalizer, NER, export, collectors
 docs/               Publishing guide, licensing checklist, supporting documentation
@@ -152,8 +154,15 @@ off-target-category filter, not just post-hoc auditing), and Hugging Face export
 working and covered by tests. RAG (chunking, embedding with Qwen3-Embedding, a pgvector index,
 retriever, and an Ollama-based local-first generator behind a stable interface) has been built
 and verified against the real corpus — 484 documents chunked into 1282 passages, fully embedded
-and indexed, with `scripts/ask.py` returning grounded, cited answers. See `ROADMAP.md` for the
-technical-decision reasoning and what's next.
+and indexed, with `scripts/ask.py` returning grounded, cited answers. A first real knowledge
+graph has also been built end to end, spanning every Arabic-capable source (Wikipedia AR,
+WAFA, GDELT, Semantic Scholar) — 13,063 canonicalized entities, 950 linked to Wikidata QIDs,
+189 LLM-extracted relations from an initial 46-document pass, stored as a NetworkX graph
+(`data/graph/kg_graph.graphml`) — see the Knowledge Graph section below and `ROADMAP.md` Track
+E for the real numbers, including several real bugs found and fixed by actually running it at
+scale (a Wikidata homonym-collision problem, a qwen3 "thinking mode" issue, and NER silently
+producing garbage on non-Arabic text). See `ROADMAP.md` for the technical-decision reasoning
+and what's next.
 
 Generated datasets are intentionally git-ignored; see `docs/huggingface_publishing_guide.md`.
 The RAG generator requires [Ollama](https://ollama.com) running locally with the model named
@@ -285,6 +294,83 @@ want into one file, then point `--input` at it.
 - **Palestine Remembered and Nakba Archive are intentionally not implemented** — the former
   is behind active bot-detection this project won't bypass; the latter raises a
   survivor-testimony consent question distinct from licensing. See `ROADMAP.md` Track D.
+
+## Knowledge Graph
+
+Four stages, run in order, each a thin script over `src/knowlegde_graph/`. Every stage's
+output is JSONL (or GraphML for the graph itself), so you can inspect results at any point
+with a plain text editor or `jq`/Python, not just by re-running the next stage. `build_kg_entities.py`
+and `extract_kg_relations.py` both accept **multiple `--input` files**, so the KG can span
+every collected source, not just whichever one happened to get NER run on it first.
+
+**NER is Arabic-only** — confirmed directly by running it on English text, which produced
+nonsense ("Israel" tagged PERSON, section headers tagged as entities). `scripts/run_ner.py`
+now skips non-Arabic documents per-document (not per-source, since GDELT and Semantic Scholar
+are language-mixed), marking them `ner_skipped_reason: "non_arabic_language"` rather than
+silently mis-tagging them. Run it once per source before the KG stages:
+
+```powershell
+uv run python scripts/run_ner.py                                    # refresh Arabic Wikipedia
+uv run python scripts/run_ner.py --input data/processed/wafa_documents.jsonl --output data/processed/wafa_documents.ner.jsonl
+uv run python scripts/run_ner.py --input data/processed/gdelt_documents.jsonl --output data/processed/gdelt_documents.ner.jsonl
+uv run python scripts/run_ner.py --input data/processed/semantic_scholar_documents.jsonl --output data/processed/semantic_scholar_documents.ner.jsonl
+# English Wikipedia isn't worth running — 0% of it is Arabic, so every document would be skipped.
+```
+
+Then the KG itself:
+
+```powershell
+uv run python scripts/build_kg_entities.py --input data/processed/wikipedia_ar_documents.ner.jsonl `
+    data/processed/wafa_documents.ner.jsonl data/processed/gdelt_documents.ner.jsonl data/processed/semantic_scholar_documents.ner.jsonl   # E1
+uv run python scripts/fetch_wikidata_aliases.py --limit 4000        # E2a: fetch Wikidata dump (occasional, not per-run)
+uv run python scripts/link_kg_entities.py                          # E2b: link -> data/entities/kg_entities.linked.jsonl
+uv run python scripts/extract_kg_relations.py `
+    --input data/processed/wikipedia_ar_documents.ner.jsonl data/processed/wafa_documents.ner.jsonl `
+            data/processed/gdelt_documents.ner.jsonl data/processed/semantic_scholar_documents.ner.jsonl `
+    --max-docs 15 --max-pairs-per-doc 15                            # E3: needs Ollama running; --max-docs is PER FILE
+uv run python scripts/build_kg_graph.py                             # E4: -> data/graph/kg_graph.graphml
+uv run python -m eval.kg_eval                                       # E5: precision/accuracy against hand-checked gold sets
+```
+
+`--max-docs` on `extract_kg_relations.py` applies **per input file**, not to the combined
+total — Arabic Wikipedia's file is far larger than the others, so a combined-total cap would
+starve every other source of documents entirely.
+
+**Entity linking (E2)** matches canonicalized entities against a Wikidata alias table scoped
+to Palestine-related items (`wdt:P17`/`P27`/`P495` = Q219060), not general Wikidata — it will
+correctly *not* link entities like Israel, Jordan, or Egypt (out of scope by design), and it
+also can't currently resolve historically-Palestinian cities now administered by Israel (e.g.
+Haifa, Jaffa), since Wikidata's country property reflects present-day sovereignty, not
+historical identity — a known, named gap, not a silent miss. On the multi-source corpus this
+links ~7% of canonicalized entities (950/13,063) — expected for an alias-table approach
+against a broad, mostly-generic NER entity set (most PERSON mentions especially won't have a
+Wikidata entry at all).
+
+**Relation extraction (E3)** makes one LLM call per candidate entity pair (two entities
+co-occurring in the same sentence), so runtime scales with `--max-docs` (per file) ×
+`--max-pairs-per-doc` × number of input files. It requires [Ollama](https://ollama.com)
+running with the model configured in `configs/rag.yaml`'s `generation.model` pulled. Start
+small and scale up once you've spot-checked the output — `eval/gold/kg_relations_gold.json`
+shows the actual failure patterns found on a real 40-relation sample (precision 0.60): mostly
+backward subject/object relations and multi-way "between X and Y" facts that don't fit a
+binary relation cleanly, both worth knowing about before trusting the graph at face value.
+That gold sample was drawn from an earlier Arabic-Wikipedia-only run — it's a snapshot
+characterizing extraction quality, not something re-derived from the live, now multi-source
+`data/graph/kg_relations.jsonl`.
+
+**Inspecting the graph:**
+
+```python
+from src.knowlegde_graph.graph_store import load_graph, find_entities_by_name, neighbors_of
+graph = load_graph("data/graph/kg_graph.graphml")
+matches = find_entities_by_name(graph, "القدس")   # substring match on canonical_name
+neighbors_of(graph, matches[0])                    # outgoing relations + target entity info
+```
+
+See `ROADMAP.md` Track E for the full real-numbers writeup, including two real bugs found by
+actually running this at scale (a Wikidata homonym-collision problem that mislinked this
+corpus's top three entities, and a qwen3 "thinking mode" issue that silently returned empty
+relation-extraction responses) and how each was fixed.
 
 ## Future Work
 
