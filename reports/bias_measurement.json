@@ -1,0 +1,123 @@
+{
+  "inputs": [
+    "data\\processed\\wikipedia_ar_documents.categorized.jsonl",
+    "data\\processed\\wafa_documents.categorized.jsonl",
+    "data\\processed\\gdelt_documents.categorized.jsonl"
+  ],
+  "total_documents": 760,
+  "documents_with_category": 760,
+  "category_distribution_by_source": {
+    "wikipedia-ar": {
+      "geography": 0.0017,
+      "history": 0.0086,
+      "culture": 0.0017,
+      "arts_literature": 0.0069,
+      "food_cuisine": 0.0034,
+      "heritage": 0.0086,
+      "politics": 0.0017,
+      "daily_life": 0.0034,
+      "architecture": 0.0017,
+      "conflict": 0.0017,
+      "biography": 0.0034,
+      "uncategorized": 0.957
+    },
+    "wafa-news": {
+      "geography": 0.0189,
+      "conflict": 0.1887,
+      "economy": 0.0189,
+      "politics": 0.0094,
+      "uncategorized": 0.7642
+    },
+    "gdelt": {
+      "culture": 0.1644,
+      "heritage": 0.0822,
+      "conflict": 0.0274,
+      "arts_literature": 0.0411,
+      "daily_life": 0.0137,
+      "biography": 0.0137,
+      "uncategorized": 0.6575
+    }
+  },
+  "category_distribution_divergence": {
+    "wikipedia-ar_vs_wafa-news": 0.2306,
+    "wikipedia-ar_vs_gdelt": 0.3167,
+    "wafa-news_vs_gdelt": 0.3151
+  },
+  "weat": {
+    "target_set_culture_terms": [
+      "تراث",
+      "فولكلور",
+      "تطريز",
+      "دبكة",
+      "مطبخ",
+      "حرفة",
+      "موسيقى",
+      "أدب"
+    ],
+    "target_set_conflict_terms": [
+      "احتلال",
+      "مقاومة",
+      "اشتباك",
+      "حصار",
+      "غارة",
+      "اعتقال",
+      "استيطان",
+      "انتفاضة"
+    ],
+    "attribute_set_negative_terms": [
+      "عنف",
+      "دمار",
+      "قتل",
+      "حرب",
+      "خطر",
+      "معاناة"
+    ],
+    "attribute_set_positive_terms": [
+      "سلام",
+      "جمال",
+      "فرح",
+      "أمل",
+      "ازدهار",
+      "تعاون"
+    ],
+    "effect_size": -1.612,
+    "interpretation": "Positive effect_size: culture terms associate more with the NEGATIVE attribute set than conflict terms do (surprising, worth investigating). Negative effect_size: conflict terms associate more with the NEGATIVE attribute set (the intuitive direction). Magnitude near 0: no strong differential association found.",
+    "per_term_associations": {
+      "target_x_associations": [
+        -0.000675579425933881,
+        -0.0224674935883169,
+        0.02322576807289345,
+        0.01166483355712633,
+        0.010479626401568076,
+        0.05287703115285314,
+        -0.026886467617684873,
+        -0.028509844007790608
+      ],
+      "target_y_associations": [
+        0.1918660390870386,
+        0.06026869216226205,
+        0.08697869960281157,
+        0.1363280379282985,
+        0.14891234320492153,
+        0.07407353004242778,
+        0.04450045756825949,
+        0.10231284111067551
+      ]
+    }
+  },
+  "llm_framing_probe_by_source": {
+    "wikipedia-ar": {
+      "mixed": 3,
+      "non_conflict": 4,
+      "conflict": 1
+    },
+    "wafa-news": {
+      "non_conflict": 1,
+      "conflict": 7
+    },
+    "gdelt": {
+      "mixed": 6,
+      "non_conflict": 2
+    }
+  }
+}

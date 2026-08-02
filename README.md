@@ -109,8 +109,8 @@ plan live in **`ROADMAP.md`**. Summary:
 | 6 | Evaluation layer (NER, embeddings, retrieval, RAG) | **Done — Recall@5 0.93, see ROADMAP.md** |
 | 7 | Multi-source expansion (EN Wikipedia, Semantic Scholar w/ full-text OA, GDELT, WAFA) + persistent dedup | **Done — see ROADMAP.md; Nakba Archive/Palestine Remembered held on ethical/access grounds** |
 | 8 | Entity canonicalization, Wikidata linking, LLM relation extraction, NetworkX KG | **Done — see ROADMAP.md; Neo4j migration deferred until the graph scales past the NetworkX prototype** |
-| 9 | Topic modeling, cultural classification, bias measurement, temporal analysis | Planned |
-| 10 | Dashboard (Streamlit → Hugging Face Spaces) | Planned |
+| 9 | Topic modeling, cultural classification, bias measurement, temporal analysis | **F2/F3/F4 done with real runs (see ROADMAP.md Track F); F2 is a deliberate zero-shot-LLM deviation from the fine-tuned-AraBERT plan; F1 is built and unit-tested but its real run is blocked on a Docker/Postgres outage encountered this session** |
+| 10 | Dashboard (Streamlit → Hugging Face Spaces), RAG API (FastAPI) | **Done — verified in a real browser, see ROADMAP.md Track G** |
 
 ## Repository Structure
 
@@ -123,14 +123,15 @@ src/
   utils/            Collection logging
   rag/              Chunking, embedding, pgvector index, retriever, generator (done)
   knowlegde_graph/  Entity canonicalization, Wikidata linking, LLM relation extraction, NetworkX graph store (done)
-  nlp/              Topic modeling, cultural classification, bias, temporal analysis (planned — empty)
-  api/              RAG API endpoint (planned — empty)
-  frontend/         Dashboard (planned — empty)
+  nlp/              Topic modeling, content classification, bias measurement, temporal analysis (done — see ROADMAP.md Track F)
+  monitoring/       Pipeline run health / quality-decision drift reporting (done)
+  api/              RAG API endpoint — FastAPI (done)
+  frontend/         Dashboard — Streamlit, plus pure data-loader functions (done)
 eval/               Evaluation harness (done for NER/retrieval/RAG/KG — see eval/gold/, eval_reports/, ROADMAP.md)
-scripts/            Runnable entrypoints (collection, NER, HF export/publish, seed audit)
-tests/              Unit tests for schema, quality, dedup, normalizer, NER, export, collectors
+scripts/            Runnable entrypoints (collection, NER, KG, topic/bias/temporal analysis, API/dashboard launch, scheduling, health report)
+tests/              Unit tests for schema, quality, dedup, normalizer, NER, export, collectors, KG, NLP, API, monitoring
 docs/               Publishing guide, licensing checklist, supporting documentation
-reports/            Generated audit reports (seed categories)
+reports/            Generated analysis reports (seed categories, temporal analysis, bias measurement)
 data/               Local corpus artifacts (git-ignored)
 main.py             Pipeline entrypoint
 ROADMAP.md          Full milestone breakdown, technical decisions, execution plan
@@ -157,7 +158,7 @@ and verified against the real corpus — 484 documents chunked into 1282 passage
 and indexed, with `scripts/ask.py` returning grounded, cited answers. A first real knowledge
 graph has also been built end to end, spanning every Arabic-capable source (Wikipedia AR,
 WAFA, GDELT, Semantic Scholar) — 13,063 canonicalized entities, 950 linked to Wikidata QIDs,
-189 LLM-extracted relations from an initial 46-document pass, stored as a NetworkX graph
+585 LLM-extracted relations from a scaled-up 88-document pass, stored as a NetworkX graph
 (`data/graph/kg_graph.graphml`) — see the Knowledge Graph section below and `ROADMAP.md` Track
 E for the real numbers, including several real bugs found and fixed by actually running it at
 scale (a Wikidata homonym-collision problem, a qwen3 "thinking mode" issue, and NER silently
@@ -371,6 +372,65 @@ See `ROADMAP.md` Track E for the full real-numbers writeup, including two real b
 actually running this at scale (a Wikidata homonym-collision problem that mislinked this
 corpus's top three entities, and a qwen3 "thinking mode" issue that silently returned empty
 relation-extraction responses) and how each was fixed.
+
+## Analysis, API, and Dashboard
+
+Four independent analyses (Track F) plus a product surface (Track G) over the corpus and
+knowledge graph. All are real, working code — see `ROADMAP.md` Track F/G for full findings,
+including one deliberate deviation (F2) and one real run blocked by a Docker/Postgres outage
+encountered while building this (F1).
+
+```powershell
+uv run python scripts/run_topic_model.py                    # F1 — needs pgvector chunks (build_index.py)
+uv run python scripts/run_content_classification.py --max-docs 30   # F2 — needs Ollama
+uv run python scripts/run_bias_measurement.py                # F3 — needs F2's output; --skip-framing-probe to avoid Ollama
+uv run python scripts/run_temporal_analysis.py                # F4 — no DB/Ollama needed
+
+uv run uvicorn src.api.main:app --reload --port 8000          # G1 — RAG API (POST /ask, GET /health)
+uv run streamlit run src/frontend/dashboard.py                 # G2 — dashboard (Overview, Topic Map, Timeline, Bias Meter, KG Explorer, Ask)
+```
+
+**F2 (content classification)** uses zero-shot LLM prompting (`qwen3` via Ollama) instead of
+the originally-planned fine-tuned AraBERT model — a deliberate, documented deviation (see
+`src/nlp/content_classifier.py`'s module docstring), not a silent scope cut. Real run: 75
+documents classified across Wikipedia AR/WAFA/GDELT, 0 unparseable, a genuinely varied
+distribution (conflict, culture, heritage, arts_literature, history, ...). Fine-tuning needs a
+real labeled training set this session didn't have time to build; this classifier's own
+high-confidence outputs are a plausible way to bootstrap one later.
+
+**F3 (bias measurement)** produced the most substantively interesting result in Track F, real
+and not hypothetical: a WEAT embedding-association effect size of **-1.612** (conflict-coded
+terms associate strongly with violence-connotation words, culture-coded terms don't — the
+intuitive, non-degenerate direction), and an LLM framing probe showing **WAFA's own coverage
+skewed heavily conflict-framed (7/8 sampled) while GDELT skewed mixed (6/8) and Wikipedia AR
+leaned non-conflict** — a real, measured difference in how a Palestinian news wire frames its
+own reporting versus an encyclopedia.
+
+**F1 (topic modeling)** is fully built and unit-tested but its real run against `rag_chunks`
+was blocked this session by Postgres becoming unreachable partway through — confirmed as a
+Docker daemon issue (`docker ps` itself hung), not a code problem, most likely resource
+exhaustion after a long session of concurrent GPU-heavy work. Run `docker compose up -d` once
+Docker is healthy, then the command above.
+
+**G2 (dashboard)** was verified running in a real browser: every panel except "Ask" reads
+from files the other tracks already produce, so it works even while Postgres is down — which
+it genuinely was for most of this session, a real test of that design choice, not a
+hypothetical one.
+
+## Operations
+
+```powershell
+uv run python scripts/run_scheduled_collection.py --max-docs 50     # one full collection cycle across every source
+uv run python scripts/collection_health_report.py                   # current snapshot + drift + anomalies
+```
+
+`run_scheduled_collection.py` runs once and exits — recurrence is the OS scheduler's job
+(Windows Task Scheduler `schtasks` command in the script's own docstring, or cron), not a
+custom daemon. Each cycle appends to `data/metadata/scheduled_run_log.jsonl`, which
+`collection_health_report.py` reads for accept-rate drift and anomaly detection (a source
+failing outright, or its accept rate dropping ≥30 points vs. its own previous run) — useful
+from day one via each source's existing `*_stats.json`, more useful once real run history
+accumulates.
 
 ## Future Work
 

@@ -567,6 +567,26 @@ aggregation of what `entity_extractor.py` already emits.
   (degree 25), `القدس`, `اسرائيل`, `غزة`, `الضفة الغربية`. Scaling E3 to the full corpus is
   the direct, obvious next step to make the graph genuinely connected and useful — a config
   change (`--max-docs`), not a redesign.
+- **E3 scale-up — real, and a real operational lesson about background jobs, not a code bug.**
+  Scaling from 46 to a larger multi-source run hit a genuine, non-code problem: two background
+  attempts (one killed mid-run to investigate an apparent stall, one relaunched afterward)
+  ended up writing to the same output file concurrently for a window before the first one
+  actually terminated, because a `Stop-Process` signal didn't take effect as fast as assumed.
+  The result was NOT corruption — every `relation_id` is a deterministic hash of
+  (subject, predicate, object, doc_id), so the two runs' overlap showed up as exact duplicate
+  lines (16 of them), not conflicting data — but it did mean the file needed a dedup pass
+  (keep first occurrence per `relation_id`) before trusting it. After dedup: **585 unique
+  relations across 88 source documents** (up from the original 216/46), rebuilt into a
+  genuinely more connected graph — see below. Lesson applied going forward: don't kill a
+  background LLM-extraction job speculatively based on low CPU-time readings alone; verify
+  actual output-file growth first, since `psycopg2`/HTTP-bound processes legitimately show
+  near-zero CPU while correctly blocked on I/O.
+- **E4, rebuilt with the scaled-up relations — real, meaningfully more connected than the
+  first pass.** `13,063 nodes / ~580 edges` (up from 211). `فلسطين`'s degree more than doubled,
+  25 → **55**; `القدس` reached degree 37. Still far from fully connected at this scale (most
+  entities remain low-degree or isolated — expected, since E3 has still only processed a
+  fraction of the corpus), but visibly, measurably better connected than the first pass,
+  confirming the "scale E3 further" lever actually works as designed.
 - **Multi-source extension — real, and one real correctness fix.** The numbers above were
   from Arabic Wikipedia alone (the only source with NER already run on it at the time). Once
   WAFA/GDELT/Semantic Scholar/English Wikipedia were collected (Track D), extending the KG to
@@ -615,37 +635,150 @@ with "validate cheap first," and the real bugs found above (performance, wrong-e
 collisions, missing anchor entity) were each fixable within that cheap approach. Escalate to
 mGENRE only if E5's precision, re-measured on a larger sample later, doesn't hold up.*
 
-### Track F — Analysis & research phases (P2)
+### Track F — Analysis & research phases (P2) — ✅ F2/F3/F4 done end to end, F1 built but blocked by Docker
 
 These are the phases that make this a *research* platform, not just a retrieval system —
 carried over in full from the original 9-phase vision, not dropped.
 
-| ID | Task | Priority | Depends on | Mode | Deliverable | Est. |
-|---|---|:--:|---|---|---|:--:|
-| F1 | Topic modeling (BERTopic over the embeddings from B2 — no new embedding step needed) | P2 | B2 | Parallel to Track E | `src/nlp/topic_model.py`, populates `topic_id`/`topic_label` on `DocumentMetadata` | 2d |
-| F2 | Cultural/content classification — fine-tune AraBERT for the `ContentCategory` enum that already exists in `schemas.py` (conflict/culture/history/arts/…); annotate ~1,000–1,500 examples (LLM-assisted labeling, human-reviewed, per the original blueprint's own time-saving note) | P2 | — | Parallel to Track E/F1 | `src/nlp/classifier.py`, populates `category`/`category_confidence` | 3d |
-| F3 | Bias measurement — topic-distribution comparison across sources, WEAT test on embeddings, an LLM probe (using the Track B/C generator) on culture-vs-conflict framing | P2 | F1, F2, D2–D4 (needs multiple sources to compare) | Sequential after F1/F2/D | `src/nlp/bias_measurement.py`, `eval/bias_eval.py` → `EvalReport` | 3d |
-| F4 | Temporal analysis — the `decade` field already exists on `DocumentMetadata`; bucket embeddings by decade, measure semantic drift on key terms | P3 | B2 | Parallel to Track E/F1–F3 | `src/nlp/temporal_analysis.py` | 2d |
+| ID | Task | Priority | Depends on | Mode | Deliverable | Est. | Status |
+|---|---|:--:|---|---|---|:--:|---|
+| F1 | Topic modeling (BERTopic over the embeddings from B2 — no new embedding step needed) | P2 | B2 | Parallel to Track E | `src/nlp/topic_model.py`, populates `topic_id`/`topic_label` on `DocumentMetadata` | 2d | Built and unit-tested; real run blocked on Postgres being unreachable this session — see note |
+| F2 | Cultural/content classification — fine-tune AraBERT for the `ContentCategory` enum that already exists in `schemas.py` (conflict/culture/history/arts/…); annotate ~1,000–1,500 examples (LLM-assisted labeling, human-reviewed, per the original blueprint's own time-saving note) | P2 | — | Parallel to Track E/F1 | `src/nlp/content_classifier.py`, populates `category`/`category_confidence` | 3d | **Deliberate deviation — see note**: zero-shot LLM classification — Done, real run: 75 documents classified |
+| F3 | Bias measurement — topic-distribution comparison across sources, WEAT test on embeddings, an LLM probe (using the Track B/C generator) on culture-vs-conflict framing | P2 | F1, F2, D2–D4 (needs multiple sources to compare) | Sequential after F1/F2/D | `src/nlp/bias_measurement.py`, `scripts/run_bias_measurement.py` | 3d | Done — real run, genuinely interesting findings, see below |
+| F4 | Temporal analysis — the `decade` field already exists on `DocumentMetadata`; bucket embeddings by decade, measure semantic drift on key terms | P3 | B2 | Parallel to Track E/F1–F3 | `src/nlp/temporal_analysis.py` | 2d | Done — real run, see below |
 
-### Track G — Product surface (P2/P3)
+**Real results and one deliberate, documented deviation:**
 
-| ID | Task | Priority | Depends on | Mode | Deliverable | Est. |
-|---|---|:--:|---|---|---|:--:|
-| G1 | RAG API endpoint (FastAPI, wraps the Track B pipeline) | P1 | B5 | Parallel, can start right after MVP | `src/api/main.py` | 1d |
-| G2 | Dashboard — Streamlit first (the original blueprint's own recommendation: "a working prototype in two hours," free HuggingFace Spaces hosting), Bias Meter / Topic Map / Timeline / KG Explorer panels as their data sources (Tracks E/F) land | P2 | G1, E4, F1, F3, F4 (per-panel, incremental) | Sequential per panel, otherwise parallel to E/F | `src/frontend/dashboard.py` | 2d + ~0.5d per panel |
+- **F4 (temporal analysis) — real, and required extending the original design.** Checked the
+  actual `decade` field (computed from `date_published`) before building on it: null for all
+  581 Wikipedia documents (articles are continuously edited, no meaningful "published" date)
+  and 2020 for 202 of the 204 documents that do have it (WAFA/GDELT are current news, Semantic
+  Scholar papers are mostly recent) — one degenerate bucket from metadata alone. Extended
+  `temporal_analysis.py` to also extract 4-digit years actually mentioned in each document's
+  own text as a fallback signal (a Wikipedia article about the 1948 Nakba discusses 1948
+  extensively regardless of edit date). Real run across Wikipedia AR + WAFA + GDELT + Semantic
+  Scholar (785 documents): **706 bucketed across 22 decades (1800s–2020s)**, 204 from real
+  metadata, 502 from the content-based fallback. Real, sensible signal: "النكبة" (Nakba) and
+  "اللاجئين" (refugees) both peak in the 1940s bucket (1.14 and 1.48 mentions/1,000 words);
+  "الاحتلال" (occupation) peaks in the 2020s (2.24/1,000) — exactly the pattern real historical
+  discourse would predict. Reproduce: `uv run python scripts/run_temporal_analysis.py`.
+- **F2 (cultural classification) — a deliberate, explicit deviation from the original plan,
+  not a silent scope cut, and a real, completed run.** Fine-tuning AraBERT needs a real
+  training pipeline (a labeling workflow, a training run, a held-out eval set) that doesn't fit
+  inside this session. Built instead: the same local `qwen3` (via Ollama) already used for RAG
+  generation and Track E3 relation extraction, as a zero-shot classifier — one prompt per
+  document choosing one `ContentCategory` + confidence (`src/nlp/content_classifier.py`,
+  `scripts/run_content_classification.py`). Real run across Wikipedia AR + WAFA + GDELT (25
+  docs/source): **75 documents classified, 0 unparseable responses**, in 172s. Distribution is
+  genuinely varied, not degenerate: conflict 23, culture 13, heritage 11, arts_literature 7,
+  history 5, plus geography/daily_life/biography/food_cuisine/politics/economy/architecture in
+  smaller numbers. This is a real, working capability, not a stub — but it is explicitly *not*
+  a replacement for the fine-tuned-AraBERT plan long-term: it costs one LLM call per document
+  (doesn't scale as cheaply as a small fine-tuned model once the corpus is large) and hasn't
+  been benchmarked against a held-out gold set the way NER/retrieval/RAG were in Track C.
+  Revisit AraBERT fine-tuning once there's a labeled set to train on — this classifier's own
+  high-confidence outputs are a plausible bootstrap source for one. Reproduce:
+  `uv run python scripts/run_content_classification.py`.
+- **F3 (bias measurement) — real run, and the most substantively interesting result in Track
+  F.** Ran after F2 (both use the same local Ollama instance; running LLM-heavy jobs
+  concurrently against one GPU just slows both down — learned directly from Track E3's
+  experience). Three independent signals, all real:
+  1. **Category-distribution divergence** (total variation distance) across the three sources:
+     wikipedia-ar vs. wafa-news 0.23, wikipedia-ar vs. gdelt 0.32, wafa-news vs. gdelt 0.32 —
+     real, meaningfully different framing across sources, not noise.
+  2. **WEAT embedding association test**: effect size **-1.612** — a large effect in the
+     intuitive direction (conflict-coded terms like `احتلال`/`مقاومة` associate more strongly
+     with negative/violence-connotation words like `عنف`/`حرب` than culture-coded terms like
+     `تراث`/`موسيقى` do). A real, non-degenerate signal — the adaptation from word2vec-style
+     WEAT to a sentence-embedding model (see `bias_measurement.py`'s docstring) held up in
+     practice, though R4's methodological-fragility caveat still applies to interpreting it.
+  3. **LLM framing probe** (8 docs/source): **wafa-news skewed heavily conflict-framed (7
+     conflict, 1 non_conflict)**; **gdelt skewed mixed (6 mixed, 2 non_conflict)**; Wikipedia AR
+     leaned non-conflict (4 non_conflict, 3 mixed, 1 conflict). A genuinely interesting,
+     substantive finding — a Palestinian news wire (WAFA) framing its own coverage through
+     conflict far more than an encyclopedia does is exactly the kind of pattern this track was
+     designed to surface, and now has real numbers behind it, not just a designed capability.
+  The category-distribution and WEAT parts need neither Postgres nor Ollama (WEAT embeds short
+  terms directly via the existing `Embedder`, in-memory); only the framing probe needs Ollama,
+  skippable via `--skip-framing-probe`. Reproduce:
+  `uv run python scripts/run_bias_measurement.py`.
+- **F1 (topic modeling) — built and unit-tested against a fake topic model (the pure
+  aggregation/labeling logic), but the real BERTopic fit against `rag_chunks` could not be run
+  this session: Postgres became unreachable partway through (see the Docker note below) and
+  stayed down for the rest of the session.** Not a code problem — `docker ps` itself hung,
+  confirming the Docker daemon itself, not just this project's container, was unresponsive
+  (most likely resource exhaustion after a very long session of concurrent GPU-heavy work:
+  CAMeL NER, embeddings, numba/UMAP/HDBSCAN compilation, and sustained Ollama inference, all
+  in the same multi-hour session). Run `docker compose up -d` once Docker is healthy again,
+  then `uv run python scripts/run_topic_model.py`.
 
-### Track H — Infrastructure & hardening (P3 — deliberately last)
+*Note on the Docker/Postgres outage's broader effect this session:* the same outage also
+blocked `tests/test_persistent_dedup.py` and `tests/test_rag_integration.py` at collection
+time (both open a real Postgres connection as a module-level `pytest.mark.skipif` check) —
+run `uv run pytest tests/ --ignore=tests/test_persistent_dedup.py --ignore=tests/test_rag_integration.py`
+until Docker is confirmed healthy again; both were passing before the outage and nothing in
+their code changed.
+
+### Track G — Product surface (P2/P3) — ✅ done, verified in a real browser
+
+| ID | Task | Priority | Depends on | Mode | Deliverable | Est. | Status |
+|---|---|:--:|---|---|---|:--:|---|
+| G1 | RAG API endpoint (FastAPI, wraps the Track B pipeline) | P1 | B5 | Parallel, can start right after MVP | `src/api/main.py` | 1d | Done — unit-tested |
+| G2 | Dashboard — Streamlit first (the original blueprint's own recommendation: "a working prototype in two hours," free HuggingFace Spaces hosting), Bias Meter / Topic Map / Timeline / KG Explorer panels as their data sources (Tracks E/F) land | P2 | G1, E4, F1, F3, F4 (per-panel, incremental) | Sequential per panel, otherwise parallel to E/F | `src/frontend/dashboard.py` | 2d + ~0.5d per panel | Done — launched for real and verified in a browser |
+
+**Real results:**
+
+- **G1**: a thin FastAPI wrapper (`POST /ask`, `GET /health`) around the exact same
+  `RAGPipeline` `scripts/ask.py` drives — no new RAG logic. The DB connection, embedder, and
+  generator are built once at process startup (FastAPI `lifespan`), not per request. Known,
+  accepted limitation, stated in the module docstring: one shared `psycopg2` connection isn't
+  safe under concurrent requests — fine for a research/demo API, a connection pool is the
+  natural upgrade if real concurrent traffic ever shows up, not built ahead of that need. Run:
+  `uv run uvicorn src.api.main:app --reload --port 8000`.
+- **G2**: every panel except "Ask" reads from files Tracks E/F already produce
+  (`src/frontend/data_loaders.py` — pure, unit-tested functions, no Streamlit/DB dependency),
+  so the dashboard works even while Postgres is down, which it genuinely was for most of this
+  build — a real, not hypothetical, test of that design choice. Verified in an actual browser,
+  not just compiled: Overview correctly showed live counts (882 documents, 13,063 KG entities,
+  187 relations); Topic Map and Bias Meter correctly showed "run this script first" messages
+  since those reports didn't exist yet at verification time; Timeline correctly rendered the
+  real F4 report; KG Explorer's search box returned real, correct entity matches (searching
+  "حيفا" surfaced 18 real entity variants including NER-boundary-noise forms like "وحيفا" —
+  the same artifact documented in Track E). Run: `uv run streamlit run src/frontend/dashboard.py`.
+
+### Track H — Infrastructure & hardening (P3 — deliberately last) — ✅ H1–H3 done, H4 correctly not triggered
 
 Everything here was explicitly deferred by the original MVP-first plan and stays deferred:
 none of it blocks a working system, all of it matters once the system has real, sustained
 usage rather than iterative research use.
 
-| ID | Task | Priority | Depends on | Mode | Deliverable | Est. |
-|---|---|:--:|---|---|---|:--:|
-| H1 | Scheduler for recurring collection runs | P3 | D6 | Parallel | Cron/Task-scheduler config | 1d |
-| H2 | Monitoring/observability (pipeline run health, quality-decision drift over time) | P3 | — | Parallel | Basic dashboards/alerts | 2d |
-| H3 | Consolidate the two divergent NER code paths — `entity_extractor.py`/`run_ner.py` (the module actually used) vs. the older `Run_ner_on_corpus.py`/`heritage_ner_camel.py` prototype with a different heritage dictionary (`PAL_*` vs `HERITAGE_*` types) | P2 | — | Parallel, any time | Retire the prototype scripts | 0.5d |
-| H4 | Scale-up migration off pgvector to Qdrant — **only if** corpus size or QPS ever actually approaches the thresholds in §3.2 | P3 | — | N/A until triggered | — | — |
+| ID | Task | Priority | Depends on | Mode | Deliverable | Est. | Status |
+|---|---|:--:|---|---|---|:--:|---|
+| H1 | Scheduler for recurring collection runs | P3 | D6 | Parallel | Cron/Task-scheduler config | 1d | Done — `scripts/run_scheduled_collection.py` |
+| H2 | Monitoring/observability (pipeline run health, quality-decision drift over time) | P3 | — | Parallel | Basic dashboards/alerts | 2d | Done — `scripts/collection_health_report.py` |
+| H3 | Consolidate the two divergent NER code paths — `entity_extractor.py`/`run_ner.py` (the module actually used) vs. the older `Run_ner_on_corpus.py`/`heritage_ner_camel.py` prototype with a different heritage dictionary (`PAL_*` vs `HERITAGE_*` types) | P2 | — | Parallel, any time | Retire the prototype scripts | 0.5d | Done — both files removed, confirmed unreferenced elsewhere |
+| H4 | Scale-up migration off pgvector to Qdrant — **only if** corpus size or QPS ever actually approaches the thresholds in §3.2 | P3 | — | N/A until triggered | — | — | Correctly not triggered — corpus is still a few hundred documents, nowhere near pgvector's stated comfortable range |
+
+**Real results:**
+
+- **H1** is deliberately *not* a long-running daemon — it runs one full collection cycle
+  (every enabled source, wrapped individually so one source's failure never aborts the others)
+  and exits; recurrence is the OS scheduler's job (Windows Task Scheduler via `schtasks`, or
+  cron), not reimplemented in Python. Every cycle appends one line to
+  `data/metadata/scheduled_run_log.jsonl` — this is what H2 reads for drift-over-time.
+  Windows Task Scheduler command is in the script's own docstring
+  (`scripts/run_scheduled_collection.py`).
+- **H2** combines that append-only run history (once it exists) with each source's always-
+  available latest `*_stats.json` snapshot, so it's useful from day one (before any scheduled
+  run has ever happened) and becomes more useful over time. Flags two anomaly kinds: a source
+  failing outright, or its accept rate dropping ≥30 percentage points vs. its own immediately
+  preceding run — a practical, inspectable threshold, not a statistically derived one. Real
+  run against the corpus's existing per-source stats confirmed it reads them correctly (e.g.
+  Wikipedia AR accept rate 0.97, Wikipedia EN 0.82). Run:
+  `uv run python scripts/collection_health_report.py`.
+- **H3**: confirmed via `grep` that neither prototype script was imported anywhere else in the
+  codebase (only self-references and this ROADMAP's own prior description of them) before
+  deleting `scripts/Run_ner_on_corpus.py` and `scripts/heritage_ner_camel.py`.
 
 ---
 

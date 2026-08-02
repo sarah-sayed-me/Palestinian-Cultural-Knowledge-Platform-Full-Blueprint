@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dashboard",
+      "runtimeExecutable": ".venv/Scripts/streamlit.exe",
+      "runtimeArgs": ["run", "src/frontend/dashboard.py", "--server.headless", "true"],
+      "port": 8501
+    },
+    {
+      "name": "rag-api",
+      "runtimeExecutable": ".venv/Scripts/uvicorn.exe",
+      "runtimeArgs": ["src.api.main:app", "--port", "8000"],
+      "port": 8000
+    }
+  ]
+}
