@@ -635,14 +635,14 @@ with "validate cheap first," and the real bugs found above (performance, wrong-e
 collisions, missing anchor entity) were each fixable within that cheap approach. Escalate to
 mGENRE only if E5's precision, re-measured on a larger sample later, doesn't hold up.*
 
-### Track F — Analysis & research phases (P2) — ✅ F2/F3/F4 done end to end, F1 built but blocked by Docker
+### Track F — Analysis & research phases (P2) — ✅ F1/F2/F3/F4 all done end to end
 
 These are the phases that make this a *research* platform, not just a retrieval system —
 carried over in full from the original 9-phase vision, not dropped.
 
 | ID | Task | Priority | Depends on | Mode | Deliverable | Est. | Status |
 |---|---|:--:|---|---|---|:--:|---|
-| F1 | Topic modeling (BERTopic over the embeddings from B2 — no new embedding step needed) | P2 | B2 | Parallel to Track E | `src/nlp/topic_model.py`, populates `topic_id`/`topic_label` on `DocumentMetadata` | 2d | Built and unit-tested; real run blocked on Postgres being unreachable this session — see note |
+| F1 | Topic modeling (BERTopic over the embeddings from B2 — no new embedding step needed) | P2 | B2 | Parallel to Track E | `src/nlp/topic_model.py`, populates `topic_id`/`topic_label` on `DocumentMetadata` | 2d | Done — real run, one real bug fixed (pgvector `Vector` type), see below |
 | F2 | Cultural/content classification — fine-tune AraBERT for the `ContentCategory` enum that already exists in `schemas.py` (conflict/culture/history/arts/…); annotate ~1,000–1,500 examples (LLM-assisted labeling, human-reviewed, per the original blueprint's own time-saving note) | P2 | — | Parallel to Track E/F1 | `src/nlp/content_classifier.py`, populates `category`/`category_confidence` | 3d | **Deliberate deviation — see note**: zero-shot LLM classification — Done, real run: 75 documents classified |
 | F3 | Bias measurement — topic-distribution comparison across sources, WEAT test on embeddings, an LLM probe (using the Track B/C generator) on culture-vs-conflict framing | P2 | F1, F2, D2–D4 (needs multiple sources to compare) | Sequential after F1/F2/D | `src/nlp/bias_measurement.py`, `scripts/run_bias_measurement.py` | 3d | Done — real run, genuinely interesting findings, see below |
 | F4 | Temporal analysis — the `decade` field already exists on `DocumentMetadata`; bucket embeddings by decade, measure semantic drift on key terms | P3 | B2 | Parallel to Track E/F1–F3 | `src/nlp/temporal_analysis.py` | 2d | Done — real run, see below |
@@ -702,22 +702,34 @@ carried over in full from the original 9-phase vision, not dropped.
   terms directly via the existing `Embedder`, in-memory); only the framing probe needs Ollama,
   skippable via `--skip-framing-probe`. Reproduce:
   `uv run python scripts/run_bias_measurement.py`.
-- **F1 (topic modeling) — built and unit-tested against a fake topic model (the pure
-  aggregation/labeling logic), but the real BERTopic fit against `rag_chunks` could not be run
-  this session: Postgres became unreachable partway through (see the Docker note below) and
-  stayed down for the rest of the session.** Not a code problem — `docker ps` itself hung,
-  confirming the Docker daemon itself, not just this project's container, was unresponsive
-  (most likely resource exhaustion after a very long session of concurrent GPU-heavy work:
-  CAMeL NER, embeddings, numba/UMAP/HDBSCAN compilation, and sustained Ollama inference, all
-  in the same multi-hour session). Run `docker compose up -d` once Docker is healthy again,
-  then `uv run python scripts/run_topic_model.py`.
+- **F1 (topic modeling) — done, real run, and two real bugs found and fixed once Postgres
+  recovered.** First real attempt crashed: `fetch_chunk_embeddings` did `list(r[3])` on the
+  `embedding` column, but psycopg2's registered pgvector type adapter (`register_vector()`,
+  `src/rag/db.py`) deserializes it into a `Vector` object, which isn't iterable — it only
+  exposes `.to_list()`/`.to_numpy()`. Fixed, with a regression test (a fake `Vector`-like
+  object with `.to_list()` but no `__iter__`, so the test fails again if this regresses).
+  Real run: **488/581 Wikipedia AR documents had indexed chunks, 581 documents labeled, 41
+  topics found, 283 outlier chunks** (`data/processed/wikipedia_ar_documents.ner.topics.jsonl`).
+  Second finding, not a bug: the default c-TF-IDF vectorizer produced labels dominated by
+  years/numbers and stray Latin-script loanwords rather than Arabic content words (e.g.
+  `"1187 / 2026 / 1099 / 86"`). Added an Arabic-normalizing custom tokenizer
+  (`_arabic_aware_vectorizer`, reuses `normalize_arabic()`) — a real, worthwhile fix for
+  token-form consistency, but it did **not** fully solve the label-readability issue, because
+  the deeper cause isn't fixable by tokenization: c-TF-IDF is designed to rank words that are
+  frequent *within* a cluster but rare *elsewhere*, and common Arabic words like `فلسطين`
+  appear in nearly every chunk across nearly every topic, so they can never be "distinctive"
+  by that metric — while a specific year concentrates in one cluster and wins by design. The
+  *clustering* is real and meaningful regardless (one topic keys on 1948/1947/1967/1949,
+  genuinely grouping Nakba/1948-war content — consistent with F4's independent finding that
+  this corpus organizes strongly by historical period). A real next step, not yet built: LLM-
+  generated topic labels (feed each topic's representative chunks to qwen3, ask for a short
+  human label) instead of relying on c-TF-IDF's raw top-n-words output.
 
-*Note on the Docker/Postgres outage's broader effect this session:* the same outage also
-blocked `tests/test_persistent_dedup.py` and `tests/test_rag_integration.py` at collection
-time (both open a real Postgres connection as a module-level `pytest.mark.skipif` check) —
-run `uv run pytest tests/ --ignore=tests/test_persistent_dedup.py --ignore=tests/test_rag_integration.py`
-until Docker is confirmed healthy again; both were passing before the outage and nothing in
-their code changed.
+*Note on the Docker/Postgres outage, resolved:* it also blocked `tests/test_persistent_dedup.py`
+and `tests/test_rag_integration.py` at collection time for the rest of that session (both open
+a real Postgres connection as a module-level `pytest.mark.skipif` check). Docker has since
+recovered on its own (confirmed: `docker ps` responds, all containers healthy) — the full suite,
+**198 tests**, passes with no `--ignore` flags needed.
 
 ### Track G — Product surface (P2/P3) — ✅ done, verified in a real browser
 

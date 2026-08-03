@@ -10,16 +10,16 @@
     "wikipedia-ar": {
       "geography": 0.0017,
       "history": 0.0086,
-      "culture": 0.0017,
+      "culture": 0.0034,
       "arts_literature": 0.0069,
       "food_cuisine": 0.0034,
-      "heritage": 0.0086,
+      "heritage": 0.0103,
       "politics": 0.0017,
       "daily_life": 0.0034,
-      "architecture": 0.0017,
-      "conflict": 0.0017,
+      "architecture": 0.0034,
+      "conflict": 0.0034,
       "biography": 0.0034,
-      "uncategorized": 0.957
+      "uncategorized": 0.9501
     },
     "wafa-news": {
       "geography": 0.0189,
@@ -39,8 +39,8 @@
     }
   },
   "category_distribution_divergence": {
-    "wikipedia-ar_vs_wafa-news": 0.2306,
-    "wikipedia-ar_vs_gdelt": 0.3167,
+    "wikipedia-ar_vs_wafa-news": 0.2289,
+    "wikipedia-ar_vs_gdelt": 0.3115,
     "wafa-news_vs_gdelt": 0.3151
   },
   "weat": {
@@ -107,17 +107,17 @@
   },
   "llm_framing_probe_by_source": {
     "wikipedia-ar": {
-      "mixed": 3,
+      "mixed": 4,
       "non_conflict": 4,
-      "conflict": 1
+      "conflict": 2
     },
     "wafa-news": {
       "non_conflict": 1,
-      "conflict": 7
+      "conflict": 9
     },
     "gdelt": {
-      "mixed": 6,
-      "non_conflict": 2
+      "mixed": 7,
+      "non_conflict": 3
     }
   }
 }

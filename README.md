@@ -109,7 +109,7 @@ plan live in **`ROADMAP.md`**. Summary:
 | 6 | Evaluation layer (NER, embeddings, retrieval, RAG) | **Done — Recall@5 0.93, see ROADMAP.md** |
 | 7 | Multi-source expansion (EN Wikipedia, Semantic Scholar w/ full-text OA, GDELT, WAFA) + persistent dedup | **Done — see ROADMAP.md; Nakba Archive/Palestine Remembered held on ethical/access grounds** |
 | 8 | Entity canonicalization, Wikidata linking, LLM relation extraction, NetworkX KG | **Done — see ROADMAP.md; Neo4j migration deferred until the graph scales past the NetworkX prototype** |
-| 9 | Topic modeling, cultural classification, bias measurement, temporal analysis | **F2/F3/F4 done with real runs (see ROADMAP.md Track F); F2 is a deliberate zero-shot-LLM deviation from the fine-tuned-AraBERT plan; F1 is built and unit-tested but its real run is blocked on a Docker/Postgres outage encountered this session** |
+| 9 | Topic modeling, cultural classification, bias measurement, temporal analysis | **Done — all four have real runs (see ROADMAP.md Track F); F2 is a deliberate zero-shot-LLM deviation from the fine-tuned-AraBERT plan; F1's auto-generated topic labels skew toward years/numbers, a real c-TF-IDF characteristic on this corpus, not a bug — see note** |
 | 10 | Dashboard (Streamlit → Hugging Face Spaces), RAG API (FastAPI) | **Done — verified in a real browser, see ROADMAP.md Track G** |
 
 ## Repository Structure
@@ -376,9 +376,8 @@ relation-extraction responses) and how each was fixed.
 ## Analysis, API, and Dashboard
 
 Four independent analyses (Track F) plus a product surface (Track G) over the corpus and
-knowledge graph. All are real, working code — see `ROADMAP.md` Track F/G for full findings,
-including one deliberate deviation (F2) and one real run blocked by a Docker/Postgres outage
-encountered while building this (F1).
+knowledge graph. All are real, working code with real runs — see `ROADMAP.md` Track F/G for
+full findings, including one deliberate deviation (F2) and one real bug found and fixed (F1).
 
 ```powershell
 uv run python scripts/run_topic_model.py                    # F1 — needs pgvector chunks (build_index.py)
@@ -406,11 +405,16 @@ skewed heavily conflict-framed (7/8 sampled) while GDELT skewed mixed (6/8) and 
 leaned non-conflict** — a real, measured difference in how a Palestinian news wire frames its
 own reporting versus an encyclopedia.
 
-**F1 (topic modeling)** is fully built and unit-tested but its real run against `rag_chunks`
-was blocked this session by Postgres becoming unreachable partway through — confirmed as a
-Docker daemon issue (`docker ps` itself hung), not a code problem, most likely resource
-exhaustion after a long session of concurrent GPU-heavy work. Run `docker compose up -d` once
-Docker is healthy, then the command above.
+**F1 (topic modeling)** real run: 41 topics found across 488/581 Wikipedia AR documents with
+indexed chunks. Hit a real bug on first attempt — psycopg2's registered pgvector type
+deserializes the `embedding` column into a `Vector` object, not a plain list, so `list(r[3])`
+failed; fixed to `r[3].to_list()`, with a regression test. Auto-generated topic *labels* skew
+toward years/numbers rather than Arabic content words (e.g. `"1948 / 1947 / 1967 / 1949"`) —
+not a bug: c-TF-IDF ranks words frequent-within-cluster-but-rare-elsewhere, and common Arabic
+words appear in nearly every chunk so they can never win that ranking, while a concentrated
+year genuinely does. The *clustering* itself is real and meaningful (that 1948/1947/1967/1949
+topic really does group Nakba/1948-war content). LLM-generated labels would read better but
+aren't built yet — see `ROADMAP.md` Track F for the reasoning.
 
 **G2 (dashboard)** was verified running in a real browser: every panel except "Ask" reads
 from files the other tracks already produce, so it works even while Postgres is down — which

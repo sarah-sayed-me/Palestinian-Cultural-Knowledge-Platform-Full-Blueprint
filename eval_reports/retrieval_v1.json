@@ -1,15 +1,15 @@
 {
   "report": {
     "eval_name": "retrieval_v1",
-    "run_at": "2026-07-26T08:54:15.720709+00:00",
+    "run_at": "2026-08-02T16:23:01.200582+00:00",
     "dataset_size": 200,
     "metrics": {
       "evaluable_queries": 199.0,
       "skipped_queries": 1.0,
-      "mrr": 0.8877,
+      "mrr": 0.8883,
       "recall_at_5": 0.9347,
       "recall_at_10": 0.9648,
-      "avg_top1_score": 0.6935,
+      "avg_top1_score": 0.6933,
       "avg_hit_score": 0.6905
     },
     "notes": "Document-level Recall@k/MRR against the real pgvector retriever — see module docstring for why paragraph-level scoring isn't supported by this gold set. 3 queries reference at least one doc_id no longer in the indexed corpus (corpus drift since the gold set was built); 1 of those have NO resolvable gold doc and were excluded from the metrics entirely (not counted as misses)."
@@ -27,10 +27,10 @@
     "single_answer": {
       "evaluable_queries": 173,
       "skipped_queries": 1,
-      "mrr": 0.8781,
+      "mrr": 0.8787,
       "recall_at_5": 0.9249,
       "recall_at_10": 0.9595,
-      "avg_top1_score": 0.6901,
+      "avg_top1_score": 0.6899,
       "avg_hit_score": 0.6867
     }
   },

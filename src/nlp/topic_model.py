@@ -18,6 +18,7 @@ avoids a second, document-level embedding pass just to get one topic per doc.
 
 from __future__ import annotations
 
+import re
 from collections import Counter
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -34,8 +35,40 @@ def fetch_chunk_embeddings(
     chunk_ids = [r[0] for r in rows]
     doc_ids = [r[1] for r in rows]
     texts = [r[2] for r in rows]
-    embeddings = [list(r[3]) for r in rows]
+    # psycopg2's registered vector type adapter (register_vector(), see
+    # src/rag/db.py) deserializes the `embedding` column into a pgvector
+    # `Vector` object, not a plain list/tuple — it doesn't support the
+    # iterable protocol list() relies on, only .to_list()/.to_numpy().
+    embeddings = [r[3].to_list() for r in rows]
     return chunk_ids, doc_ids, texts, embeddings
+
+
+def _arabic_aware_vectorizer():
+    """A CountVectorizer for BERTopic's c-TF-IDF step that normalizes Arabic
+    before tokenizing (diacritics/alef-hamza/teh-marbuta unification via the
+    same normalize_arabic() the rest of the pipeline already uses).
+
+    Without this, a real run showed topic *labels* dominated by numbers and
+    stray Latin-script loanwords (e.g. "brek / baklava / brei / brie",
+    "sepulchre / holy / the") rather than Arabic content words — not because
+    the clustering was wrong (topic sizes and groupings were real and
+    sensible, e.g. one cluster keyed on 1948/1947/1967/1949 genuinely
+    grouped Nakba/1948-war content), but because sklearn's default
+    tokenizer has no Arabic normalization: the same root word surfaces as
+    many different unnormalized forms, splitting its count across variants
+    and letting less-common-but-consistently-spelled numbers/loanwords rank
+    higher in c-TF-IDF by comparison.
+    """
+    from sklearn.feature_extraction.text import CountVectorizer
+
+    from src.preprocessing.arabic_normalizer import normalize_arabic
+
+    token_re = re.compile(r"[^\W\d_]{2,}|\d{2,}", re.UNICODE)
+
+    def tokenizer(text: str) -> List[str]:
+        return token_re.findall(normalize_arabic(text))
+
+    return CountVectorizer(tokenizer=tokenizer, token_pattern=None, min_df=2)
 
 
 def fit_topic_model(
@@ -52,6 +85,7 @@ def fit_topic_model(
     topic_model = BERTopic(
         min_topic_size=min_topic_size,
         nr_topics=nr_topics,
+        vectorizer_model=_arabic_aware_vectorizer(),
         calculate_probabilities=False,
         verbose=False,
     )

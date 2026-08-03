@@ -1,4 +1,55 @@
-from src.nlp.topic_model import aggregate_document_topics, topic_label
+from src.nlp.topic_model import aggregate_document_topics, fetch_chunk_embeddings, topic_label
+
+
+class _FakeVector:
+    """Stands in for pgvector's Vector type — has .to_list(), not __iter__,
+    so list(vector) fails (the real bug this regression test catches)."""
+
+    def __init__(self, values):
+        self._values = values
+
+    def to_list(self):
+        return self._values
+
+
+class _FakeCursor:
+    def __init__(self, rows):
+        self._rows = rows
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def execute(self, *a, **k):
+        pass
+
+    def fetchall(self):
+        return self._rows
+
+
+class _FakeConn:
+    def __init__(self, rows):
+        self._rows = rows
+
+    def cursor(self):
+        return _FakeCursor(self._rows)
+
+
+def test_fetch_chunk_embeddings_handles_pgvector_vector_type():
+    rows = [
+        ("chunk-1", "doc-1", "some text", _FakeVector([0.1, 0.2, 0.3])),
+        ("chunk-2", "doc-1", "more text", _FakeVector([0.4, 0.5, 0.6])),
+    ]
+    conn = _FakeConn(rows)
+
+    chunk_ids, doc_ids, texts, embeddings = fetch_chunk_embeddings(conn, table="rag_chunks")
+
+    assert chunk_ids == ["chunk-1", "chunk-2"]
+    assert doc_ids == ["doc-1", "doc-1"]
+    assert texts == ["some text", "more text"]
+    assert embeddings == [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]
 
 
 class _FakeTopicModel:

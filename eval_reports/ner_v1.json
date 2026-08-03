@@ -1,7 +1,7 @@
 {
   "report": {
     "eval_name": "ner_v1",
-    "run_at": "2026-07-26T08:52:59.921180+00:00",
+    "run_at": "2026-08-02T16:22:21.433515+00:00",
     "dataset_size": 108,
     "metrics": {
       "precision_exact": 0.46,
