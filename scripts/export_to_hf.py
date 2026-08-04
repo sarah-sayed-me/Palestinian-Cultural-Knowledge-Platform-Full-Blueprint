@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, List, Union
 
 import pandas as pd
 
@@ -27,7 +27,7 @@ def _is_clear(record: dict[str, Any]) -> bool:
 
 def export_to_hf_dataset(
     *,
-    input_path: Path = DEFAULT_INPUT,
+    input_path: Union[Path, List[Path]] = DEFAULT_INPUT,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     write_jsonl_copy: bool = False,
     clear_only: bool = False,
@@ -37,19 +37,27 @@ def export_to_hf_dataset(
     Includes everything by default (private research corpus). Pass
     clear_only=True to restrict to license_status == "clear" — e.g. when
     preparing a subset intended for public release.
-    """
-    if not input_path.exists():
-        raise FileNotFoundError(f"Processed input not found: {input_path}")
 
-    all_records = _read_jsonl(input_path)
+    input_path accepts either one file or a list — passing every source's
+    file combines them into a single dataset (each record already carries
+    its own source_id, so downstream users can still filter by source).
+    """
+    input_paths = [input_path] if isinstance(input_path, Path) else list(input_path)
+    missing = [p for p in input_paths if not p.exists()]
+    if missing:
+        raise FileNotFoundError(f"Processed input(s) not found: {missing}")
+
+    all_records: list[dict[str, Any]] = []
+    for path in input_paths:
+        all_records.extend(_read_jsonl(path))
     if not all_records:
-        raise ValueError(f"No records found in {input_path}")
+        raise ValueError(f"No records found in {input_paths}")
 
     records = [r for r in all_records if _is_clear(r)] if clear_only else all_records
     excluded_count = len(all_records) - len(records)
     if not records:
         raise ValueError(
-            f"No 'clear' records in {input_path} ({excluded_count} excluded by --clear-only). "
+            f"No 'clear' records in {input_paths} ({excluded_count} excluded by --clear-only). "
             f"Drop --clear-only to export everything."
         )
 
@@ -65,8 +73,10 @@ def export_to_hf_dataset(
             for record in records:
                 handle.write(json.dumps(record, ensure_ascii=False) + "\n")
 
+    by_source = dataframe["source_id"].value_counts().to_dict() if "source_id" in dataframe.columns else {}
+    by_language = dataframe["language"].value_counts().to_dict() if "language" in dataframe.columns else {}
     summary = {
-        "input": str(input_path),
+        "input": [str(p) for p in input_paths],
         "output_dir": str(output_dir),
         "train_parquet": str(train_path),
         "jsonl_copy": str(jsonl_copy) if jsonl_copy else None,
@@ -74,6 +84,8 @@ def export_to_hf_dataset(
         "excluded_as_not_clear": excluded_count,
         "columns": list(dataframe.columns),
         "total_words": int(dataframe.get("word_count", pd.Series(dtype=int)).sum()),
+        "by_source": by_source,
+        "by_language": by_language,
     }
     if summary["num_rows"]:
         summary["average_words"] = round(summary["total_words"] / summary["num_rows"], 2)
@@ -101,7 +113,7 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export processed corpus to HF dataset files.")
-    parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
+    parser.add_argument("--input", type=Path, nargs="+", default=[DEFAULT_INPUT])
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--write-jsonl-copy", action="store_true")
     parser.add_argument(

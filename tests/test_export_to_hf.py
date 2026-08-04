@@ -73,6 +73,23 @@ def test_export_clear_only_restricts_to_clear_documents(tmp_path):
     assert summary["excluded_as_not_clear"] == 1
 
 
+def test_export_combines_multiple_input_files(tmp_path):
+    wiki_path = tmp_path / "wikipedia_ar.jsonl"
+    wafa_path = tmp_path / "wafa.jsonl"
+    output_dir = tmp_path / "hf"
+    wiki_path.write_text(json.dumps(_record(doc_id="1"), ensure_ascii=False) + "\n", encoding="utf-8")
+    wafa_path.write_text(
+        json.dumps(_record(doc_id="2", source_id="wafa-news", license_status="needs_review"), ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+    summary = export_to_hf_dataset(input_path=[wiki_path, wafa_path], output_dir=output_dir)
+
+    assert summary["num_rows"] == 2
+    assert summary["by_source"] == {"wikipedia-ar": 1, "wafa-news": 1}
+    assert summary["input"] == [str(wiki_path), str(wafa_path)]
+
+
 def test_export_clear_only_raises_when_nothing_is_clear(tmp_path):
     input_path = tmp_path / "docs.jsonl"
     output_dir = tmp_path / "hf"
