@@ -47,17 +47,25 @@ def render(data):
         st.info("لا توجد بيانات تصنيف محتوى بعد — شغّل scripts/run_content_classification.py ثم scripts/run_bias_measurement.py.")
         return
 
-    # Gauges row
-    gauge_cols = st.columns(len(dimensions))
-    for i, dim in enumerate(dimensions):
-        with gauge_cols[i]:
-            fig = create_bias_gauge(
-                dim["dimension"],
-                dim["value"],
-                "ثقافة",
-                "صراع",
-            )
-            st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False}, theme=None)
+    # Gauges grid — st.plotly_chart(use_container_width=True) scales the
+    # whole figure (numbers included) to fit its column, so packing all 6
+    # into one row left each too narrow to read clearly (only looked "clear"
+    # in Streamlit's fullscreen view, which gives a chart the full page
+    # width instead of 1/6 of it). 3 per row roughly doubles each gauge's
+    # width and, with it, how large the percentage renders.
+    GAUGES_PER_ROW = 3
+    for row_start in range(0, len(dimensions), GAUGES_PER_ROW):
+        row_dims = dimensions[row_start:row_start + GAUGES_PER_ROW]
+        gauge_cols = st.columns(GAUGES_PER_ROW)
+        for col, dim in zip(gauge_cols, row_dims):
+            with col:
+                fig = create_bias_gauge(
+                    dim["dimension"],
+                    dim["value"],
+                    "ثقافة",
+                    "صراع",
+                )
+                st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False}, theme=None)
 
     st.markdown("<div style='height:0.5rem'></div>", unsafe_allow_html=True)
 

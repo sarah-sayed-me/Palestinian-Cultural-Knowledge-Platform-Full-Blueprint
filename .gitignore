@@ -125,3 +125,16 @@ htmlcov/
 .ruff_cache/
 
 data/train_corpus_with_entities.json
+
+# ─── Dashboard deployment exceptions ──────────────────────────────────────────
+# Small, pre-computed files the deployed Streamlit dashboard (src/frontend/)
+# reads directly — no live Postgres/Ollama needed for these 5 tabs. Must come
+# after the broader data/*, *.jsonl ignores above to actually take effect
+# (git applies the LAST matching pattern in the file).
+!data/processed/wikipedia_ar_documents.jsonl
+!data/processed/wikipedia_en_documents.jsonl
+!data/processed/wafa_documents.jsonl
+!data/processed/gdelt_documents.jsonl
+!data/processed/semantic_scholar_documents.jsonl
+!data/processed/wikipedia_ar_documents.ner.topics.jsonl
+!data/graph/kg_graph.graphml

@@ -1,0 +1,23 @@
+# Deployment requirements for the Streamlit dashboard (src/frontend/app.py)
+# ONLY — not the full data-processing pipeline's dependencies.
+#
+# The dashboard reads pre-computed files (corpus JSONL, KG GraphML, Track F
+# report JSON) rather than running NER/embedding/topic-modeling live, so it
+# never touches torch/camel-tools/bertopic/sentence-transformers at runtime.
+# pyproject.toml's full dependency list (needed to actually build the
+# corpus/graph/reports locally) is deliberately NOT used for this deploy:
+# torch alone is multi-GB and its [tool.uv.sources] override there points at
+# a Windows-only CUDA index that wouldn't even resolve on Streamlit Cloud's
+# Linux CPU containers.
+#
+# The Ask (RAG) tab needs Postgres+Ollama, neither available on free hosting
+# — src/frontend/services/backend.py's ask_question() imports psycopg2/
+# ollama/sentence-transformers lazily inside a try/except, so their absence
+# here just makes Ask show a friendly "unavailable" message instead of
+# crashing the rest of the app. See ROADMAP.md's G2 section for the full
+# reasoning behind this split.
+streamlit>=1.38.0
+plotly>=5.24.0
+networkx>=3.6.0
+pydantic>=2.13.4
+pandas>=3.0.3
