@@ -1,6 +1,6 @@
 {
   "eval_name": "kg_entity_linking_v1",
-  "run_at": "2026-07-29T09:38:59.225276+00:00",
+  "run_at": "2026-08-03T16:01:34.226200+00:00",
   "dataset_size": 18,
   "metrics": {
     "accuracy_on_linkable_entities": 1.0,

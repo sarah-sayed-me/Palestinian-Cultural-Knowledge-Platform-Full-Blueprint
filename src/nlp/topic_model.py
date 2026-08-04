@@ -71,6 +71,35 @@ def _arabic_aware_vectorizer():
     return CountVectorizer(tokenizer=tokenizer, token_pattern=None, min_df=2)
 
 
+def compute_2d_projection(embeddings: List[List[float]]) -> List[Tuple[float, float]]:
+    """A separate 2D UMAP reduction for scatter-plot visualization only.
+
+    BERTopic's own `umap_model` reduces to 5 dimensions for HDBSCAN
+    clustering, not 2 — it isn't meant for plotting and its coordinates
+    aren't a good 2D layout. This fits an independent 2-component UMAP over
+    the same chunk embeddings so a topic map can show real chunk/document
+    positions instead of synthetic ones.
+    """
+    import numpy as np
+    from umap import UMAP
+
+    reducer = UMAP(n_components=2, random_state=42)
+    coords = reducer.fit_transform(np.array(embeddings, dtype="float32"))
+    return [(float(x), float(y)) for x, y in coords]
+
+
+def aggregate_document_coords(chunk_doc_ids: List[str], chunk_coords: List[Tuple[float, float]]) -> Dict[str, Tuple[float, float]]:
+    """Mean 2D position per document across its chunks."""
+    sums: Dict[str, List[float]] = {}
+    counts: Dict[str, int] = {}
+    for doc_id, (x, y) in zip(chunk_doc_ids, chunk_coords):
+        acc = sums.setdefault(doc_id, [0.0, 0.0])
+        acc[0] += x
+        acc[1] += y
+        counts[doc_id] = counts.get(doc_id, 0) + 1
+    return {doc_id: (acc[0] / counts[doc_id], acc[1] / counts[doc_id]) for doc_id, acc in sums.items()}
+
+
 def fit_topic_model(
     texts: List[str],
     embeddings: List[List[float]],

@@ -1,6 +1,6 @@
 {
   "eval_name": "kg_relations_v1",
-  "run_at": "2026-07-29T09:38:59.225043+00:00",
+  "run_at": "2026-08-03T16:01:34.219924+00:00",
   "dataset_size": 40,
   "metrics": {
     "precision": 0.6,

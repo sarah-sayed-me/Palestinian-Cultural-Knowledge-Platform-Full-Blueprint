@@ -1,0 +1,697 @@
+/* ============================================
+   Palestinian Cultural Knowledge Platform Theme
+   منصة المعرفة الثقافية الفلسطينية
+   ============================================ */
+
+/* --- Google Fonts Import (Arabic) --- */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* --- CSS Variables --- */
+:root {
+    /* Palestinian Palette */
+    --palestinian-red: #CE1126;
+    --palestinian-green: #009736;
+    --palestinian-black: #1a1a1a;
+    --palestinian-white: #FAF8F5;
+
+    /* Extended Palette */
+    --olive-green: #6B8E23;
+    --olive-dark: #556B2F;
+    --warm-gold: #C5A55A;
+    --warm-gold-light: #E8D5A3;
+    --ivory: #FAF8F5;
+    --charcoal: #2C2C2C;
+    --warm-gray: #8B8580;
+    --light-gray: #F0EDE8;
+    --medium-gray: #D4CFC8;
+    --card-bg: #FFFFFF;
+    --card-border: #E8E2D9;
+
+    /* Typography */
+    --font-arabic: 'Noto Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+    --font-decorative: 'Amiri', 'Noto Sans Arabic', serif;
+
+    /* Spacing */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+    --shadow-gold: 0 4px 16px rgba(197, 165, 90, 0.15);
+}
+
+/* --- Global Reset & Base --- */
+.stApp {
+    font-family: var(--font-arabic) !important;
+    direction: rtl;
+    text-align: right;
+    background-color: var(--ivory) !important;
+    color: var(--charcoal) !important;
+}
+
+/* --- Hide Default Streamlit Chrome --- */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header[data-testid="stHeader"] {
+    background: transparent !important;
+}
+
+.stApp > header {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* --- Block Container --- */
+.block-container {
+    max-width: 1280px !important;
+    padding-top: 1.5rem !important;
+    padding-bottom: 2rem !important;
+}
+
+/* --- Palestinian Flag Accent Line (Top) --- */
+.palestinian-accent-line {
+    height: 4px;
+    background: linear-gradient(to left,
+        var(--palestinian-black) 0%, var(--palestinian-black) 25%,
+        var(--palestinian-white) 25%, var(--palestinian-white) 50%,
+        var(--palestinian-green) 50%, var(--palestinian-green) 75%,
+        var(--palestinian-red) 75%, var(--palestinian-red) 100%
+    );
+    border-radius: 2px;
+    margin-bottom: 1rem;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d1f 40%, #3d3522 100%);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 3rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    direction: rtl;
+    text-align: center;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(107,142,35,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(197,165,90,0.08) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* Islamic Geometric Pattern Overlay */
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.04;
+    background-image:
+        linear-gradient(30deg, rgba(197,165,90,0.3) 12%, transparent 12.5%, transparent 87%, rgba(197,165,90,0.3) 87.5%),
+        linear-gradient(150deg, rgba(197,165,90,0.3) 12%, transparent 12.5%, transparent 87%, rgba(197,165,90,0.3) 87.5%),
+        linear-gradient(30deg, rgba(197,165,90,0.3) 12%, transparent 12.5%, transparent 87%, rgba(197,165,90,0.3) 87.5%),
+        linear-gradient(150deg, rgba(197,165,90,0.3) 12%, transparent 12.5%, transparent 87%, rgba(197,165,90,0.3) 87.5%),
+        linear-gradient(60deg, rgba(197,165,90,0.15) 25%, transparent 25.5%, transparent 75%, rgba(197,165,90,0.15) 75%),
+        linear-gradient(60deg, rgba(197,165,90,0.15) 25%, transparent 25.5%, transparent 75%, rgba(197,165,90,0.15) 75%);
+    background-size: 80px 140px;
+    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+    pointer-events: none;
+}
+
+.hero-title {
+    font-family: var(--font-decorative) !important;
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+    color: var(--warm-gold) !important;
+    margin-bottom: 0.5rem !important;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.02em;
+}
+
+.hero-subtitle {
+    font-family: var(--font-arabic) !important;
+    font-size: 1.05rem !important;
+    color: rgba(250, 248, 245, 0.85) !important;
+    margin-bottom: 0.75rem !important;
+    position: relative;
+    z-index: 1;
+    line-height: 1.8 !important;
+}
+
+.hero-desc {
+    font-family: var(--font-arabic) !important;
+    font-size: 0.88rem !important;
+    color: rgba(250, 248, 245, 0.6) !important;
+    position: relative;
+    z-index: 1;
+    line-height: 1.7 !important;
+}
+
+.hero-desc .tech-badge {
+    display: inline-block;
+    background: rgba(197, 165, 90, 0.15);
+    color: var(--warm-gold);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    margin: 0 3px;
+    border: 1px solid rgba(197, 165, 90, 0.2);
+}
+
+/* --- Custom Navigation Tabs --- */
+.palestinian-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 5px;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--card-border);
+    overflow-x: auto;
+    direction: rtl;
+}
+
+.palestinian-tab {
+    flex: 1;
+    min-width: fit-content;
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    border: none;
+    background: transparent;
+    color: var(--warm-gray);
+    font-family: var(--font-arabic);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+    white-space: nowrap;
+    position: relative;
+}
+
+.palestinian-tab:hover {
+    background: var(--light-gray);
+    color: var(--charcoal);
+}
+
+.palestinian-tab.active {
+    background: linear-gradient(135deg, var(--palestinian-green) 0%, var(--olive-dark) 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 151, 54, 0.25);
+}
+
+.palestinian-tab .tab-en {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 400;
+    opacity: 0.75;
+    margin-top: 2px;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    direction: ltr;
+}
+
+/* --- KPI Metric Cards --- */
+.kpi-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 1.2rem 1.5rem;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
+    text-align: center;
+    direction: rtl;
+}
+
+.kpi-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--warm-gold-light);
+}
+
+.kpi-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+}
+
+.kpi-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    line-height: 1.2;
+    font-family: 'Segoe UI', var(--font-arabic), sans-serif;
+}
+
+.kpi-label {
+    font-size: 0.85rem;
+    color: var(--warm-gray);
+    margin-top: 0.2rem;
+}
+
+/* --- Content Cards --- */
+.content-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1rem;
+    direction: rtl;
+}
+
+.content-card-header {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--light-gray);
+}
+
+/* --- Chart Containers --- */
+.chart-container {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 1.2rem;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.chart-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 0.75rem;
+    text-align: right;
+}
+
+/* --- Section Headers --- */
+.section-header {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--warm-gold);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    direction: rtl;
+}
+
+.section-header .header-icon {
+    font-size: 1.2rem;
+}
+
+/* --- Filter Controls --- */
+.filter-panel {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1rem;
+    direction: rtl;
+}
+
+.filter-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--warm-gray);
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* --- RAG / Ask Interface --- */
+.ask-container {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-md);
+    direction: rtl;
+    position: relative;
+    overflow: hidden;
+}
+
+.ask-container::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -30%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(107,142,35,0.04) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.answer-card {
+    background: linear-gradient(135deg, #FEFDFB 0%, #F8F5EE 100%);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    border-right: 4px solid var(--olive-green);
+    border: 1px solid var(--medium-gray);
+    border-right: 4px solid var(--olive-green);
+    direction: rtl;
+    line-height: 1.9;
+    font-size: 0.95rem;
+}
+
+.citation-badge {
+    display: inline-block;
+    background: rgba(0, 151, 54, 0.1);
+    color: var(--palestinian-green);
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid rgba(0, 151, 54, 0.2);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.citation-badge:hover {
+    background: rgba(0, 151, 54, 0.2);
+    border-color: var(--palestinian-green);
+}
+
+/* --- Suggested Questions --- */
+.suggested-question {
+    background: var(--light-gray);
+    border: 1px solid var(--medium-gray);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--charcoal);
+    transition: all 0.2s ease;
+    direction: rtl;
+    text-align: right;
+}
+
+.suggested-question:hover {
+    background: rgba(0, 151, 54, 0.08);
+    border-color: var(--palestinian-green);
+    color: var(--olive-dark);
+}
+
+/* --- Loading Animation --- */
+.loading-container {
+    text-align: center;
+    padding: 2rem;
+    direction: rtl;
+}
+
+.loading-dots {
+    display: inline-flex;
+    gap: 6px;
+}
+
+.loading-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--olive-green);
+    animation: bounce 1.4s infinite ease-in-out;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+/* --- Bias Meter / Gauge --- */
+.bias-meter-container {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.bias-label {
+    font-size: 0.85rem;
+    color: var(--warm-gray);
+}
+
+/* --- KG Explorer --- */
+.kg-search-box {
+    direction: rtl;
+    text-align: right;
+}
+
+.entity-info-panel {
+    background: linear-gradient(135deg, #FEFDFB 0%, #F8F5EE 100%);
+    border-radius: var(--radius-md);
+    padding: 1.2rem;
+    border: 1px solid var(--medium-gray);
+    border-right: 4px solid var(--warm-gold);
+    direction: rtl;
+}
+
+/* --- Timeline Styles --- */
+.timeline-era-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--card-border);
+    border-right: 3px solid var(--palestinian-green);
+    margin-bottom: 0.5rem;
+    direction: rtl;
+}
+
+/* --- Olive Branch Decoration --- */
+.olive-decoration {
+    text-align: center;
+    color: var(--olive-green);
+    font-size: 1.5rem;
+    opacity: 0.3;
+    margin: 0.5rem 0;
+    letter-spacing: 8px;
+    user-select: none;
+}
+
+/* --- Empty State --- */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--warm-gray);
+    direction: rtl;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.4;
+}
+
+.empty-state-text {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-hint {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+/* --- Footer --- */
+.platform-footer {
+    text-align: center;
+    padding: 1.5rem 0 0.5rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--medium-gray);
+    color: var(--warm-gray);
+    font-size: 0.78rem;
+    direction: rtl;
+}
+
+.platform-footer .footer-olive {
+    font-size: 1.2rem;
+    opacity: 0.3;
+    letter-spacing: 4px;
+    margin-bottom: 0.3rem;
+}
+
+/* --- Streamlit Overrides --- */
+
+/* Tabs override - hide default tab styling */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 4px;
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 5px;
+    border: 1px solid var(--card-border);
+}
+
+.stTabs [data-baseweb="tab"] {
+    border-radius: var(--radius-md) !important;
+    padding: 10px 16px !important;
+    font-family: var(--font-arabic) !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    color: var(--warm-gray) !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    background: var(--light-gray) !important;
+    color: var(--charcoal) !important;
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    background: linear-gradient(135deg, var(--palestinian-green) 0%, var(--olive-dark) 100%) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(0, 151, 54, 0.25) !important;
+}
+
+.stTabs [data-baseweb="tab-highlight"] {
+    background-color: transparent !important;
+    height: 0 !important;
+}
+
+.stTabs [data-baseweb="tab-border"] {
+    display: none !important;
+}
+
+/* Metric cards override */
+[data-testid="stMetric"] {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.2rem !important;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-sm);
+}
+
+[data-testid="stMetricValue"] {
+    font-family: 'Segoe UI', var(--font-arabic), sans-serif !important;
+    font-size: 1.8rem !important;
+}
+
+[data-testid="stMetricLabel"] {
+    font-family: var(--font-arabic) !important;
+    font-size: 0.85rem !important;
+    color: var(--warm-gray) !important;
+}
+
+/* Expander override */
+.streamlit-expanderHeader {
+    font-family: var(--font-arabic) !important;
+    font-size: 0.95rem !important;
+}
+
+/* Selectbox / Input override */
+.stSelectbox, .stTextInput {
+    font-family: var(--font-arabic) !important;
+}
+
+/* Chat input override for RAG */
+.stChatInputContainer {
+    border-radius: var(--radius-md) !important;
+}
+
+/* Plotly chart container */
+.js-plotly-plot .plotly .modebar {
+    top: 4px !important;
+    right: 4px !important;
+    left: auto !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-gray);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--medium-gray);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--warm-gray);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 1.5rem 1.2rem;
+    }
+    .hero-title {
+        font-size: 1.5rem !important;
+    }
+    .hero-subtitle {
+        font-size: 0.9rem !important;
+    }
+    .palestinian-tab {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+    .kpi-value {
+        font-size: 1.5rem;
+    }
+}
+
+/* --- Olive Branch SVG Decorations --- */
+.olive-branch-left, .olive-branch-right {
+    position: absolute;
+    opacity: 0.06;
+    pointer-events: none;
+}
+
+/* --- Source Badge --- */
+.source-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--light-gray);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    color: var(--charcoal);
+    border: 1px solid var(--medium-gray);
+}
+
+/* --- Topic Detail Card --- */
+.topic-detail-card {
+    background: linear-gradient(135deg, #FEFDFB 0%, #F5F2EB 100%);
+    border-radius: var(--radius-md);
+    padding: 1.2rem;
+    border: 1px solid var(--medium-gray);
+    border-right: 4px solid var(--palestinian-green);
+    direction: rtl;
+}
+
+/* --- Metadata Row --- */
+.metadata-row {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+}
+
+.metadata-item {
+    font-size: 0.82rem;
+    color: var(--warm-gray);
+}
+
+.metadata-item strong {
+    color: var(--charcoal);
+}

@@ -1,4 +1,4 @@
-from src.nlp.topic_model import aggregate_document_topics, fetch_chunk_embeddings, topic_label
+from src.nlp.topic_model import aggregate_document_coords, aggregate_document_topics, fetch_chunk_embeddings, topic_label
 
 
 class _FakeVector:
@@ -105,3 +105,13 @@ def test_aggregate_document_topics_handles_outlier_majority():
 
     assert result["doc-1"]["topic_id"] == -1
     assert result["doc-1"]["topic_label"] == "outlier"
+
+
+def test_aggregate_document_coords_averages_chunk_positions():
+    doc_ids = ["doc-1", "doc-1", "doc-2"]
+    coords = [(0.0, 0.0), (2.0, 4.0), (5.0, 5.0)]
+
+    result = aggregate_document_coords(doc_ids, coords)
+
+    assert result["doc-1"] == (1.0, 2.0)
+    assert result["doc-2"] == (5.0, 5.0)

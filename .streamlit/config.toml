@@ -1,0 +1,10 @@
+[theme]
+# Pinned light — styles/theme.css builds a light Palestinian-palette UI
+# (ivory background, charcoal text) regardless of theme, but without this,
+# Streamlit falls back to the visiting browser's OS dark-mode preference and
+# auto-injects light/white text into st.plotly_chart() figures via its
+# theme="streamlit" default — invisible against our light card backgrounds.
+base = "light"
+backgroundColor = "#FAF8F5"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#2C2C2C"

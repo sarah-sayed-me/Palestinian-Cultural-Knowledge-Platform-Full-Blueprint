@@ -609,7 +609,23 @@ aggregation of what `entity_extractor.py` already emits.
   sources) produced **189 relations from 46 documents** spanning all three Arabic-capable
   sources (Wikipedia AR, WAFA, GDELT, one Semantic Scholar paper) — E1's entity count grew to
   **13,063** (711 documents) and E2's linked count to **950 (7.27%)**, both re-verified to hold
-  the same correct QIDs as the single-source run.
+  the same correct QIDs as the single-source run. **E4, rebuilt from these 189 relations:
+  13,063 nodes / 187 edges** (2 relations collapsed onto duplicate `relation_id`s, same expected
+  `MultiDiGraph` behavior as the very first E4 pass).
+- **Reproduced 2026-08-03 — numbers hold, with expected small drift.** Re-ran the exact
+  multi-source recipe below end to end (Postgres + Ollama `qwen3:14b`, same NER/E1/E2/E3/E4/E5
+  steps) after `kg_relations.jsonl`/`kg_graph.graphml` on disk had regressed back to the
+  original 216-relation/19-doc single-source state (a prior background-job overwrite clobbered
+  the scaled-up files — see the lesson above about not trusting `Stop-Process` timing). Results:
+  NER language split identical (WAFA 106/106, GDELT 24/73, Semantic Scholar 1/25 Arabic); E1
+  identical at **13,063 entities / 711 documents**; E3 identical at **189 relations / 46
+  documents** with the same predicate distribution shape (`located_in` still dominant); E4
+  rebuilt to the same **13,063 nodes / 187 edges**; E5 identical against the fixed gold
+  snapshots (relation precision 0.60, 24/40; entity-linking 100%/100%). The one number that
+  moved: E2 linked count came back **901 (6.9%)**, down slightly from **950 (7.27%)** — the
+  Wikidata alias dump (`fetch_wikidata_aliases.py --limit 4000`) pulls live data, so a handful
+  of items' aliases/labels shifted between the two pulls. Not a regression in the linking logic
+  itself, just confirmation that E2 depends on an external, slowly-moving snapshot.
 - **Reproduce, in order (multi-source):**
   ```powershell
   uv run python scripts/run_ner.py                                                    # refresh AR Wikipedia NER
@@ -736,7 +752,7 @@ recovered on its own (confirmed: `docker ps` responds, all containers healthy) �
 | ID | Task | Priority | Depends on | Mode | Deliverable | Est. | Status |
 |---|---|:--:|---|---|---|:--:|---|
 | G1 | RAG API endpoint (FastAPI, wraps the Track B pipeline) | P1 | B5 | Parallel, can start right after MVP | `src/api/main.py` | 1d | Done — unit-tested |
-| G2 | Dashboard — Streamlit first (the original blueprint's own recommendation: "a working prototype in two hours," free HuggingFace Spaces hosting), Bias Meter / Topic Map / Timeline / KG Explorer panels as their data sources (Tracks E/F) land | P2 | G1, E4, F1, F3, F4 (per-panel, incremental) | Sequential per panel, otherwise parallel to E/F | `src/frontend/dashboard.py` | 2d + ~0.5d per panel | Done — launched for real and verified in a browser |
+| G2 | Dashboard — Streamlit first (the original blueprint's own recommendation: "a working prototype in two hours," free HuggingFace Spaces hosting), Bias Meter / Topic Map / Timeline / KG Explorer panels as their data sources (Tracks E/F) land | P2 | G1, E4, F1, F3, F4 (per-panel, incremental) | Sequential per panel, otherwise parallel to E/F | `src/frontend/app.py` | 2d + ~0.5d per panel | Done — launched for real and verified in a browser |
 
 **Real results:**
 
@@ -751,12 +767,46 @@ recovered on its own (confirmed: `docker ps` responds, all containers healthy) �
   (`src/frontend/data_loaders.py` — pure, unit-tested functions, no Streamlit/DB dependency),
   so the dashboard works even while Postgres is down, which it genuinely was for most of this
   build — a real, not hypothetical, test of that design choice. Verified in an actual browser,
-  not just compiled: Overview correctly showed live counts (882 documents, 13,063 KG entities,
-  187 relations); Topic Map and Bias Meter correctly showed "run this script first" messages
-  since those reports didn't exist yet at verification time; Timeline correctly rendered the
-  real F4 report; KG Explorer's search box returned real, correct entity matches (searching
-  "حيفا" surfaced 18 real entity variants including NER-boundary-noise forms like "وحيفا" —
-  the same artifact documented in Track E). Run: `uv run streamlit run src/frontend/dashboard.py`.
+  not just compiled: Overview correctly showed live counts (882 documents, 13,063 KG entities);
+  Topic Map and Bias Meter correctly showed "run this script first" messages since those reports
+  didn't exist yet at verification time; Timeline correctly rendered the real F4 report; KG
+  Explorer's search box returned real, correct entity matches (searching "حيفا" surfaced 18 real
+  entity variants including NER-boundary-noise forms like "وحيفا" — the same artifact documented
+  in Track E).
+- **G2 redesign — real, and a real integration, not a reskin.** A full Arabic/RTL redesign
+  (Palestinian visual identity — flag palette, hero section, card-based layout) was integrated
+  from an externally-generated `app.py`/`components/`/`services/`/`mock/` package. It shipped
+  wired to `mock/demo_data.py` and needed real wiring, not just dropping the files in; done via
+  a rewritten `services/backend.py` that adapts real pipeline output into the same shapes the
+  views expect. Two real gaps had to be closed, not papered over: (1) the Topic Map's scatter
+  plot needs 2D coordinates per document, and nothing upstream computed them — BERTopic's own
+  `umap_model` reduces to 5D for HDBSCAN clustering, not 2D for plotting — so
+  `src/nlp/topic_model.py` gained `compute_2d_projection()`/`aggregate_document_coords()` (an
+  independent 2-component UMAP fit over the same chunk embeddings) and
+  `scripts/run_topic_model.py` now persists `topic_x`/`topic_y` per document; re-run and
+  verified against the real 581-document Wikipedia-AR corpus. (2) the Bias Meter's dimension
+  list is built dynamically from whichever `ContentCategory` values actually appear in
+  `reports/bias_measurement.json` (up to 17 possible categories) rather than a fixed hardcoded
+  4/5 — `uncategorized` is excluded from the percentage math since it's a coverage gap, not a
+  signal, and `components/charts.py`'s stacked-bar chart was generalized to accept a dynamic
+  category list instead of 4 hardcoded keys. Also found and fixed several real bugs in the
+  supplied files while integrating (not stylistic nitpicks — each one crashed the app or
+  silently broke a feature): an unterminated docstring in `ask.py` that swallowed
+  `import streamlit as st` into a string literal; a Plotly `add_vline()` call that crashes on a
+  categorical x-axis whenever an annotation is attached (worked around with `add_shape()` +
+  `add_annotation()` instead); a duplicate `margin` kwarg crashing `create_bias_gauge()`;
+  `st.tabs()` labels containing raw `<span>` HTML, which `st.tabs()` doesn't render (rendered as
+  literal text instead — replaced with plain Arabic tab names); and clicking a suggested
+  question in the Ask tab raising `StreamlitAPIException` because it tried to set
+  `st.session_state["ask_input"]` after that widget was already instantiated in the same run
+  (fixed with the standard stash-value-then-`st.rerun()` pattern). Verified end-to-end in a real
+  browser against real data: Overview/Topic Map/Timeline/Bias Meter/KG Explorer all render real
+  numbers (no mock data left in the default path), a real KG Explorer search for "القدس"
+  returned its real Wikidata QID and real (if occasionally backward — a known extraction-quality
+  issue, see E5) relations, and a real end-to-end RAG round-trip through the Ask tab returned a
+  substantive Arabic answer with 5 real citations. Run: `uv run streamlit run src/frontend/app.py`
+  (`.claude/launch.json`'s `dashboard` config updated to match; `mock/demo_data.py` kept only as
+  an offline/schema reference, not imported by default).
 
 ### Track H — Infrastructure & hardening (P3 — deliberately last) — ✅ H1–H3 done, H4 correctly not triggered
 

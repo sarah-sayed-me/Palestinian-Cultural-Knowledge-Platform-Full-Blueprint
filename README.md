@@ -157,8 +157,9 @@ retriever, and an Ollama-based local-first generator behind a stable interface) 
 and verified against the real corpus — 484 documents chunked into 1282 passages, fully embedded
 and indexed, with `scripts/ask.py` returning grounded, cited answers. A first real knowledge
 graph has also been built end to end, spanning every Arabic-capable source (Wikipedia AR,
-WAFA, GDELT, Semantic Scholar) — 13,063 canonicalized entities, 950 linked to Wikidata QIDs,
-585 LLM-extracted relations from a scaled-up 88-document pass, stored as a NetworkX graph
+WAFA, GDELT, Semantic Scholar) — 13,063 canonicalized entities, 901 linked to Wikidata QIDs,
+189 LLM-extracted relations from a 46-document multi-source pass, rebuilt into a 13,063-node /
+187-edge graph, stored as a NetworkX graph
 (`data/graph/kg_graph.graphml`) — see the Knowledge Graph section below and `ROADMAP.md` Track
 E for the real numbers, including several real bugs found and fixed by actually running it at
 scale (a Wikidata homonym-collision problem, a qwen3 "thinking mode" issue, and NER silently
@@ -343,7 +344,7 @@ correctly *not* link entities like Israel, Jordan, or Egypt (out of scope by des
 also can't currently resolve historically-Palestinian cities now administered by Israel (e.g.
 Haifa, Jaffa), since Wikidata's country property reflects present-day sovereignty, not
 historical identity — a known, named gap, not a silent miss. On the multi-source corpus this
-links ~7% of canonicalized entities (950/13,063) — expected for an alias-table approach
+links ~7% of canonicalized entities (901/13,063) — expected for an alias-table approach
 against a broad, mostly-generic NER entity set (most PERSON mentions especially won't have a
 Wikidata entry at all).
 
@@ -386,8 +387,23 @@ uv run python scripts/run_bias_measurement.py                # F3 — needs F2's
 uv run python scripts/run_temporal_analysis.py                # F4 — no DB/Ollama needed
 
 uv run uvicorn src.api.main:app --reload --port 8000          # G1 — RAG API (POST /ask, GET /health)
-uv run streamlit run src/frontend/dashboard.py                 # G2 — dashboard (Overview, Topic Map, Timeline, Bias Meter, KG Explorer, Ask)
+uv run streamlit run src/frontend/app.py                       # G2 — dashboard (Overview, Topic Map, Timeline, Bias Meter, KG Explorer, Ask)
 ```
+
+**Dashboard (`src/frontend/app.py`)** is a full Arabic/RTL UI — a community-contributed redesign
+integrated to run on real pipeline data rather than the mock data it originally shipped with.
+Structure: `app.py` (entry point/routing) → `components/views/*.py` (one file per tab) →
+`components/{cards,charts,header}.py` (shared UI/Plotly pieces) → `services/backend.py` (the real
+data adapter — reads `data_loaders.py`, `graph_store.py`, the Track F report JSON files, and the
+live RAG pipeline for Ask; every `get_*_data()` is Streamlit-cached for ~30s since the whole
+script reruns on every widget interaction). `mock/demo_data.py` is kept only as an offline/schema
+reference — nothing imports it by default. Two real gaps were closed to wire this up:
+`scripts/run_topic_model.py` now also persists a `topic_x`/`topic_y` 2D UMAP projection per
+document (previously nothing computed 2D coordinates for the Topic Map's scatter plot — BERTopic's
+own UMAP reduces to 5D for clustering, not 2D for plotting), and the Bias Meter's dimension list is
+built dynamically from whatever `ContentCategory` values actually appear in
+`reports/bias_measurement.json` (up to 17 possible categories) rather than a fixed hardcoded set —
+`uncategorized` is excluded from the percentage math since it's a coverage gap, not a signal.
 
 **F2 (content classification)** uses zero-shot LLM prompting (`qwen3` via Ollama) instead of
 the originally-planned fine-tuned AraBERT model — a deliberate, documented deviation (see

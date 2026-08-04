@@ -127,7 +127,7 @@ uv run python scripts/run_temporal_analysis.py      # no DB/Ollama needed
 
 # 8. API / Dashboard
 uv run uvicorn src.api.main:app --reload --port 8000
-uv run streamlit run src/frontend/dashboard.py
+uv run streamlit run src/frontend/app.py
 
 # 9. Tests
 uv run pytest tests/ -q                              # 198 tests, all pass when Postgres is up

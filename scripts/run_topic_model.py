@@ -30,7 +30,13 @@ sys.path.insert(0, str(ROOT))
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-from src.nlp.topic_model import aggregate_document_topics, fetch_chunk_embeddings, fit_topic_model
+from src.nlp.topic_model import (
+    aggregate_document_coords,
+    aggregate_document_topics,
+    compute_2d_projection,
+    fetch_chunk_embeddings,
+    fit_topic_model,
+)
 from src.rag.config import RagConfig
 from src.rag.db import get_connection
 
@@ -78,6 +84,9 @@ def main() -> None:
     )
     doc_topics = aggregate_document_topics(doc_ids, chunk_topics, topic_model)
 
+    chunk_coords = compute_2d_projection(embeddings)
+    doc_coords = aggregate_document_coords(doc_ids, chunk_coords)
+
     outputs = []
     total_docs_labeled = 0
     for input_path in args.input:
@@ -89,6 +98,9 @@ def main() -> None:
                 if assignment:
                     doc["topic_id"] = assignment["topic_id"]
                     doc["topic_label"] = assignment["topic_label"]
+                    coords = doc_coords.get(doc.get("doc_id"))
+                    if coords:
+                        doc["topic_x"], doc["topic_y"] = coords
                     labeled += 1
                 out_handle.write(json.dumps(doc, ensure_ascii=False) + "\n")
         outputs.append(str(output_path))
